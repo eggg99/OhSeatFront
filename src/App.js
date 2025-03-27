@@ -10,7 +10,7 @@ function App() {
                         <ul>
                             <li><a href="/">좌석추천</a></li>
                             <li><a href="/">채팅</a></li>
-                            <li><a href="/">로그인</a></li>
+                            <li><a href="/">로그인버튼</a></li>
                         </ul>
                     </nav>
                 </div>
