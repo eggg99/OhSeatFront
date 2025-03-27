@@ -1,25 +1,35 @@
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    return (
+        <div className="App">
+            <header className="App_header">
+                <div className="inner">
+                    <h1 className="logo"><a href="/">OhSeat</a></h1>
+                    <nav className="menu_wrap">
+                        <ul>
+                            <li><a href="/">좌석추천</a></li>
+                            <li><a href="/">채팅</a></li>
+                            <li><a href="/">로그인</a></li>
+                        </ul>
+                    </nav>
+                </div>
+            </header>
+            <main className="App_main">
+                <div>안녕하시개</div>
+            </main>
+            <footer className="App_footer">
+                <div className="inner">
+                    <nav className="footer-credits">
+                        <ul>
+                            <li>Copyright © OhSeat Corp. All rights Reserved.</li>
+                            <li>Made by 김민정 이효원</li>
+                        </ul>
+                    </nav>
+                </div>
+            </footer>
+        </div>
+    );
 }
 
 export default App;
