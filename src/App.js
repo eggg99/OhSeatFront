@@ -10,9 +10,12 @@ function App() {
                         <ul>
                             <li><a href="/">좌석추천</a></li>
                             <li><a href="/">채팅</a></li>
-                            <li><a href="/">로그인버튼</a></li>
                         </ul>
                     </nav>
+                    <div className="login_btn_wrap">
+                        <button class="btn btn-primary btn-jelly">회원가입</button>
+                        <button class="btn btn-secondary btn-jelly">로그인</button>
+                    </div>
                 </div>
             </header>
             <main className="App_main">
