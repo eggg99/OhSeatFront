@@ -1,37 +1,27 @@
 import React from "react";
+import { BrowserRouter } from "react-router-dom";
+import Header from "./components/Header";
+import Footer from "./components/Footer";
+import AppRoutes from "./routes.js";
+import { createTheme, ThemeProvider }from "@mui/material"
+
+const theme = createTheme({
+    typography:{
+        fontFamily: "'Pretendard-Regular', 'CookieRun-Regular', 'esamanru-Medium','Ownglyph_ParkDaHyun', 'MonoplexKR-Regular', sans-serif"
+    }
+});
 
 function App() {
     return (
-        <div className="App">
-            <header className="App_header">
-                <div className="inner">
-                    <h1 className="logo"><a href="/">OhSeat</a></h1>
-                    <nav className="menu_wrap">
-                        <ul>
-                            <li><a href="/">좌석추천</a></li>
-                            <li><a href="/">채팅</a></li>
-                        </ul>
-                    </nav>
-                    <div className="login_btn_wrap">
-                        <button class="btn btn-primary btn-jelly">회원가입</button>
-                        <button class="btn btn-secondary btn-jelly">로그인</button>
-                    </div>
-                </div>
-            </header>
-            <main className="App_main">
-                <div>안녕하시개</div>
-            </main>
-            <footer className="App_footer">
-                <div className="inner">
-                    <nav className="footer-credits">
-                        <ul>
-                            <li>Copyright © OhSeat Corp. All rights Reserved.</li>
-                            <li>Made by 김민정 이효원</li>
-                        </ul>
-                    </nav>
-                </div>
-            </footer>
-        </div>
+        <ThemeProvider theme={theme}>
+            <div className="App">
+                <BrowserRouter>
+                    <Header />
+                    <AppRoutes />       
+                    <Footer />
+                </BrowserRouter>
+            </div>
+        </ThemeProvider>
     );
 }
 

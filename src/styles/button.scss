@@ -22,7 +22,9 @@
     border-radius: var(--btn-radius);
     white-space: nowrap;
     cursor: pointer;
+    display: inline-block;
     &-jelly {
+      font-family: 'esamanru-Medium';
         &:hover {
             animation: jelly 0.5s;
         }
