@@ -1,4 +1,4 @@
-function Main(){
+function PageMain(){
     return(
         <main className="App_main">
             <div>안녕하시개</div>
@@ -6,4 +6,4 @@ function Main(){
     )
 }
 
-export default Main;
+export default PageMain;

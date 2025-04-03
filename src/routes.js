@@ -1,15 +1,29 @@
 import { Route, Routes } from "react-router-dom";
-import Main from "./components/Main";
-import Login from "./components/Login";
-import NotFound from "./components/NotFound";
+
+import PageUser from './pages/PageUser';
+import PageMain from "./pages/PageMain";
+import PageNotFound from "./pages/PageNotFound";
+import Login from './components/Login';
+import Join from './components/Join';
+import FindId from "./components/FindId";
+import FindPw from "./components/FindPw";
 
 function AppRoutes(){
     return(
-        <Routes>
-            <Route path="/" element={<Main />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="*" element={<NotFound />} />
+        <main className="App_main">
+        <Routes >
+            <Route path="/" element={<PageMain />} />
+            <Route path="/user" element={<PageUser />}>
+                <Route path="join" element={<Join />} />
+                <Route path="find/id" element={<FindId />} />
+                <Route path="find/pw" element={<FindPw />} />
+                <Route path="login" element={<Login />} />
+            </Route>
+            <Route path="/recommend" element={<PageUser />} />
+            <Route path="/chatting" element={<PageUser />} />
+            <Route path="*" element={<PageNotFound />} />
         </Routes>
+        </main>
     )
 }
 

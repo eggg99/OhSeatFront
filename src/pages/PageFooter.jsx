@@ -1,5 +1,7 @@
-function Footer(){
-    return(
+import React from 'react';
+
+const Footer = () => {
+    return (
         <footer className="App_footer">
             <div className="inner">
                 <nav className="footer-credits">
@@ -10,7 +12,7 @@ function Footer(){
                 </nav>
             </div>
         </footer>
-    )
-}
+    );
+};
 
 export default Footer;

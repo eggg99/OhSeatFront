@@ -8,7 +8,7 @@
 body {
     height:100vh;
     margin: 0;
-    font-family: 'Pretendard-Regular', 'CookieRun-Regular', 'esamanru-Medium','Ownglyph_ParkDaHyun', 'MonoplexKR-Regular', sans-serif;
+    font-family: 'Pretendard-Regular', 'CookieRun-Regular', 'GongGothicMedium','Ownglyph_ParkDaHyun', 'MonoplexKR-Regular', sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     display: flex;
@@ -26,40 +26,30 @@ a{
 }
 
 input{
-    outline: none;
-    border: none;
-    font-family: 'Pretendard-Regular', 'CookieRun-Regular', 'esamanru-Medium','Ownglyph_ParkDaHyun', 'MonoplexKR-Regular', sans-serif;
-    font-size: 16px;
+    border: 1px solid #c5c5c5;
+    padding: 5px;
+    border-radius: 4px;
 }
-@font-face {
-    font-family: "CookieRun-Black";
-    font-weight: normal;
-    src: url("../fonts/CookieRun-Black.ttf") format("truetype");
-}
-@font-face {
-    font-family: "CookieRun-Bold";
-    font-weight: normal;
-    src: url("../fonts/CookieRun-Bold.ttf") format("truetype");
-}
-@font-face {
+
+
+.logo {
     font-family: "CookieRun-Regular";
-    font-weight: normal;
-    src: url("../fonts/CookieRun-Regular.ttf") format("truetype");
+    font-weight: bold;
+    font-size: xx-large;
 }
+
 @font-face {
-    font-family: "esamanru-Bold";
+    font-family: 'CookieRun-Regular';
+    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/CookieRun-Regular.woff') format('woff');
     font-weight: normal;
-    src: url("../fonts/esamanru-Bold.ttf") format("truetype");
+    font-style: normal;
 }
+
 @font-face {
-    font-family: "esamanru-Light";
+    font-family: 'GongGothicMedium';
+    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_20-10@1.0/GongGothicMedium.woff') format('woff');
     font-weight: normal;
-    src: url("../fonts/esamanru-Light.ttf") format("truetype");
-}
-@font-face {
-    font-family: "esamanru-Medium";
-    font-weight: normal;
-    src: url("../fonts/esamanru-Medium.ttf") format("truetype");
+    font-style: normal;
 }
 
 @font-face {

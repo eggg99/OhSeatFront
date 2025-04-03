@@ -14,14 +14,13 @@ $color-e: #e9e9e9;
     z-index: 3;
     height: 5rem;
     border-bottom: 1px solid $color-e;
+    background-color: #fff;
     .inner {
         display: flex;
         padding: 1rem 11.7rem;
         align-items: center;
         .logo {
             flex-grow: 5;
-            font-family: "CookieRun-Black";
-            font-size: xx-large;
         }
         .menu_wrap {
             flex-grow: 2;
@@ -29,7 +28,7 @@ $color-e: #e9e9e9;
                 overflow: hidden;
                 li {
                     float: inline-start;
-                    font-family: "esamanru-Medium";
+                    font-family: "GongGothicMedium";
                     font-size: 18px;
                     margin: 1rem;
                     & + li {
@@ -70,7 +69,7 @@ $color-e: #e9e9e9;
                 li {
                     float: left;
                     color: $color-c;
-                    font-family: "esamanru-Light";
+                    font-family: "GongGothicMedium";
                     font-size: 13px;
                     & + li {
                         margin-left: 2rem;
