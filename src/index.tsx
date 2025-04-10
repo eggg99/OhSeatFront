@@ -4,7 +4,8 @@ import './styles/index.scss';
 import './styles/layout.scss';
 import './styles/button.scss';
 import './styles/custom.scss';
-import App from './App';
+import '@/index.css'
+import App from './App.jsx';
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));

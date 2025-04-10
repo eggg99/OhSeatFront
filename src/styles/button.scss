@@ -1,6 +1,9 @@
 .btn-primary {
     --btn-color: white;
     --primary-color:#e50914;
+    &:hover {
+      background: #c90000;
+    }
 }
 
 .btn-secondary {

@@ -1,8 +1,8 @@
 import React from "react";
 import { BrowserRouter } from "react-router-dom";
-import Header from "./pages/PageHeader";
-import Footer from "./pages/PageFooter";
-import AppRoutes from "./routes.js";
+import Header from "./pages/PageHeader.js";
+import Footer from "./pages/PageFooter.js";
+import AppRoutes from "./routes.jsx";
 
 
 function App() {
