@@ -7,6 +7,7 @@ import Login from './components/Login';
 import Join from './components/Join';
 import FindId from "./components/FindId";
 import FindPw from "./components/FindPw";
+import Mypage from "./components/Mypage";
 
 function AppRoutes(){
     return(
@@ -18,6 +19,7 @@ function AppRoutes(){
                 <Route path="find/id" element={<FindId />} />
                 <Route path="find/pw" element={<FindPw />} />
                 <Route path="login" element={<Login />} />
+                <Route path="mypage" element={<Mypage />} />
             </Route>
             <Route path="/recommend" element={<PageUser />} />
             <Route path="/chatting" element={<PageUser />} />

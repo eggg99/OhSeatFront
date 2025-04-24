@@ -2,14 +2,14 @@ import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
 import { REGEXP_ONLY_DIGITS_AND_CHARS } from "input-otp"
-import {
-  InputOTP,
-  InputOTPGroup,
-  InputOTPSlot,
-} from "@/components/ui/input-otp"
+import { InputOTP, InputOTPGroup, InputOTPSlot} from "@/components/ui/input-otp"
+import { ArrowBigLeft } from "lucide-react"
+import { Link } from "react-router-dom";
+
 export default function FindPw(){
     return (
-        <form className='login-form'>
+        <form className='login-form join shadow rounded-xl border bg-card'>
+            <Link to="/user/login"><ArrowBigLeft className="absolute top-1 left-1 w-8 h-8" /></Link>
             <h1 className='title'>비밀번호 찾기</h1>
             <div className='input-group'>
                 <Input type="text" placeholder="이름" id="name" name="name" required/>

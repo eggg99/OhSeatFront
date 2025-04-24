@@ -16,6 +16,7 @@ const Header = () => {
                 <div className="login_btn_wrap">
                     <Link to="/user/join"   className="btn btn-primary btn-jelly white">회원가입</Link>
                     <Link to="/user/login"  className="btn btn-secondary btn-jelly white">로그인</Link>
+                    <Link to="/user/mypage"  className="btn btn-secondary btn-jelly white">마이페이지(temp)</Link>
                 </div>
             </div>
         </header>
