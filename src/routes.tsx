@@ -3,11 +3,12 @@ import { Route, Routes } from "react-router-dom";
 import PageUser from './pages/PageUser';
 import PageMain from "./pages/PageMain";
 import PageNotFound from "./pages/PageNotFound";
-import Login from './components/Login';
-import Join from './components/Join';
-import FindId from "./components/FindId";
-import FindPw from "./components/FindPw";
-import Mypage from "./components/Mypage";
+import Login from './components/user/Login';
+import Join from './components/user/Join';
+import FindId from "./components/user/FindId";
+import FindPw from "./components/user/FindPw";
+import Mypage from "./components/user/Mypage";
+import PageRecommend from "./pages/PageRecommend";
 
 function AppRoutes(){
     return(
@@ -21,7 +22,7 @@ function AppRoutes(){
                 <Route path="login" element={<Login />} />
                 <Route path="mypage" element={<Mypage />} />
             </Route>
-            <Route path="/recommend" element={<PageUser />} />
+            <Route path="/recommend" element={<PageRecommend />} />
             <Route path="/chatting" element={<PageUser />} />
             <Route path="*" element={<PageNotFound />} />
         </Routes>

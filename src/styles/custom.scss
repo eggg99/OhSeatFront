@@ -1,0 +1,31 @@
+.content-wrapper{
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+    border-bottom: 1px dashed #e4e4e7b3;
+    border-right: 1px dashed #e4e4e7b3;
+    &.vtcal{
+      overflow-y: auto;
+      height:calc(100vh - 250px);
+    }
+}
+.checkbox {
+    display: none; // 체크박스 숨김
+  
+    &:checked + .terms-label {
+      background:#c90000;
+    }
+  }
+  
+  .terms-label {
+    display: inline-block;
+    padding: 4px 16px;
+    border-radius: 4px;
+    background-color: black;
+    color:#fff;
+    cursor: pointer;
+    transition: border 0.2s ease;
+    width: 100%;
+    text-align: center;
+
+  }
