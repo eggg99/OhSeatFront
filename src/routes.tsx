@@ -9,6 +9,7 @@ import FindId from "./components/user/FindId";
 import FindPw from "./components/user/FindPw";
 import Mypage from "./components/user/Mypage";
 import PageRecommend from "./pages/PageRecommend";
+import PageRecommendDetail from "./pages/PageRecommendDetail";
 
 function AppRoutes(){
     return(
@@ -23,6 +24,7 @@ function AppRoutes(){
                 <Route path="mypage" element={<Mypage />} />
             </Route>
             <Route path="/recommend" element={<PageRecommend />} />
+            <Route path="/recommend/:id" element={<PageRecommendDetail />} />
             <Route path="/chatting" element={<PageUser />} />
             <Route path="*" element={<PageNotFound />} />
         </Routes>

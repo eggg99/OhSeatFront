@@ -18,6 +18,7 @@ import {
     PaginationPrevious,
   } from "@/components/ui/pagination"
   import datas from '../../assets/sample/data/ReviewData.json'
+  import { Link } from "react-router-dom";
   
   export default function SeatReviewList() {
     return (
@@ -38,7 +39,9 @@ import {
                 <TableBody>
                     {datas.map((data) => (
                         <TableRow key={data.id}>
-                        <TableCell>{data.title}</TableCell>
+                        <Link to={`/recommend/${data.id}`}>
+                            <TableCell>{data.title}</TableCell>
+                        </Link>
                         <TableCell>{data.author}</TableCell>
                         <TableCell>{data.date}</TableCell>
                         <TableCell>{data.views}</TableCell>
