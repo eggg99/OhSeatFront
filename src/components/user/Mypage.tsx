@@ -20,7 +20,7 @@ export default function Join(){
                     <Input type="email" placeholder="닉네임" />
                     <Button type="submit">중복</Button>
                 </div>
-            </div>
+            </div>hjkl
             <div className='input-group'>
                 <Input type="password" placeholder="비밀번호" id="password" name="password"/>
             </div>
@@ -30,10 +30,10 @@ export default function Join(){
             <div className='input-group'>
                 <Input type="text" placeholder="핸드폰번호" id="phone" name="phone" required/>
             </div>
-            <div className="input-group">
+            {/* <div className="input-group">
                 <Label className="text-slate-300" htmlFor="phone">프로필사진</Label>
                 <Input type="file" id="profile" name="profile" accept="image/*" />
-            </div>
+            </div> */}
             <button className="btn btn-primary w-full text-sm">수정하기</button>
             <div className='link-group space-x-1 self-end'>
                 <Link to="/">

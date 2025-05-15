@@ -20,7 +20,7 @@ export default function Join(){
                     <Button type="submit">전송</Button>
                 </div>
             </div>
-            <div className='input-group'>
+            {/* <div className='input-group'>
                 <Label className="text-slate-300" htmlFor="email_otp">인증번호</Label>
                 <InputOTP maxLength={6} pattern={REGEXP_ONLY_DIGITS_AND_CHARS}>
                     <InputOTPGroup>
@@ -32,7 +32,7 @@ export default function Join(){
                         <InputOTPSlot index={5} />
                     </InputOTPGroup>
                 </InputOTP>
-            </div>
+            </div> */}
             <div className='input-group'>
                 <div className="flex w-full items-center space-x-2">
                     <Input type="email" placeholder="닉네임" />
@@ -48,10 +48,10 @@ export default function Join(){
             <div className='input-group'>
                 <Input type="text" placeholder="핸드폰번호" id="phone" name="phone" required/>
             </div>
-            <div className="input-group">
+            {/* <div className="input-group">
                 <Label className="text-slate-300" htmlFor="phone">프로필사진</Label>
                 <Input type="file" id="profile" name="profile" accept="image/*" />
-            </div>
+            </div> */}
             <button className="btn btn-primary w-full text-sm">회원가입</button>
         </form>
     )
