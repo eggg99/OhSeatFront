@@ -1,0 +1,14 @@
+.detail-wrapper{
+    width: 100%;
+    margin: 2rem auto 5rem;
+    .detail-form{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width:80%;
+        margin:0 auto;
+        padding: 2rem;
+        gap:1rem;
+    }
+}
