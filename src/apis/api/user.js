@@ -1,0 +1,24 @@
+import { defaultInstance } from "@/apis/utils/instance";
+
+// 회원가입 요청
+export const join = async (formData) => {
+    try {
+        const response = await defaultInstance.post('/user/create', formData);
+        return response.data;
+    } catch (error) {
+        console.error('회원가입 에러:', error);
+        throw error;
+    }
+};
+
+
+// 로그인 요청
+export const login = async (formData) => {
+    try {
+        const response = await defaultInstance.post('/user/login', formData);
+        return response.data;
+    } catch (error) {
+        console.error('로그인 에러:', error);
+        throw error;
+    }
+};
