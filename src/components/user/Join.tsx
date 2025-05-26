@@ -13,8 +13,8 @@ export default function Join(){
     const navigate = useNavigate(); // ✅ 이동을 위한 훅
 
     const [formData, setFormData] = useState({
-        name: '',
         email: '',
+        name: '',
         nickname: '',
         password: '',
         password2: '',
@@ -41,6 +41,7 @@ export default function Join(){
 
         try {
             const response = await join(formData);
+            console.log(response);
             // ✅ 성공 후 이동
             alert('회원가입이 완료되었습니다!');
             navigate('/user/login');

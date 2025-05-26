@@ -3,7 +3,7 @@ import { defaultInstance } from "@/apis/utils/instance";
 // 회원가입 요청
 export const join = async (formData) => {
     try {
-        const response = await defaultInstance.post('/user/create', formData);
+        const response = await defaultInstance.post('/user/join', formData);
         return response.data;
     } catch (error) {
         console.error('회원가입 에러:', error);
