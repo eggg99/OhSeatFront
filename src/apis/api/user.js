@@ -23,7 +23,7 @@ export const login = async (formData) => {
     }
 };
 
-// 로그인 요청
+// 마이페이지 요청
 export const mypage = async (formData) => {
     try {
         const response = await defaultInstance.get('/user/mypage', {params: formData});
