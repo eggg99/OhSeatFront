@@ -1,7 +1,7 @@
 import { defaultInstance } from "@/apis/utils/instance";
 
-// 회원가입 요청
-export const join = async (formData) => {
+// 회원가입 처리
+export const registerUser = async (formData) => {
     try {
         const response = await defaultInstance.post('/user/join', formData);
         return response.data;
@@ -11,9 +11,8 @@ export const join = async (formData) => {
     }
 };
 
-
-// 로그인 요청
-export const login = async (formData) => {
+// 로그인 처리
+export const loginUser = async (formData) => {
     try {
         const response = await defaultInstance.post('/user/login', formData);
         return response.data;
@@ -23,10 +22,32 @@ export const login = async (formData) => {
     }
 };
 
-// 마이페이지 요청
-export const mypage = async (formData) => {
+// 마이페이지 조회
+export const getUser = async (formData) => {
     try {
         const response = await defaultInstance.get('/user/mypage', {params: formData});
+        return response.data;
+    } catch (error) {
+        console.error('마이페이지 에러:', error);
+        throw error;
+    }
+};
+
+// 마이페이지 수정
+export const updateUser = async (formData) => {
+    try {
+        const response = await defaultInstance.put('/user/mypage', formData);
+        return response.data;
+    } catch (error) {
+        console.error('마이페이지 에러:', error);
+        throw error;
+    }
+};
+
+// 회원탈퇴
+export const deleteUser = async (userId) => {
+    try {
+        const response = await defaultInstance.delete(`/user/mypage/${userId}`);
         return response.data;
     } catch (error) {
         console.error('마이페이지 에러:', error);

@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
-import { login } from "@/apis/api/user";
+import { loginUser } from "@/apis/api/user";
 export default function Login(){
     const navigate = useNavigate();
 
@@ -23,9 +23,13 @@ export default function Login(){
         e.preventDefault();
 
         try {
-            const response = await login(formData);
-            // ✅ 성공 후 이동
+            const response = await loginUser(formData);
+            // 성공 후 이동
             alert('로그인이 완료되었습니다!');
+            // 로컬 스토리지에 저장
+            localStorage.setItem("userId", response.userId);
+            localStorage.setItem("userNick", response.nickname);
+            localStorage.setItem("userEmail", response.email);
             navigate('/');
         } catch (error) {
             console.error(error);
