@@ -1,52 +1,84 @@
 import { Input } from "@/components/ui/input"
-import { Button } from "@/components/ui/button"
-import { Label } from "@/components/ui/label"
-import { REGEXP_ONLY_DIGITS_AND_CHARS } from "input-otp"
-import { InputOTP, InputOTPGroup, InputOTPSlot} from "@/components/ui/input-otp"
 import { ArrowBigLeft } from "lucide-react"
 import { Link } from "react-router-dom";
 import { use, useState } from "react"
-import { registerUser } from "@/apis/api/user"
 import { useNavigate } from 'react-router-dom';
+import { registerUser } from "@/apis/api/user";
 
 export default function Join(){
     const navigate = useNavigate(); // 이동을 위한 훅
 
-    const [formData, setFormData] = useState({
-        name: '',
-        email: '',
-        nickname: '',
-        password: '',
-        password2: '',
-        phoneNumber: '',
+    const [inputValue, setInputValue] = useState({
+        name: '',               // 이름
+        email: '',              // 이메일
+        nickname: '',           // 닉네임
+        password: '',           // 비밀번호
+        password2: '',          // 비밀번호 확인
+        phoneNumber: '',        // 핸드폰번호
+
+        validPassword : false,  // 비밀번호 정규식 충족 여부
     });
 
-    const [message, setMessage] = useState('');
+    const [errorMessages, setErrorMessages] = useState({
+        password: "",
+        password2: "",
+    });
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const { name, value } = e.target;
-        setFormData((prev) => ({
-            ...prev,
-            [name]: value,
-        }));
-    };
+
+    const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*()_\-+=]).{8,16}$/;
+    const submitRequirements = 
+        inputValue.name && 
+        inputValue.email && 
+        inputValue.nickname && 
+        inputValue.password && 
+        inputValue.phoneNumber && 
+        inputValue.validPassword;
+
+    // 입력 필드 변경 시, 상태 반영을 위한 핸들러
+    // e: React.ChangeEvent<HTMLInputElement> : 이벤트 객체의 HTMLInputElement 타입 명시
+    const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = e.target;       // 이벤트가 발생한 <input>요소의 name, value를 꺼내기
+        setInputValue({                         
+            ...inputValue,                      // 기존 값을 그대로 복사하여 바꾸려는 필드만 덮어씌우도록함
+            [name] : value,                     // 해당 name에 새로운 value를 할당함
+        });
+
+        switch(name) {
+            case "password" : 
+                const isValid = passwordRegex.test(value);
+                setInputValue(prev => ({
+                    ...prev,
+                    validPassword: isValid,
+                }));
+
+                setErrorMessages(prev => ({
+                    ...prev,
+                    password: isValid ? "" : "숫자+영문자+특수문자 조합으로 8자리 이상 입력해주세요",
+                    password2: inputValue.password2 && value !== inputValue.password2
+                    ? "비밀번호와 비밀번호확인이 같지 않아요"
+                    : "",
+                }));
+            case "password2" : 
+                setErrorMessages(prev => ({
+                    ...prev,
+                    password2: inputValue.password !== value
+                    ? "비밀번호와 비밀번호확인이 같지 않아요"
+                    : "",
+                }));
+        }
+    }
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
-        if (formData.password !== formData.password2) {
-            setMessage('비밀번호가 일치하지 않습니다.');
-            return;
-        }
-
         try {
-            const response = await registerUser(formData);
+            const response = await registerUser(inputValue);
             console.log(response);
             // 성공 후 이동
             alert('회원가입이 완료되었습니다!');
             navigate('/user/login');
         } catch (error) {
-            setMessage('회원가입 실패! 다시 시도해주세요.');
+            alert('회원가입 실패! 다시 시도해주세요.');
             console.error(error);
         }
     };
@@ -62,29 +94,50 @@ export default function Join(){
             <h1 className='title'>회원가입</h1>
 
             <div className='input-group'>
-                <Input type="text" placeholder="이름" name="name" value={formData.name} onChange={handleChange} required/>
+                <Input type="text" 
+                    placeholder="이름" 
+                    name="name" 
+                    value={inputValue.name} 
+                    onChange={handleInput} 
+                    required 
+                    maxLength={30}
+                />
             </div>
             <div className='input-group'>
                 <div className="flex w-full items-center space-x-2">
-                    <Input type="email" placeholder="이메일" name="email" value={formData.email} onChange={handleChange} required />
+                    <Input type="email" placeholder="이메일" name="email" value={inputValue.email} onChange={handleInput} required maxLength={240}/>
                 </div>
             </div>
             <div className='input-group'>
                 <div className="flex w-full items-center space-x-2">
-                    <Input type="text" placeholder="닉네임" name="nickname" value={formData.nickname} onChange={handleChange} required/>
+                    <Input type="text" placeholder="닉네임" name="nickname" value={inputValue.nickname} onChange={handleInput} required maxLength={80}/>
                 </div>
             </div>
             <div className='input-group'>
-                <Input type="password" placeholder="비밀번호" name="password" value={formData.password} onChange={handleChange} required/>
+                <Input type="password" 
+                    placeholder="비밀번호" 
+                    name="password" 
+                    value={inputValue.password} 
+                    onChange={handleInput}
+                    required
+                />
+                <p className="text-red-500">{errorMessages.password && <div className="error-msg">{errorMessages.password}</div>}</p>
             </div>
             <div className='input-group'>
-                <Input type="password" placeholder="비밀번호 확인" name="password2" value={formData.password2} onChange={handleChange} required/>
+                <Input type="password" placeholder="비밀번호 확인" name="password2" value={inputValue.password2} onChange={handleInput} required/>
+                <p className="text-red-500">{errorMessages.password2 && <div className="error-msg">{errorMessages.password2}</div>}</p>
+                
             </div>
             <div className='input-group'>
-                <Input type="text" placeholder="핸드폰번호" name="phoneNumber" value={formData.phoneNumber} onChange={handleChange} required/>
+                <Input type="text" placeholder="핸드폰번호" name="phoneNumber" value={inputValue.phoneNumber} onChange={handleInput} required maxLength={12}/>
             </div>
-            <button className="btn btn-primary w-full text-sm" type="submit">회원가입</button>
-            {message && <p className="text-center mt-2 text-sm text-red-500">{message}</p>}
+            <button 
+                className="btn btn-primary w-full text-sm" 
+                type="submit"
+                disabled={!submitRequirements}
+            >
+                    회원가입
+            </button>
         </form>
     )
 }
