@@ -54,27 +54,23 @@ export default function Join(){
                 setErrorMessages(prev => ({
                     ...prev,
                     password: isValid ? "" : "숫자+영문자+특수문자 조합으로 8자리 이상 입력해주세요",
-                    password2: inputValue.password2 && value !== inputValue.password2
-                    ? "비밀번호와 비밀번호확인이 같지 않아요"
-                    : "",
                 }));
             case "password2" : 
                 setErrorMessages(prev => ({
                     ...prev,
-                    password2: inputValue.password !== value
-                    ? "비밀번호와 비밀번호확인이 같지 않아요"
-                    : "",
+                    password2: inputValue.password !== value ? "비밀번호와 비밀번호확인이 같지 않아요" : "",
                 }));
         }
     }
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-
+        if(!inputValue.validPassword){
+            alert("비밀번호를 확인해주세요");
+            return false;
+        }
         try {
-            const response = await registerUser(inputValue);
-            console.log(response);
-            // 성공 후 이동
+            await registerUser(inputValue);
             alert('회원가입이 완료되었습니다!');
             navigate('/user/login');
         } catch (error) {
@@ -129,12 +125,11 @@ export default function Join(){
                 
             </div>
             <div className='input-group'>
-                <Input type="text" placeholder="핸드폰번호" name="phoneNumber" value={inputValue.phoneNumber} onChange={handleInput} required maxLength={12}/>
+                <Input type="text" placeholder="휴대폰번호(- 제외)" name="phoneNumber" value={inputValue.phoneNumber} onChange={handleInput} required maxLength={12}/>
             </div>
             <button 
                 className="btn btn-primary w-full text-sm" 
                 type="submit"
-                disabled={!submitRequirements}
             >
                     회원가입
             </button>

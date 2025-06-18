@@ -1,20 +1,14 @@
+import { userStore } from '@/store/userStore';
 import Logo from '../components/common/Logo';
 import { useState, useEffect } from 'react';
 import { Link } from "react-router-dom";
 
 const Header = () => {
-    const [userId, setUserId] = useState<string | null>(null);
-    const [userNick, setUserNick] = useState<string | null>(null);
-
-    useEffect(() => {
-        setUserId(localStorage.getItem('userId'));
-        setUserNick(localStorage.getItem('userNick'));
-    }, []);
+    const { userId, userNick, clearUser } = userStore();
 
     const logout = () => {
-        localStorage.clear();
-        setUserId(null);
-        setUserNick(null);
+        alert('로그아웃 되었습니다');
+        clearUser();
     }
 
     return (

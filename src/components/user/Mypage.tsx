@@ -5,12 +5,14 @@ import { Link } from "react-router-dom";
 import { useEffect, useState } from "react"
 import { getUser, updateUser, deleteUser } from "@/apis/api/user"
 import { useNavigate } from 'react-router-dom';
+import { userStore } from "@/store/userStore";
 
 export default function Mypage(){
     const navigate = useNavigate(); // 이동을 위한 훅
+    const { userId } = userStore();
 
     const [formData, setFormData] = useState({
-        userId:localStorage.getItem('userId'),
+        userId:userId,
         name: '',
         email: '',
         nickname: '',

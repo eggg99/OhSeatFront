@@ -17,8 +17,13 @@ export const loginUser = async (formData) => {
         const response = await defaultInstance.post('/user/login', formData);
         return response.data;
     } catch (error) {
-        console.error('로그인 에러:', error);
-        throw error;
+        if (error.response && error.response.status === 401) {
+            alert(error.response.data.message);
+            return false;
+        } else {
+            console.error('로그인 에러:', error);
+            throw error;
+        }
     }
 };
 

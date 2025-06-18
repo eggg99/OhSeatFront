@@ -3,8 +3,10 @@ import { Link, useNavigate } from "react-router-dom";
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { loginUser } from "@/apis/api/user";
+import { userStore } from "@/store/userStore";
 export default function Login(){
     const navigate = useNavigate();
+    const { setUser } = userStore();
 
     const [formData, setFormData] = useState({
         email: '',
@@ -21,19 +23,14 @@ export default function Login(){
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-
-        try {
-            const response = await loginUser(formData);
-            // 성공 후 이동
-            alert('로그인이 완료되었습니다!');
-            // 로컬 스토리지에 저장
-            localStorage.setItem("userId", response.userId);
-            localStorage.setItem("userNick", response.nickname);
-            localStorage.setItem("userEmail", response.email);
-            navigate('/');
-        } catch (error) {
-            console.error(error);
+        const response = await loginUser(formData);
+        if (!response) {
+            // 로그인 실패한 경우: 아무 동작 안함
+            return;
         }
+        alert('로그인이 완료되었습니다!');
+        setUser({'userId': response.userId, 'userNick': response.nickname, 'userEmail': response.email})
+        navigate('/');
     }
 
     return(
