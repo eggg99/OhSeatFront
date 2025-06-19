@@ -6,9 +6,10 @@ export const userStore = create(persist(
         userId: '',
         userNick: '',
         userEmail: '',
+        token : '',
         
-        setUser: (user) => set({ userId: user.userId, userNick: user.userNick, userEmail: user.userEmail}),
-        clearUser: () => set({ userId: '', userNick: '', userEmail: '',}),
+        setUser: (user) => set({ userId: user.userId, userNick: user.userNick, userEmail: user.userEmail, token:user.token}),
+        clearUser: () => set({ userId: '', userNick: '', userEmail: '',token:''}),
     }),
     {
         name : 'user-store',

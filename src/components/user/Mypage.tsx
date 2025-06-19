@@ -1,7 +1,4 @@
 import { Input } from "@/components/ui/input"
-import { Button } from "@/components/ui/button"
-import { ArrowBigLeft } from "lucide-react"
-import { Link } from "react-router-dom";
 import { useEffect, useState } from "react"
 import { getUser, updateUser, deleteUser } from "@/apis/api/user"
 import { useNavigate } from 'react-router-dom';
@@ -9,17 +6,26 @@ import { userStore } from "@/store/userStore";
 
 export default function Mypage(){
     const navigate = useNavigate(); // 이동을 위한 훅
-    const { userId } = userStore();
+    const { userId, clearUser } = userStore();
 
     const [formData, setFormData] = useState({
-        userId:userId,
-        name: '',
-        email: '',
-        nickname: '',
-        password: '',
-        password2: '',
-        phoneNumber: '',
+        userId:userId,          // 유저 아이디
+        name: '',               // 이름
+        email: '',              // 이메일
+        nickname: '',           // 닉네임
+        password: '',           // 비밀번호
+        password2: '',          // 비밀번호 확인
+        phoneNumber: '',        // 핸드폰번호
+
+        validPassword : false,  // 비밀번호 정규식 충족 여부
     });
+
+    const [errorMessages, setErrorMessages] = useState({
+        password: "",
+        password2: "",
+    });
+
+    const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*()_\-+=]).{8,16}$/;
 
     const [message, setMessage] = useState('');
 
@@ -30,8 +36,13 @@ export default function Mypage(){
     const getData = async () => {
         try {
             const response = await getUser(formData);
-            console.log('getData' , response);
-            setFormData(response); // 받아온 데이터 저장
+            setFormData(prev => ({
+                ...prev,              // 기존 값 유지 (특히 password)
+                ...response,          // 응답으로 덮어쓰기
+                password: prev.password,   // password는 기존 값 유지
+                password2: prev.password2, // 필요하면 이것도 유지
+                validPassword: prev.validPassword,
+            }));
         } catch (error) {
             console.error(error);
         }
@@ -40,24 +51,42 @@ export default function Mypage(){
     // 수정 시 state 업데이트용 핸들러
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
-        setFormData((prev) => ({
-            ...prev,
+        setFormData({
+            ...formData,
             [name]: value,
-        }));
+        });
+
+        switch(name) {
+            case "password" : 
+                const isValid = passwordRegex.test(value);
+                setFormData(prev => ({
+                    ...prev,
+                    validPassword: isValid,
+                }));
+
+                setErrorMessages(prev => ({
+                    ...prev,
+                    password: isValid ? "" : "",
+                }));
+            case "password2" : 
+                setErrorMessages(prev => ({
+                    ...prev,
+                    password2: formData.password !== value ? "비밀번호와 비밀번호확인이 같지 않아요" : "",
+                }));
+        }
     };
 
     // 수정 버튼 클릭 시 호출되는 핸들러
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-
-        if (formData.password !== formData.password2) {
-            setMessage('비밀번호가 일치하지 않습니다.');
-            return;
+        console.log(formData.password);
+        if(!formData.validPassword && (formData.password || formData.password2)){
+            alert("비밀번호를 확인해주세요");
+            return false;
         }
-        
         try {
-            const response = await updateUser(formData);
-            console.log('updateUser', response);
+            await updateUser(formData);
+            alert('회원정보 수정이 완료되었습니다');
         } catch (error) {
             console.error(error);
         }
@@ -71,6 +100,7 @@ export default function Mypage(){
         try{
             await deleteUser(formData.userId);
             alert("탈퇴가 처리되었습니다.");
+            clearUser();
             navigate('/');
         } catch (error) {
             console.error(error);
@@ -98,14 +128,15 @@ export default function Mypage(){
                 </div>
                 <div className='input-group'>
                     <Input type="password" placeholder="비밀번호" id="password" name="password" onChange={handleChange}/>
+                    <div className="text-red-500">{errorMessages.password && <div className="error-msg">{errorMessages.password}</div>}</div>
                 </div>
                 <div className='input-group'>
                     <Input type="password" placeholder="비밀번호 확인" id="password2" name="password2" onChange={handleChange}/>
+                    <div className="text-red-500">{errorMessages.password2 && <div className="error-msg">{errorMessages.password2}</div>}</div>
                 </div>
                 <div className='input-group'>
                     <Input type="text" placeholder="핸드폰번호" name="phoneNumber" value={formData.phoneNumber} onChange={handleChange}/>
                 </div>
-                {message && <p className="text-center mt-2 text-sm text-red-500">{message}</p>}
                 <button className="btn btn-primary w-full text-sm" type="submit">수정하기</button>
             </form>
             <div>

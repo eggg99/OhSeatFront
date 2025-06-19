@@ -1,24 +1,24 @@
 import axios from 'axios';
+import { userStore } from "@/store/userStore";
 
 const BASE_URL = 'http://localhost:8000/api'
 
-export const axiosApi = (url, options = {}) => {
-    return axios.create({
-        baseURL: url,
-        headers: { 'Content-Type': 'application/json' },
-        ...options,
-    });
-};
+export const axiosApi = axios.create({
+    baseURL: BASE_URL,
+    headers: {
+        'Content-Type': 'application/json',
+    },
+});
 
-const axiosAuthApi = (url, options) => {
-    const token = localStorage.getItem('userInformation')
-    const instance = axios.create({
-        baseURL : url,
-        headers: {Authorization: 'Bearer ' + token },
-        ...options,
-    })
-    return instance
-}
-
-export const defaultInstance = axiosApi(BASE_URL);
-export const authInstance = axiosAuthApi(BASE_URL)
+axiosApi.interceptors.request.use(
+  (config) => {
+    const { token } = userStore.getState();
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
