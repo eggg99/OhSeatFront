@@ -7,6 +7,7 @@ import Login from './components/user/Login';
 import Join from './components/user/Join';
 import FindId from "./components/user/FindId";
 import FindPw from "./components/user/FindPw";
+import ChangePw from "./components/user/ChangePw";
 import Mypage from "./components/user/Mypage";
 import PageRecommend from "./pages/PageRecommend";
 import PageRecommendDetail from "./pages/PageRecommendDetail";
@@ -22,6 +23,7 @@ function AppRoutes(){
                 <Route path="find/pw" element={<FindPw />} />
                 <Route path="login" element={<Login />} />
                 <Route path="mypage" element={<Mypage />} />
+                <Route path="ChangePw" element={<ChangePw />} />
             </Route>
             <Route path="/recommend" element={<PageRecommend />} />
             <Route path="/recommend/:id" element={<PageRecommendDetail />} />

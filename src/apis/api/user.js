@@ -30,7 +30,6 @@ export const loginUser = async (formData) => {
 // 마이페이지 조회
 export const getUser = async (formData) => {
     try {
-        console.log(formData);
         const response = await axiosApi.get('/user/mypage', {params: formData})
         return response.data;
     } catch (error) {

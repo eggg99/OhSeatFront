@@ -1,8 +1,9 @@
 import { Input } from "@/components/ui/input"
 import { useEffect, useState } from "react"
 import { getUser, updateUser, deleteUser } from "@/apis/api/user"
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { userStore } from "@/store/userStore";
+import { Button } from "../ui/button";
 
 export default function Mypage(){
     const navigate = useNavigate(); // 이동을 위한 훅
@@ -13,21 +14,8 @@ export default function Mypage(){
         name: '',               // 이름
         email: '',              // 이메일
         nickname: '',           // 닉네임
-        password: '',           // 비밀번호
-        password2: '',          // 비밀번호 확인
         phoneNumber: '',        // 핸드폰번호
-
-        validPassword : false,  // 비밀번호 정규식 충족 여부
     });
-
-    const [errorMessages, setErrorMessages] = useState({
-        password: "",
-        password2: "",
-    });
-
-    const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*()_\-+=]).{8,16}$/;
-
-    const [message, setMessage] = useState('');
 
     useEffect(() => {
         getData(); // 마운트 될 때 데이터 가져오기
@@ -36,13 +24,7 @@ export default function Mypage(){
     const getData = async () => {
         try {
             const response = await getUser(formData);
-            setFormData(prev => ({
-                ...prev,              // 기존 값 유지 (특히 password)
-                ...response,          // 응답으로 덮어쓰기
-                password: prev.password,   // password는 기존 값 유지
-                password2: prev.password2, // 필요하면 이것도 유지
-                validPassword: prev.validPassword,
-            }));
+            setFormData(response);
         } catch (error) {
             console.error(error);
         }
@@ -51,39 +33,16 @@ export default function Mypage(){
     // 수정 시 state 업데이트용 핸들러
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
-        setFormData({
-            ...formData,
+        setFormData((prev) => ({
+            ...prev,
             [name]: value,
-        });
-
-        switch(name) {
-            case "password" : 
-                const isValid = passwordRegex.test(value);
-                setFormData(prev => ({
-                    ...prev,
-                    validPassword: isValid,
-                }));
-
-                setErrorMessages(prev => ({
-                    ...prev,
-                    password: isValid ? "" : "",
-                }));
-            case "password2" : 
-                setErrorMessages(prev => ({
-                    ...prev,
-                    password2: formData.password !== value ? "비밀번호와 비밀번호확인이 같지 않아요" : "",
-                }));
-        }
+        }));
     };
 
     // 수정 버튼 클릭 시 호출되는 핸들러
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        console.log(formData.password);
-        if(!formData.validPassword && (formData.password || formData.password2)){
-            alert("비밀번호를 확인해주세요");
-            return false;
-        }
+        
         try {
             await updateUser(formData);
             alert('회원정보 수정이 완료되었습니다');
@@ -116,6 +75,9 @@ export default function Mypage(){
                 <h1 className='title'>마이페이지</h1>
                 
                 <div className='input-group'>
+                    <Link to="/user/changePw" className="w-1/4 m-0 bg-black text-white text-center rounded-sm p-1 outline-2 outline-offset-4">비밀번호 수정</Link>
+                </div>
+                <div className='input-group'>
                     <Input type="text" placeholder="이름" value={formData.name} disabled/>
                 </div>
                 <div className='input-group'>
@@ -127,20 +89,12 @@ export default function Mypage(){
                     </div>
                 </div>
                 <div className='input-group'>
-                    <Input type="password" placeholder="비밀번호" id="password" name="password" onChange={handleChange}/>
-                    <div className="text-red-500">{errorMessages.password && <div className="error-msg">{errorMessages.password}</div>}</div>
-                </div>
-                <div className='input-group'>
-                    <Input type="password" placeholder="비밀번호 확인" id="password2" name="password2" onChange={handleChange}/>
-                    <div className="text-red-500">{errorMessages.password2 && <div className="error-msg">{errorMessages.password2}</div>}</div>
-                </div>
-                <div className='input-group'>
                     <Input type="text" placeholder="핸드폰번호" name="phoneNumber" value={formData.phoneNumber} onChange={handleChange}/>
                 </div>
                 <button className="btn btn-primary w-full text-sm" type="submit">수정하기</button>
             </form>
             <div>
-                <button className="btn btn-secondary text-sm " onClick={handleDelete}>탈퇴하기</button>
+                <button className="btn text-sm " onClick={handleDelete}>탈퇴하기</button>
             </div>
         </div>
     )

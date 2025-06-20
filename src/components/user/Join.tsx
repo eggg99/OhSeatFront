@@ -26,13 +26,6 @@ export default function Join(){
 
 
     const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*()_\-+=]).{8,16}$/;
-    const submitRequirements = 
-        inputValue.name && 
-        inputValue.email && 
-        inputValue.nickname && 
-        inputValue.password && 
-        inputValue.phoneNumber && 
-        inputValue.validPassword;
 
     // 입력 필드 변경 시, 상태 반영을 위한 핸들러
     // e: React.ChangeEvent<HTMLInputElement> : 이벤트 객체의 HTMLInputElement 타입 명시
@@ -117,11 +110,11 @@ export default function Join(){
                     onChange={handleInput}
                     required
                 />
-                <p className="text-red-500">{errorMessages.password && <div className="error-msg">{errorMessages.password}</div>}</p>
+                <div className="text-red-500">{errorMessages.password && <div className="error-msg">{errorMessages.password}</div>}</div>
             </div>
             <div className='input-group'>
                 <Input type="password" placeholder="비밀번호 확인" name="password2" value={inputValue.password2} onChange={handleInput} required/>
-                <p className="text-red-500">{errorMessages.password2 && <div className="error-msg">{errorMessages.password2}</div>}</p>
+                <div className="text-red-500">{errorMessages.password2 && <div className="error-msg">{errorMessages.password2}</div>}</div>
                 
             </div>
             <div className='input-group'>
