@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Input } from "@/components/ui/input"
 import { useNavigate } from 'react-router-dom';
+import { changePassword } from "@/apis/api/user";
 
 export default function ChangePw(){
     const navigate = useNavigate();
@@ -46,13 +47,19 @@ export default function ChangePw(){
         }
     };
 
-    const handleSubmit = () => {
-        try {
-            alert('비밀번호 변경이 완료되었습니다.');
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        if(!inputValue.validPassword){
+            alert("비밀번호를 확인해주세요");
+            return false;
+        }
+        const response = await changePassword(inputValue);
+        if(!response){
+            // 비밀번호 변경이 실패한 경우 : 아무 동작 안함
+            return;
+        } else {
+            alert('비밀번호 변경이 완료되었습니다!');
             navigate('/user/mypage');
-        } catch (error) {
-            alert('회원가입 실패! 다시 시도해주세요.');
-            console.error(error);
         }
     };
 
@@ -102,3 +109,12 @@ export default function ChangePw(){
         </form>
     )
 }
+function updatePassword(inputValue: {
+    originPwd: string; // 기존 비밀번호
+    password: string; // 새로운 비밀번호
+    password2: string; // 새로운 비밀번호 확인
+    validPassword: boolean;
+}) {
+    throw new Error("Function not implemented.");
+}
+

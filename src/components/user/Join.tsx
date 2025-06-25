@@ -62,13 +62,13 @@ export default function Join(){
             alert("비밀번호를 확인해주세요");
             return false;
         }
-        try {
-            await registerUser(inputValue);
+        const response = await registerUser(inputValue);
+        if(!response){
+            // 회원가입이 실패한 경우 : 아무 동작 안함
+            return;
+        } else {
             alert('회원가입이 완료되었습니다!');
             navigate('/user/login');
-        } catch (error) {
-            alert('회원가입 실패! 다시 시도해주세요.');
-            console.error(error);
         }
     };
 
