@@ -30,7 +30,10 @@ export default function Join(){
     // 입력 필드 변경 시, 상태 반영을 위한 핸들러
     // e: React.ChangeEvent<HTMLInputElement> : 이벤트 객체의 HTMLInputElement 타입 명시
     const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const { name, value } = e.target;       // 이벤트가 발생한 <input>요소의 name, value를 꺼내기
+        // 이벤트가 발생한 <input>요소의 name, value를 꺼내기
+        const { name } = e.target;
+        const value = e.target.value.replace(/ /g,"") // 공백 제거된 값
+
         setInputValue({                         
             ...inputValue,                      // 기존 값을 그대로 복사하여 바꾸려는 필드만 덮어씌우도록함
             [name] : value,                     // 해당 name에 새로운 value를 할당함

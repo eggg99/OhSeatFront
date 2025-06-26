@@ -21,7 +21,9 @@ export default function ChangePw(){
     const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*()_\-+=]).{8,16}$/;
 
     const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const { name, value } = e.target;       
+        const { name } = e.target;
+        const value = e.target.value.replace(/ /g,"") // 공백 제거된 값
+
         setInputValue({                         
             ...inputValue,                      
             [name] : value,                     
@@ -109,12 +111,3 @@ export default function ChangePw(){
         </form>
     )
 }
-function updatePassword(inputValue: {
-    originPwd: string; // 기존 비밀번호
-    password: string; // 새로운 비밀번호
-    password2: string; // 새로운 비밀번호 확인
-    validPassword: boolean;
-}) {
-    throw new Error("Function not implemented.");
-}
-
