@@ -84,3 +84,23 @@ export const changePassword = async (formData) => {
         }
     }
 };
+
+// 이메일 찾기
+export const findEmail = async (formData) => {
+    try {
+        const response = await axiosApi.post('/user/findEmail', formData);
+        return response.data;
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+// 비밀번호 찾기
+export const findPw = async (formData) => {
+    try {
+        const response = await axiosApi.post('/user/findPw', formData);
+        return response.data;
+    } catch (error) {
+        console.log(error);
+    }
+}
