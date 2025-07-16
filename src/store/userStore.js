@@ -8,7 +8,11 @@ export const userStore = create(persist(
         userEmail: '',
         token : '',
         
-        setUser: (user) => set({ userId: user.userId, userNick: user.userNick, userEmail: user.userEmail, token:user.token}),
+        setUser: (user) => set((state) => ({
+            ...state,
+            ...user,
+        })),
+
         clearUser: () => set({ userId: '', userNick: '', userEmail: '',token:''}),
     }),
     {

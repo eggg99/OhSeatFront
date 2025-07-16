@@ -3,9 +3,10 @@ import { ArrowBigLeft } from "lucide-react"
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react"
 import { findPw } from "@/apis/api/user";
-
+import { userStore } from "@/store/userStore";
 export default function FindPw(){
-     const navigate = useNavigate(); // 이동을 위한 훅
+    const navigate = useNavigate(); // 이동을 위한 훅
+    const { setUser } = userStore();
 
     const [inputValue, setInputValue] = useState({
             name: '',               // 이름
@@ -28,10 +29,13 @@ export default function FindPw(){
         e.preventDefault();
 
         const response = await findPw(inputValue);
-        console.log(response);
         if(!response){
             return;
         } else {
+            alert(response.message);
+            console.log(response.changePwToken);
+            
+            setUser({'token':response.changePwToken})
             navigate('/user/changePw');
         }
     }

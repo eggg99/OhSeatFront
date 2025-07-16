@@ -2,9 +2,11 @@ import { useState } from "react";
 import { Input } from "@/components/ui/input"
 import { useNavigate } from 'react-router-dom';
 import { changePassword } from "@/apis/api/user";
+import { userStore } from "@/store/userStore";
 
 export default function ChangePw(){
     const navigate = useNavigate();
+    const { userId } = userStore();
     const [inputValue, setInputValue] = useState({
             password: '',           // 새로운 비밀번호
             password2: '',          // 새로운 비밀번호 확인
@@ -60,7 +62,12 @@ export default function ChangePw(){
             return;
         } else {
             alert('비밀번호 변경이 완료되었습니다!');
-            navigate('/user/mypage');
+
+             if (userId) {
+                navigate('/user/mypage'); // 로그인되어 있는 사용자
+            } else {
+                navigate('/user/login'); // 비밀번호 찾기로 온 사용자
+            }
         }
     };
 
