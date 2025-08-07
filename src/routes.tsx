@@ -15,7 +15,7 @@ import PageRecommendDetail from "./pages/PageRecommendDetail";
 function AppRoutes(){
     return(
         <main className="App_main">
-        <Routes >
+        <Routes > 
             <Route path="/" element={<PageMain />} />
             <Route path="/user" element={<PageUser />}>
                 <Route path="join" element={<Join />} />
