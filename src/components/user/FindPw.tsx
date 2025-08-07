@@ -4,9 +4,16 @@ import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react"
 import { findPw } from "@/apis/api/user";
 import { userStore } from "@/store/userStore";
+import ReCAPTCHA from 'react-google-recaptcha';
+
 export default function FindPw(){
     const navigate = useNavigate(); // 이동을 위한 훅
     const { setUser } = userStore();
+    const [captchaToken, setCaptchaToken] = useState<string | null>(null);
+
+    const handleCaptchaChange = (token: string | null) => {
+        setCaptchaToken(token);
+    };
 
     const [inputValue, setInputValue] = useState({
             name: '',               // 이름
@@ -27,8 +34,13 @@ export default function FindPw(){
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-
-        const response = await findPw(inputValue);
+        if (!captchaToken) {
+            alert('캡차 인증을 완료해주세요.');
+            return;
+        }
+        // captchaToken을 함께 전달
+        const response = await findPw({ ...inputValue, captchaToken });
+        
         if(!response){
             return;
         } else {
@@ -59,7 +71,10 @@ export default function FindPw(){
             <div className='input-group'>
                 <Input type="email" placeholder="이메일" name="email" value={inputValue.email} onChange={handleInput} required/>
             </div>
-
+            <ReCAPTCHA
+                sitekey={import.meta.env.VITE_REACT_APP_RECAPTCHA_SITE_KEY || ""}
+                onChange={handleCaptchaChange}
+            />
             <button className="btn btn-primary w-full text-sm" type="submit">비밀번호 찾기</button>
         </form>
     )

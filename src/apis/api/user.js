@@ -73,7 +73,6 @@ export const changePassword = async (formData) => {
         const response = await axiosApi.post('/user/changePw', formData);
         return response.data;
     } catch (error) {
-        console.log(error);
         if (error.response && error.status === 401) {
             alert(error.response.data.message);
             return false;
@@ -101,6 +100,8 @@ export const findPw = async (formData) => {
         const response = await axiosApi.post('/user/findPw', formData);
         return response.data;
     } catch (error) {
-        console.log(error);
+        console.error('비밀번호 찾기 에러:', error);
+        alert(error.response.data.message);
+        return false;
     }
 }
