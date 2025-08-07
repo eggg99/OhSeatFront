@@ -4,7 +4,15 @@ import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { loginUser } from "@/apis/api/user";
 import { userStore } from "@/store/userStore";
+import ReCAPTCHA from 'react-google-recaptcha';
+
 export default function Login(){
+    const [captchaToken, setCaptchaToken] = useState<string | null>(null);
+
+    const handleCaptchaChange = (token: string | null) => {
+        setCaptchaToken(token);
+    };
+
     const navigate = useNavigate();
     const { setUser } = userStore();
 
@@ -24,7 +32,13 @@ export default function Login(){
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        const response = await loginUser(inputValue);
+        if (!captchaToken) {
+            alert('캡차 인증을 완료해주세요.');
+            return;
+        }
+        // captchaToken을 함께 전달
+        const response = await loginUser({ ...inputValue, captchaToken });
+
         if (!response) {
             // 로그인 실패한 경우: 아무 동작 안함
             return;
@@ -48,6 +62,10 @@ export default function Login(){
             <div className='input-group'>
                 <Input type="password" placeholder="비밀번호" name="password" value={inputValue.password} onChange={handleInput} required/>
             </div>
+            <ReCAPTCHA
+                sitekey={import.meta.env.VITE_REACT_APP_RECAPTCHA_SITE_KEY || ""}
+                onChange={handleCaptchaChange}
+            />
             <button className="btn btn-primary w-full text-sm" type="submit">로그인</button>
             <div className='link-group space-x-1'>
                 <Link to="/user/join">
