@@ -72,7 +72,7 @@ export default function Login(){
                     <Button variant="link" className="p-0">회원가입</Button>
                 </Link>
                 <span>/</span>
-                <Link to="/user/find/id">
+                <Link to="/user/find/email">
                     <Button variant="link" className="p-0">아이디찾기</Button> 
                 </Link>
                 <span>/</span>

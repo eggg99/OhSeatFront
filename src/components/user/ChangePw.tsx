@@ -6,7 +6,6 @@ import { changePassword } from "@/apis/api/user";
 export default function ChangePw(){
     const navigate = useNavigate();
     const [inputValue, setInputValue] = useState({
-            originPwd: '',          // 기존 비밀번호
             password: '',           // 새로운 비밀번호
             password2: '',          // 새로운 비밀번호 확인
     
@@ -71,16 +70,6 @@ export default function ChangePw(){
             className="login-form join shadow rounded-xl border bg-card"
         >
             <h1 className='title'>비밀번호 변경</h1>
-
-            <div className='input-group'>
-                <Input type="password" 
-                    placeholder="기존 비밀번호" 
-                    name="originPwd" 
-                    value={inputValue.originPwd} 
-                    onChange={handleInput}
-                    required
-                />
-            </div>
 
             <div className='input-group'>
                 <Input type="password" 

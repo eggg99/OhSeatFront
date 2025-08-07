@@ -86,14 +86,7 @@ export default function Join(){
             <h1 className='title'>회원가입</h1>
 
             <div className='input-group'>
-                <Input type="text" 
-                    placeholder="이름" 
-                    name="name" 
-                    value={inputValue.name} 
-                    onChange={handleInput} 
-                    required 
-                    maxLength={30}
-                />
+                <Input type="text" placeholder="이름" name="name" value={inputValue.name} onChange={handleInput} required maxLength={30}/>
             </div>
             <div className='input-group'>
                 <div className="flex w-full items-center space-x-2">
@@ -123,12 +116,8 @@ export default function Join(){
             <div className='input-group'>
                 <Input type="text" placeholder="휴대폰번호(- 제외)" name="phoneNumber" value={inputValue.phoneNumber} onChange={handleInput} required maxLength={12}/>
             </div>
-            <button 
-                className="btn btn-primary w-full text-sm" 
-                type="submit"
-            >
-                    회원가입
-            </button>
+            
+            <button className="btn btn-primary w-full text-sm" type="submit">회원가입</button>
         </form>
     )
 }

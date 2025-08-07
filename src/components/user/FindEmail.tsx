@@ -2,15 +2,14 @@ import { Input } from "@/components/ui/input"
 import { ArrowBigLeft } from "lucide-react"
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react"
-import { findPw } from "@/apis/api/user";
+import { findEmail } from "@/apis/api/user";
 
-export default function FindPw(){
-     const navigate = useNavigate(); // 이동을 위한 훅
+export default function FindId() {
+    const navigate = useNavigate(); // 이동을 위한 훅
 
     const [inputValue, setInputValue] = useState({
             name: '',               // 이름
             phoneNumber: '',        // 핸드폰번호
-            email: '',              // 이메일
     });
 
     // 입력 필드 변경 시, 상태 반영을 위한 핸들러
@@ -27,12 +26,12 @@ export default function FindPw(){
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
-        const response = await findPw(inputValue);
+        const response = await findEmail(inputValue);
         console.log(response);
         if(!response){
             return;
         } else {
-            navigate('/user/changePw');
+            navigate('/user/findResult');
         }
     }
 
@@ -44,19 +43,16 @@ export default function FindPw(){
             <Link to="/user/login">
                 <ArrowBigLeft className="absolute top-1 left-1 w-8 h-8" />
             </Link>
-            <h1 className='title'>비밀번호 찾기</h1>
-
+            <h1 className='title'>이메일 찾기</h1>
+            
             <div className='input-group'>
                 <Input type="text" placeholder="이름" name="name" value={inputValue.name} onChange={handleInput} required maxLength={30}/>
             </div>
             <div className='input-group'>
                 <Input type="text" placeholder="휴대폰번호(- 제외)" name="phoneNumber" value={inputValue.phoneNumber} onChange={handleInput} required maxLength={12}/>
             </div>
-            <div className='input-group'>
-                <Input type="email" placeholder="이메일" name="email" value={inputValue.email} onChange={handleInput} required/>
-            </div>
 
-            <button className="btn btn-primary w-full text-sm" type="submit">비밀번호 찾기</button>
+            <button className="btn btn-primary w-full text-sm" type="submit">이메일 찾기</button>
         </form>
     )
 }
