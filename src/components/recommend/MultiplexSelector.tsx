@@ -7,20 +7,29 @@ const theatersBrand = [
     { id: "megabox", label: "메가박스" },
     { id: "lottecinema", label: "롯데시네마" },
 ]
+type RegionSelectorProps = {
+  onChange: (regions: string[]) => void; // 선택된 region 배열을 부모에 넘겨줌
+};
 
-export default function TheaterSelector() {
+export default function MultiplexSelector({ onChange }: RegionSelectorProps) {
   const [checked, setChecked] = useState<string[]>([])
 
   const isAllChecked = theatersBrand.every((t) => checked.includes(t.id))
 
   const toggleAll = () => {
-    setChecked(isAllChecked ? [] : theatersBrand.map((t) => t.id))
+    const newValue = isAllChecked ? [] : theatersBrand.map((t) => t.id);
+    setChecked(newValue);
+    onChange(newValue);
   }
 
   const toggleItem = (id: string) => {
-    setChecked((prev) =>
-      prev.includes(id) ? prev.filter((v) => v !== id) : [...prev, id]
-    )
+    setChecked((prev) => {
+      const newValue = prev.includes(id)
+        ? prev.filter((v) => v !== id)
+        : [...prev, id];
+      onChange(newValue);
+      return newValue;
+    });
   }
 
   return (
@@ -29,9 +38,9 @@ export default function TheaterSelector() {
           {/* 반복 렌더링 */}
         {theatersBrand.map(({ id, label }) => {
           const isChecked =
-            id === "all-theatersBrand" ? isAllChecked : checked.includes(id)
+            id === "all-theatersBrand" ? isAllChecked : checked.includes(id);
           const handleChange =
-            id === "all-theatersBrand" ? toggleAll : () => toggleItem(id)
+            id === "all-theatersBrand" ? toggleAll : () => toggleItem(id);
 
           return (
             <div className="checkbox-item" key={id}>
