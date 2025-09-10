@@ -1,46 +1,52 @@
-import { useState } from "react"
+import React, { useState } from "react"
 import '../../styles/custom.scss';
 
-const theatersBrand = [
-    { id: "all-theatersBrand", label: "전체" },
-    { id: "cgv", label: "CGV" },
-    { id: "megabox", label: "메가박스" },
-    { id: "lottecinema", label: "롯데시네마" },
-]
-type RegionSelectorProps = {
-  onChange: (regions: string[]) => void; // 선택된 region 배열을 부모에 넘겨줌
-};
+interface MultiplexSelectorProps {
+  selectedMultiplex: string[];
+  onChange: (value: string[]) => void;
+}
 
-export default function MultiplexSelector({ onChange }: RegionSelectorProps) {
-  const [checked, setChecked] = useState<string[]>([])
+const multiplexList = [
+    { id: "all", label: "전체" },
+    { id: "1", label: "CGV" },
+    { id: "2", label: "메가박스" },
+    { id: "3", label: "롯데시네마" },
+  ]
 
-  const isAllChecked = theatersBrand.every((t) => checked.includes(t.id))
+export default function MultiplexSelector({selectedMultiplex, onChange}: MultiplexSelectorProps) {
+  // 전체 선택 여부
+  const isAllChecked = multiplexList
+                        .filter((t) => t.id !== "all")
+                        .every((t) => selectedMultiplex.includes(t.id));
 
+  // 전체 토글
   const toggleAll = () => {
-    const newValue = isAllChecked ? [] : theatersBrand.map((t) => t.id);
-    setChecked(newValue);
-    onChange(newValue);
+    if(isAllChecked){
+      onChange([]); // 전체 해제
+    } else {
+      onChange(multiplexList.filter((t) => t.id !== "all").map((t) => t.id)); // 전체 선택
+    }
   }
 
-  const toggleItem = (id: string) => {
-    setChecked((prev) => {
-      const newValue = prev.includes(id)
-        ? prev.filter((v) => v !== id)
-        : [...prev, id];
-      onChange(newValue);
-      return newValue;
-    });
+  // 개별 토글
+  const toggleItem = (id : string) => {
+    if(selectedMultiplex.includes(id)){
+      onChange(selectedMultiplex.filter((v) => v !== id));
+    } else {
+      onChange([...selectedMultiplex, id]);
+    }
   }
 
   return (
     <div className="content-wrapper py-2">
         <div className="flex justify-center gap-20">
           {/* 반복 렌더링 */}
-        {theatersBrand.map(({ id, label }) => {
+        {multiplexList.map(({ id, label }) => {
           const isChecked =
-            id === "all-theatersBrand" ? isAllChecked : checked.includes(id);
-          const handleChange =
-            id === "all-theatersBrand" ? toggleAll : () => toggleItem(id);
+            id === "all" ? isAllChecked : selectedMultiplex.includes(id);
+
+          const onCheckboxChange =
+            id === "all" ? toggleAll : () => toggleItem(id); 
 
           return (
             <div className="checkbox-item" key={id}>
@@ -49,7 +55,7 @@ export default function MultiplexSelector({ onChange }: RegionSelectorProps) {
                 id={id}
                 className="checkbox"
                 checked={isChecked}
-                onChange={handleChange}
+                onChange={onCheckboxChange}
               />
               <label
                 htmlFor={id}

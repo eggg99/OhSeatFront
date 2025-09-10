@@ -12,6 +12,11 @@ import ChangePw from "./components/user/ChangePw";
 import Mypage from "./components/user/Mypage";
 import PageRecommend from "./pages/PageRecommend";
 import PageRecommendDetail from "./pages/PageRecommendDetail";
+import RecommendAll from "./components/recommend/RecommendAll";
+import RecommendCgv from "./components/recommend/RecommendCgv";
+import RecommendMegabox from "./components/recommend/RecommendMegabox";
+import RecommendLottecinema from "./components/recommend/RecommendLottecinema";
+
 
 
 function AppRoutes(){
@@ -28,7 +33,13 @@ function AppRoutes(){
                 <Route path="mypage" element={<Mypage />} />
                 <Route path="ChangePw" element={<ChangePw />} />
             </Route>
-            <Route path="/recommend" element={<PageRecommend />} />
+            
+            <Route path="/recommend" element={<PageRecommend />}>
+                <Route path="all" element={<RecommendAll />}/>
+                <Route path="cgv" element={<RecommendCgv />} />
+                <Route path="megabox" element={<RecommendMegabox />} />
+                <Route path="lottecinema" element={<RecommendLottecinema />} />
+            </Route>
             <Route path="/recommend/:id" element={<PageRecommendDetail />} />
             <Route path="/chatting" element={<PageUser />} />
             <Route path="*" element={<PageNotFound />} />

@@ -19,7 +19,7 @@ const Header = () => {
                 <Logo />
                 <nav className="menu_wrap">
                     <ul>
-                        <li><Link to="/recommend">좌석추천</Link></li>
+                        <li><Link to="/recommend/all">좌석추천</Link></li>
                         <li><Link to="/chatting">채팅</Link></li>
                     </ul>
                 </nav>
