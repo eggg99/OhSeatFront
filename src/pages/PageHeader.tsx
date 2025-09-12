@@ -19,13 +19,14 @@ const Header = () => {
                 <Logo />
                 <nav className="menu_wrap">
                     <ul>
-                        <li><Link to="/recommend/all">좌석추천</Link></li>
+                        <li><Link to="/recommend/all">좌석추천전체</Link></li>
+                        <li><Link to="/recommend/cgv">좌석추천CGV</Link></li>
                         <li><Link to="/chatting">채팅</Link></li>
                     </ul>
                 </nav>
                 {userId ? (
                     <>
-                    <span>{userNick}님 환영합니다 🎉</span>
+                    <span>{userNick}</span>
                     <Link to="/user/mypage"  className="btn btn-secondary btn-jelly white">마이페이지</Link>
                     <button className="btn btn-primary btn-jelly white" onClick={logout}>로그아웃</button>
                     </>

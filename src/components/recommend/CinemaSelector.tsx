@@ -1,42 +1,38 @@
 import { useState } from "react";
+import '../../styles/custom.scss'
 
 interface CinemaSelectorProps {
     cinemaList: any[];
+    selectedCinema: any | null;
+    onCinemaChange: (cinema: any) => void;
 }
 
-export default function CinemaSelector({ cinemaList }: CinemaSelectorProps){
-    const [selectedCinemaId, setSelectedCinemaId] = useState<string | null>(null);
+export default function CinemaSelector({ cinemaList, selectedCinema, onCinemaChange }: CinemaSelectorProps) {
+    if (cinemaList.length === 0) return <p>극장이 없습니다.</p>;
 
-    const handleChange = (id: string) => {
-        setSelectedCinemaId(id);
-    };
-
-    if (cinemaList.length === 0) {
-        return <p>영화를 상영하는 극장이 없습니다.</p>;
-    }
     return(
         <div className="content-wrapper py-4">
             <div className="flex justify-center gap-4 flex-wrap">
-                {/* 반복 렌더링 */}
-                {cinemaList.map(({id, label}) => {
-                    const isChecked = selectedCinemaId === id;
-
-
-                    return(
-                        <div className="checkbox-item">
+                {cinemaList.map((cinema) => {
+                    const isChecked = selectedCinema?.cinemaId === cinema.cinemaId;
+                    return (
+                        <div className="checkbox-item" key={cinema.cinemaId}>
                             <input
-                                type="checkbox"
-                                id={id}
+                                type="radio"
+                                id={cinema.cinemaId}
+                                name="cinema"
                                 className="checkbox"
-                                onChange={() => handleChange(id)}
+                                checked={isChecked}
+                                onChange={() => onCinemaChange(cinema)} // ✅ 객체 전체 전달
                             />
                             <label
-                                htmlFor={id}
+                                htmlFor={cinema.cinemaId}
                                 className={`terms-label ${isChecked ? "checked" : ""}`}
-                            >{label}
+                                >
+                                {cinema.cinemaName}
                             </label>
                         </div>
-                    )
+                    );
                 })}
             </div>
         </div>

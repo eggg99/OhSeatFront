@@ -14,7 +14,6 @@ export const axiosApi = axios.create({
 axiosApi.interceptors.request.use(
   (config) => {
     const { token } = userStore.getState();
-    console.log('api에서 보내는', token)
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }

@@ -1,8 +1,8 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import '../../styles/custom.scss'
 
 interface AreaSelectorProps {
-  onAreaChange: (areaId: string) => void;
+    onAreaChange: (areaId: string) => void;
 }
 
 const areaList = [
@@ -18,39 +18,38 @@ const areaList = [
 ]
 
 export default function AreaSelector({ onAreaChange }: AreaSelectorProps) {
-  const [selectedAreaId, setSelectedAreaId] = useState<string | null>(null);
+    const [selectedAreaId, setSelectedAreaId] = useState<string>();
 
-  const handleChange = (id: string) => {
+    const handleChange = (id: string) => {
         setSelectedAreaId(id);
         onAreaChange(id);
-  };
+    };
 
-  return (
-    <div className="content-wrapper py-4">
-      <div className="flex justify-center gap-4 flex-wrap">
-        {/* 반복 렌더링 */}
-        {areaList.map(({ id, label }) => {
-          const isChecked = selectedAreaId === id;
+    return (
+        <div className="content-wrapper py-4">
+            <div className="flex justify-center gap-4 flex-wrap">
+                {/* 반복 렌더링 */}
+                {areaList.map(({ id, label }) => {
+                    const isChecked = selectedAreaId === id;
 
-          return (
-            <div className="checkbox-item" key={id}>
-              <input
-                type="checkbox"
-                id={id}
-                className="checkbox"
-                checked={isChecked}
-                onChange={() => handleChange(id)}
-              />
-              <label
-                htmlFor={id}
-                className={`terms-label ${isChecked ? "checked" : ""}`}
-              >
-                {label}
-              </label>
+                    return (
+                        <div className="checkbox-item" key={id}>
+                            <input
+                                type="radio"
+                                id={id}
+                                name="area"
+                                className="checkbox"
+                                checked={isChecked}
+                                onChange={() => handleChange(id)}
+                            />
+                            <label
+                                htmlFor={id}
+                                className={`terms-label ${isChecked ? "checked" : ""}`}
+                            >{label}</label>
+                        </div>
+                    )
+                })}
             </div>
-          )
-        })}
-      </div>
-    </div>
-  )
+        </div>
+    )
 }
