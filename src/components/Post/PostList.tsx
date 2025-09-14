@@ -1,103 +1,84 @@
-import { useState } from "react";
-import '../../styles/custom.scss'
-import {Table,TableBody,TableCaption,TableCell,TableFooter,TableHead,TableHeader,TableRow,} from "@/components/ui/table"
-import {Pagination,PaginationContent,PaginationEllipsis,PaginationItem,PaginationLink,PaginationNext,PaginationPrevious,} from "@/components/ui/pagination"
+import '../../styles/custom.scss';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@/components/ui/pagination";
 import { Link } from "react-router-dom";
-
-interface PostData {
-  postId: number;
-  title: string;
-  content: string;
-  authorNickname: string;
-  views: number;
-  createdAt: string;
-  commentCount: number;
-}
-
-interface PostPage {
-  content: PostData[];
-  totalPages: number;
-  totalElements: number;
-  number: number; // 현재 페이지 (0부터 시작)
-  size: number;
-  first: boolean;
-  last: boolean;
-}
+import { PostPage } from "@/types/Post";
 
 interface PostListProps {
-  pageData: PostPage;
-  onPageChange: (page: number) => void; // 페이지 클릭 이벤트
+    pageData: PostPage | null;  // null 허용
+    onPageChange: (page: number) => void; // 페이지 클릭 이벤트
 }
 
 export default function PostList({ pageData, onPageChange }: PostListProps) {
-  if (!pageData || pageData.content.length === 0)
-    return <p>좌석 추천 데이터가 없습니다.</p>;
+    if (!pageData || pageData.content.length === 0) {
+        return <p>좌석 추천 데이터가 없습니다.</p>;
+    }
 
-  return (
-    <section>
-      <div className="flex-[6] flex p-4 flex-col content-wrapper vtcal gap-4">
-        {/* 정렬 UI */}
-        <div className="self-end p-2">
-          <span>최신순</span> | <span>조회순</span> | <span>댓글순</span>
-        </div>
+    return (
+        <section>
+            <div className="flex-[6] flex p-4 flex-col content-wrapper vtcal gap-4">
+                {/* 정렬 UI */}
+                <div className="self-end p-2">
+                    <span>최신순</span> | <span>조회순</span> | <span>댓글순</span>
+                </div>
 
-        {/* 게시글 테이블 */}
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>제목</TableHead>
-              <TableHead>작성자</TableHead>
-              <TableHead>작성일</TableHead>
-              <TableHead>조회수</TableHead>
-              <TableHead>댓글</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {pageData.content.map((data) => (
-              <TableRow key={data.postId}>
-                <TableCell>
-                  <Link to={`/recommend/${data.postId}`}>{data.title}</Link>
-                </TableCell>
-                <TableCell>{data.authorNickname}</TableCell>
-                <TableCell>{data.createdAt}</TableCell>
-                <TableCell>{data.views}회</TableCell>
-                <TableCell>{data.commentCount}개</TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+                {/* 게시글 테이블 */}
+                <Table>
+                    <TableHeader>
+                        <TableRow>
+                            <TableHead>제목</TableHead>
+                            <TableHead>작성자</TableHead>
+                            <TableHead>작성일</TableHead>
+                            <TableHead>조회수</TableHead>
+                            <TableHead>댓글</TableHead>
+                        </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                        {pageData.content.map((data) => (
+                            <TableRow key={data.postId}>
+                                <TableCell>
+                                    <Link to={`/recommend/${data.postId}`}>{data.title}</Link>
+                                </TableCell>
+                                <TableCell>{data.authorNickname}</TableCell>
+                                <TableCell>{data.createdAt}</TableCell>
+                                <TableCell>{data.views}회</TableCell>
+                                <TableCell>{data.commentCount}개</TableCell>
+                            </TableRow>
+                        ))}
+                    </TableBody>
+                </Table>
 
-        {/* 페이지네이션 */}
-        <Pagination>
-          <PaginationContent>
-            <PaginationItem>
-              <PaginationPrevious
-                href="#"
-                onClick={() => pageData.number > 0 && onPageChange(pageData.number - 1)}
-              />
-            </PaginationItem>
+                {/* 페이지네이션 */}
+                <Pagination>
+                    <PaginationContent>
+                        <PaginationItem>
+                            <PaginationPrevious
+                                href="#"
+                                onClick={() => pageData.number > 0 && onPageChange(pageData.number - 1)}
+                            />
+                        </PaginationItem>
 
-            {Array.from({ length: pageData.totalPages }, (_, i) => (
-              <PaginationItem key={i}>
-                <PaginationLink
-                  href="#"
-                  isActive={i === pageData.number}
-                  onClick={() => onPageChange(i)}
-                >
-                  {i + 1}
-                </PaginationLink>
-              </PaginationItem>
-            ))}
+                        {Array.from({ length: pageData.totalPages }, (_, i) => (
+                            <PaginationItem key={i}>
+                                <PaginationLink
+                                    href="#"
+                                    isActive={i === pageData.number} // 0 기반
+                                    onClick={() => onPageChange(i)}
+                                >
+                                    {i + 1}
+                                </PaginationLink>
+                            </PaginationItem>
+                        ))}
 
-            <PaginationItem>
-              <PaginationNext
-                href="#"
-                onClick={() => pageData.number < pageData.totalPages - 1 && onPageChange(pageData.number + 1)}
-              />
-            </PaginationItem>
-          </PaginationContent>
-        </Pagination>
-      </div>
-    </section>
-  );
+                        <PaginationItem>
+                            <PaginationNext
+                                href="#"
+                                onClick={() => pageData.number < pageData.totalPages - 1 && onPageChange(pageData.number + 1)}
+                            />
+                        </PaginationItem>
+                    </PaginationContent>
+                </Pagination>
+            </div>
+        </section>
+    );
 }
