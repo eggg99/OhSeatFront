@@ -1,5 +1,5 @@
-import RecommendDetail from "@/components/recommend/RecommendDetail";
-import '../styles/recommend.scss';
+import RecommendDetail from "@/components/post/PostDetail";
+import '@/styles/recommend.scss';
 
 export default function PageRecommendDetail(){
     return (

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import '../../styles/custom.scss'
+import '@/styles/custom.scss'
 
 interface ScreenSelectorProps {
     screenList: any[];

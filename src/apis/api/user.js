@@ -6,7 +6,6 @@ export const registerUser = async (formData) => {
         const response = await axiosApi.post('/user/join', formData);
         return response.data;
     } catch (error) {
-        console.log(error);
         if (error.response && error.status === 409) {
             alert(error.response.data.message);
             return false;
@@ -90,7 +89,7 @@ export const findEmail = async (formData) => {
         const response = await axiosApi.post('/user/findEmail', formData);
         return response.data;
     } catch (error) {
-        console.log(error);
+        console.error(error);
     }
 }
 

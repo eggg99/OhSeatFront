@@ -1,4 +1,4 @@
-import '../../styles/custom.scss';
+import '@/styles/custom.scss';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@/components/ui/pagination";
 import { Link } from "react-router-dom";
@@ -7,9 +7,10 @@ import { PostPage } from "@/types/Post";
 interface PostListProps {
     pageData: PostPage | null;  // null 허용
     onPageChange: (page: number) => void; // 페이지 클릭 이벤트
+    onOrderChange: (order:string) => void;
 }
 
-export default function PostList({ pageData, onPageChange }: PostListProps) {
+export default function PostList({ pageData, onPageChange, onOrderChange }: PostListProps) {
     if (!pageData || pageData.content.length === 0) {
         return <p>좌석 추천 데이터가 없습니다.</p>;
     }
@@ -19,7 +20,9 @@ export default function PostList({ pageData, onPageChange }: PostListProps) {
             <div className="flex-[6] flex p-4 flex-col content-wrapper vtcal gap-4">
                 {/* 정렬 UI */}
                 <div className="self-end p-2">
-                    <span>최신순</span> | <span>조회순</span> | <span>댓글순</span>
+                    <button onClick={() =>onOrderChange('latest')}>최신순</button> | 
+                    <button onClick={() =>onOrderChange('views')}>조회순</button> | 
+                    <button onClick={() =>onOrderChange('comments')}>댓글순</button>
                 </div>
 
                 {/* 게시글 테이블 */}

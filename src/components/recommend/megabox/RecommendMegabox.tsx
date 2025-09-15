@@ -1,14 +1,14 @@
 import { useEffect, useState } from "react";
-import AreaSelector from "./AreaSelector";
-import CinemaSelector from "./CinemaSelector";
-import CinemaInfo from "./CinemaInfo";
 import { getCinemaList, getPostList, getScreenList } from "@/apis/api/recommend";
-import ScreenSelector from "./ScreenSelector";
-import PostList from "../Post/PostList";
 import { PostPage } from "@/types/Post";
+import AreaSelector from "@/components/recommend/common/AreaSelector"
+import CinemaSelector from "@/components/recommend/common/CinemaSelector";
+import CinemaInfo from "@/components/recommend/common/CinemaInfo";
+import ScreenSelector from "@/components/recommend/common/ScreenSelector";
+import PostList from "@/components/post/PostList";
 
-export default function RecommendCgv() {
-    const multiplexId = "1"; // cgv 초기값
+export default function RecommendMegabox() {
+    const multiplexId = "2"; // megabox 초기값
     const [areaId, setAreaId] = useState<string | null>(null);
     const [cinemaList, setCinemaList] = useState<any[]>([]);
     const [selectedCinema, setSelectedCinema] = useState<any | null>(null);

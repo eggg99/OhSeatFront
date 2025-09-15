@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import '../../styles/custom.scss'
+import '@/styles/custom.scss'
 
 interface AreaSelectorProps {
     onAreaChange: (areaId: string) => void;

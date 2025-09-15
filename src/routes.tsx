@@ -12,10 +12,10 @@ import ChangePw from "./components/user/ChangePw";
 import Mypage from "./components/user/Mypage";
 import PageRecommend from "./pages/PageRecommend";
 import PageRecommendDetail from "./pages/PageRecommendDetail";
-import RecommendAll from "./components/recommend/RecommendAll";
-import RecommendCgv from "./components/recommend/RecommendCgv";
-import RecommendMegabox from "./components/recommend/RecommendMegabox";
-import RecommendLottecinema from "./components/recommend/RecommendLottecinema";
+import RecommendBrowse from "./components/recommend/browse/RecommendBrowse";
+import RecommendCgv from "./components/recommend/cgv/RecommendCgv";
+import RecommendMegabox from "./components/recommend/megabox/RecommendMegabox";
+import RecommendLotte from "./components/recommend/lotte/RecommendLotte";
 
 
 
@@ -35,10 +35,10 @@ function AppRoutes(){
             </Route>
             
             <Route path="/recommend" element={<PageRecommend />}>
-                <Route path="all" element={<RecommendAll />}/>
+                <Route path="browse" element={<RecommendBrowse />}/>
                 <Route path="cgv" element={<RecommendCgv />} />
                 <Route path="megabox" element={<RecommendMegabox />} />
-                <Route path="lottecinema" element={<RecommendLottecinema />} />
+                <Route path="lottecinema" element={<RecommendLotte />} />
             </Route>
             <Route path="/recommend/:id" element={<PageRecommendDetail />} />
             <Route path="/chatting" element={<PageUser />} />

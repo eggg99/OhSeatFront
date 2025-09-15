@@ -27,7 +27,6 @@ export default function FindId() {
         e.preventDefault();
 
         const response = await findEmail(inputValue);
-        console.log(response);
         if(!response){
             return;
         } else {

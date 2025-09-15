@@ -45,7 +45,6 @@ export default function FindPw(){
             return;
         } else {
             alert(response.message);
-            console.log(response.changePwToken);
             
             setUser({'token':response.changePwToken})
             navigate('/user/changePw');

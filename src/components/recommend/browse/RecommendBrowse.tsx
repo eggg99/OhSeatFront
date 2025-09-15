@@ -1,5 +1,5 @@
 
-export default function RecommendAll() {
+export default function RecommendBrowse() {
 
     return(
         <div>

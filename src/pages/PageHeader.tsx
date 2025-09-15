@@ -1,5 +1,5 @@
 import { userStore } from '@/store/userStore';
-import Logo from '../components/common/Logo';
+import Logo from '@/components/common/Logo';
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from "react-router-dom";
 
