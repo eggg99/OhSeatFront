@@ -48,3 +48,26 @@ export const getPostList = async(cinemaId, screenId, orderType, page, size) => {
         throw error;
     }
 }
+
+export const getPostDetail = async(postId) => {
+    try{
+        const response = await axiosApi.get(`/rcmd/postDetail/${postId}`)
+        return response.data;
+    } catch (error) {
+        console.error("게시글 상세 조회 실패: ", error);
+        throw error;
+    }
+}
+
+export const putComment = async(content, postId, commenterId) => {
+    try{
+        const response = await axiosApi.put("/rcmd/comment", { 
+            content,
+            postId,
+            commenterId,
+        })
+    } catch (error) {
+        console.error("게시글 댓글 등록 실패: ", error);
+        throw error;
+    }
+}

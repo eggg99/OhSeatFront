@@ -2,6 +2,7 @@ import '@/styles/custom.scss';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@/components/ui/pagination";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { PostPage } from "@/types/Post";
 
 interface PostListProps {
@@ -11,6 +12,8 @@ interface PostListProps {
 }
 
 export default function PostList({ pageData, onPageChange, onOrderChange }: PostListProps) {
+    const navigate = useNavigate();
+
     if (!pageData || pageData.content.length === 0) {
         return <p>좌석 추천 데이터가 없습니다.</p>;
     }
@@ -38,7 +41,9 @@ export default function PostList({ pageData, onPageChange, onOrderChange }: Post
                     </TableHeader>
                     <TableBody>
                         {pageData.content.map((data) => (
-                            <TableRow key={data.postId}>
+                            <TableRow key={data.postId}  
+                                onClick={() => navigate(`/recommend/${data.postId}`)} 
+                                className="cursor-pointer hover:bg-gray-100">
                                 <TableCell>
                                     <Link to={`/recommend/${data.postId}`}>{data.title}</Link>
                                 </TableCell>

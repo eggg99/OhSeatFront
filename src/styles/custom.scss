@@ -29,3 +29,17 @@
     text-align: center;
 
   }
+
+.embla {
+  overflow: hidden;
+  width: 850px;   // 슬라이드 영역 지정
+}
+
+.embla__container {
+  display: flex;
+}
+
+.embla__slide {
+  flex: 0 0 auto; // 슬라이드 크기를 자동으로
+  padding: 0 0.5rem;
+}

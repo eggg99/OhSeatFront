@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useEffect, useState, useCallback } from "react";
+import useEmblaCarousel from "embla-carousel-react";
 import '@/styles/custom.scss'
 
 interface ScreenSelectorProps {
@@ -8,29 +9,37 @@ interface ScreenSelectorProps {
 }
 
 export default function ScreenSelector({ screenList, selectedScreen, onScreenChange }:ScreenSelectorProps){
+    const [emblaRef] = useEmblaCarousel({ loop: false }); // 좌우 스와이프만
     if(screenList.length === 0) return <p>상영관이 없습니다.</p>
     return(
         <div className="content-wrapper py-4">
             <div className="flex justify-center gap-4 flex-wrap">
-                {screenList.map((screen) => {
-                    const isChecked = selectedScreen?.screenId === screen.screenId;
-                    return(
-                        <div className="checkbox-item" key={screen.screenId}>
-                            <input
-                                type="radio"
-                                id={screen.screenId}
-                                name="screen"
-                                className="checkbox"
-                                checked={isChecked}
-                                onChange={() => onScreenChange(screen)} // ✅ 객체 전체 전달
-                            />
-                            <label
-                                htmlFor={screen.screenId}
-                                className={`terms-label ${isChecked ? "checked" : ""}`}
-                            >{ screen.screenName }</label>
-                        </div>
-                    )
-                })}
+                <div className="embla" ref={emblaRef}>
+                    <div className="embla__container">
+                        {/* 반복 렌더링 */}
+                        {screenList.map((screen) => {
+                            const isChecked = selectedScreen?.screenId === screen.screenId;
+                            return(
+                                <div className="embla__slide" key={screen.screenId}>
+                                    <div className="checkbox-item">
+                                        <input
+                                            type="radio"
+                                            id={screen.screenId}
+                                            name="screen"
+                                            className="checkbox"
+                                            checked={isChecked}
+                                            onChange={() => onScreenChange(screen)} // ✅ 객체 전체 전달
+                                        />
+                                        <label
+                                            htmlFor={screen.screenId}
+                                            className={`terms-label ${isChecked ? "checked" : ""}`}
+                                        >{ screen.screenName }</label>
+                                    </div>
+                                </div>
+                            );
+                        })}
+                    </div>
+                </div>
             </div>
         </div>
     )

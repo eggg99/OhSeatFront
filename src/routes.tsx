@@ -40,7 +40,7 @@ function AppRoutes(){
                 <Route path="megabox" element={<RecommendMegabox />} />
                 <Route path="lottecinema" element={<RecommendLotte />} />
             </Route>
-            <Route path="/recommend/:id" element={<PageRecommendDetail />} />
+            <Route path="/recommend/:postId" element={<PageRecommendDetail />} />
             <Route path="/chatting" element={<PageUser />} />
             <Route path="*" element={<PageNotFound />} />
         </Routes>
