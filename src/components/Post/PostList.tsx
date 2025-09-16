@@ -1,20 +1,26 @@
 import '@/styles/custom.scss';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@/components/ui/pagination";
-import { Link } from "react-router-dom";
+import { Link, useOutletContext } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import { PostPage } from "@/types/Post";
+import { useRecommendStore } from "@/store/recommendStore";
 
-interface PostListProps {
-    pageData: PostPage | null;  // null 허용
-    onPageChange: (page: number) => void; // 페이지 클릭 이벤트
-    onOrderChange: (order:string) => void;
+interface OutletContextProps {
+    handlePageChange: (page: number) => void;
+    handleOrderChange: (order: string) => void;
 }
 
-export default function PostList({ pageData, onPageChange, onOrderChange }: PostListProps) {
+export default function PostList() {
     const navigate = useNavigate();
+    
+    // Zustand에서 상태 가져오기
+    const { pageData } = useRecommendStore();
 
-    if (!pageData || pageData.content.length === 0) {
+    // Outlet context에서 페이지/정렬 함수 가져오기
+    const { handlePageChange, handleOrderChange } = useOutletContext<OutletContextProps>();
+    const content = pageData?.content || [];
+
+    if (content.length === 0) {
         return <p>좌석 추천 데이터가 없습니다.</p>;
     }
 
@@ -23,9 +29,9 @@ export default function PostList({ pageData, onPageChange, onOrderChange }: Post
             <div className="flex-[6] flex p-4 flex-col content-wrapper vtcal gap-4">
                 {/* 정렬 UI */}
                 <div className="self-end p-2">
-                    <button onClick={() =>onOrderChange('latest')}>최신순</button> | 
-                    <button onClick={() =>onOrderChange('views')}>조회순</button> | 
-                    <button onClick={() =>onOrderChange('comments')}>댓글순</button>
+                    <button onClick={() =>handleOrderChange('latest')}>최신순</button> | 
+                    <button onClick={() =>handleOrderChange('views')}>조회순</button> | 
+                    <button onClick={() =>handleOrderChange('comments')}>댓글순</button>
                 </div>
 
                 {/* 게시글 테이블 */}
@@ -40,12 +46,12 @@ export default function PostList({ pageData, onPageChange, onOrderChange }: Post
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {pageData.content.map((data) => (
+                        {content.map((data:any) => (
                             <TableRow key={data.postId}  
-                                onClick={() => navigate(`/recommend/${data.postId}`)} 
+                                onClick={() => navigate(`/recommend/cgv/${data.postId}`)} 
                                 className="cursor-pointer hover:bg-gray-100">
                                 <TableCell>
-                                    <Link to={`/recommend/${data.postId}`}>{data.title}</Link>
+                                    <Link to={`/recommend/cgv/${data.postId}`}>{data.title}</Link>
                                 </TableCell>
                                 <TableCell>{data.authorNickname}</TableCell>
                                 <TableCell>{data.createdAt}</TableCell>
@@ -62,7 +68,7 @@ export default function PostList({ pageData, onPageChange, onOrderChange }: Post
                         <PaginationItem>
                             <PaginationPrevious
                                 href="#"
-                                onClick={() => pageData.number > 0 && onPageChange(pageData.number - 1)}
+                                onClick={() => pageData.number > 0 && handlePageChange(pageData.number - 1)}
                             />
                         </PaginationItem>
 
@@ -71,7 +77,7 @@ export default function PostList({ pageData, onPageChange, onOrderChange }: Post
                                 <PaginationLink
                                     href="#"
                                     isActive={i === pageData.number} // 0 기반
-                                    onClick={() => onPageChange(i)}
+                                    onClick={() => handlePageChange(i)}
                                 >
                                     {i + 1}
                                 </PaginationLink>
@@ -81,7 +87,7 @@ export default function PostList({ pageData, onPageChange, onOrderChange }: Post
                         <PaginationItem>
                             <PaginationNext
                                 href="#"
-                                onClick={() => pageData.number < pageData.totalPages - 1 && onPageChange(pageData.number + 1)}
+                                onClick={() => pageData.number < pageData.totalPages - 1 && handlePageChange(pageData.number + 1)}
                             />
                         </PaginationItem>
                     </PaginationContent>

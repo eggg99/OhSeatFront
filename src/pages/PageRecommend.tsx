@@ -4,6 +4,7 @@ export default function PageRecommend() {
   
   return (
     <div className="flex flex-col">
+        
         <Outlet />
     </div>
   )

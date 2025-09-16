@@ -10,13 +10,18 @@ import FindPw from "./components/user/FindPw";
 import FindResult from "./components/user/FindResult";
 import ChangePw from "./components/user/ChangePw";
 import Mypage from "./components/user/Mypage";
+
 import PageRecommend from "./pages/PageRecommend";
 import PageRecommendDetail from "./pages/PageRecommendDetail";
 import RecommendBrowse from "./components/recommend/browse/RecommendBrowse";
 import RecommendCgv from "./components/recommend/cgv/RecommendCgv";
 import RecommendMegabox from "./components/recommend/megabox/RecommendMegabox";
 import RecommendLotte from "./components/recommend/lotte/RecommendLotte";
+import PostList from "./components/post/PostList";
+import PostDetail from "./components/post/PostDetail";
 
+import PageRecm from "@/pages/PageRecm";
+import RecmCgv from "@/components/recommend/cgv/RecmCgv";
 
 
 function AppRoutes(){
@@ -33,16 +38,23 @@ function AppRoutes(){
                 <Route path="mypage" element={<Mypage />} />
                 <Route path="ChangePw" element={<ChangePw />} />
             </Route>
-            
+
             <Route path="/recommend" element={<PageRecommend />}>
                 <Route path="browse" element={<RecommendBrowse />}/>
-                <Route path="cgv" element={<RecommendCgv />} />
+                <Route path="cgv" element={<RecommendCgv />}>
+                    <Route index element={<PostList />} />
+                    <Route path=":postId" element={<PostDetail />} />
+                </Route>
                 <Route path="megabox" element={<RecommendMegabox />} />
                 <Route path="lottecinema" element={<RecommendLotte />} />
             </Route>
-            <Route path="/recommend/:postId" element={<PageRecommendDetail />} />
             <Route path="/chatting" element={<PageUser />} />
             <Route path="*" element={<PageNotFound />} />
+
+
+
+            <Route path="/recm/:brand" element={<PageRecm />}>
+            </Route>
         </Routes>
         </main>
     )

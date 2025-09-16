@@ -1,42 +1,51 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
+import { Outlet } from "react-router-dom";
 import { getCinemaList, getPostList, getScreenList } from "@/apis/api/recommend";
-import { PostPage } from "@/types/Post";
+import { useRecommendStore } from "@/store/recommendStore";
 import AreaSelector from "@/components/recommend/common/AreaSelector"
 import CinemaSelector from "@/components/recommend/common/CinemaSelector";
 import CinemaInfo from "@/components/recommend/common/CinemaInfo";
 import ScreenSelector from "@/components/recommend/common/ScreenSelector";
-import PostList from "@/components/post/PostList";
 
 export default function RecommendCgv() {
     const multiplexId = "1"; // cgv 초기값
-    const [areaId, setAreaId] = useState<string | null>(null);
-    const [cinemaList, setCinemaList] = useState<any[]>([]);
-    const [selectedCinema, setSelectedCinema] = useState<any | null>(null);
-    const [screenList, setScreenList] = useState<any[]>([]);
-    const [selectedScreen, setSelectedScreen] = useState<any | null>(null);
-    const [pageData, setPageData] = useState<PostPage | null>(null);
-    const [page, setPage] = useState(0); // 0부터 시작
-    const [orderType, setOrderType] = useState<string | undefined>("latest");
-    const size = 10;
+    const {
+        areaId, cinemaList, selectedCinema, screenList, selectedScreen,
+        pageData, page, orderType, size,
+        setAreaId, setCinemaList, setSelectedCinema, setScreenList, setSelectedScreen,
+        setPageData, setPage, setOrderType
+    } = useRecommendStore();
+    const ALL_CINEMA = { cinemaId: 'all_c', cinemaName: '전체' };
+    const ALL_SCREEN = { screenId: 'all_s', screenName: '전체' };
 
     // 지역 선택
-    const handleAreaChange = async (newAreaId: string) => {
-        setAreaId(newAreaId);
-        const response = await getCinemaList(multiplexId, newAreaId);
-        setCinemaList(response?.length ? response : []);
-        setScreenList([]);
-        setSelectedCinema(null);
-        setSelectedScreen(null);
-        setPageData(null);
-        setPage(0); // 페이지 초기화
+    const handleAreaChange = async (newAreaId : string) => {
+        setAreaId(newAreaId);   // 지역값 설정
+        let response = [];
+        try {
+            response = await getCinemaList(multiplexId, newAreaId);  // 영화관 불러오기 api
+        } catch (e) {
+            console.error("영화관 불러오기 실패", e);
+        }
+        setCinemaList(response?.length ? [ALL_CINEMA, ...response] : [ALL_CINEMA]);        // 영화관 리스트 설정
+        setScreenList([]);                                      // 상영관 리스트 초기화
+        setSelectedCinema(null);                                // 선택된 영화관 초기화
+        setSelectedScreen(null);                                // 선택된 상영관 초기화
+        setPageData(null);                                      // 게시글 초기화
+        setPage(0);                                             // 게시글 페이지 초기화
     };
 
     // 극장 선택
     const handleCinemaChange = async (cinema: any) => {
+        let response = [];
+        try {
+            response = await getScreenList(multiplexId, cinema.cinemaId);  // 영화관 불러오기 api
+        } catch (e) {
+            console.error("상영관 불러오기 실패", e);
+        }
         setSelectedCinema(cinema);
         setPage(0);
-        const response = await getScreenList(multiplexId, cinema.cinemaId);
-        setScreenList(response?.length ? [{ screenId: 'all', screenName: '전체' }, ...response] : [{ screenId: 'all', screenName: '전체' }]);
+        setScreenList(response?.length ? [ALL_SCREEN, ...response] : [ALL_SCREEN]);
         setSelectedScreen(null);
         setPageData(null);
     };
@@ -58,16 +67,12 @@ export default function RecommendCgv() {
     };
 
     // 페이지 변경
-    const handlePageChange = (newPage: number) => {
-        setPage(newPage); // 0 기반
-    };
+    const handlePageChange = (newPage: number) => setPage(newPage);
 
     // 정렬 변경
-    const handleOrderChange = (newOrder: string) => {
-        setOrderType(newOrder);
-    }
+    const handleOrderChange = (newOrder: string) => setOrderType(newOrder);
 
-    // 페이지 변경 시 데이터 재요청
+    // 페이지/정렬 변경 시 데이터 재요청
     useEffect(() => {
         if (selectedCinema && selectedScreen) {
             handleScreenChange(selectedScreen, page, orderType);
@@ -79,8 +84,11 @@ export default function RecommendCgv() {
             <AreaSelector onAreaChange={handleAreaChange} />
             <CinemaSelector cinemaList={cinemaList} selectedCinema={selectedCinema} onCinemaChange={handleCinemaChange} />
             <CinemaInfo selectedCinema={selectedCinema} />
+
+
             <ScreenSelector screenList={screenList} selectedScreen={selectedScreen} onScreenChange={handleScreenChange} />
-            <PostList pageData={pageData} onPageChange={handlePageChange} onOrderChange={handleOrderChange}/>
+            {/* Outlet에서 PostList / PostDetail 렌더링 */}
+            <Outlet context={{ handlePageChange, handleOrderChange }} />
         </section>
     );
 }

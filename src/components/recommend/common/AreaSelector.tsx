@@ -7,6 +7,7 @@ interface AreaSelectorProps {
 }
 
 const areaList = [
+    { id: "00", label: "전체" },
     { id: "11", label: "서울" },
     { id: "12", label: "경기" },
     { id: "13", label: "인천" },
@@ -50,7 +51,6 @@ export default function AreaSelector({ onAreaChange }: AreaSelectorProps) {
                                             htmlFor={id}
                                             className={`terms-label ${isChecked ? "checked" : ""}`}
                                         >{label}</label>
-
                                     </div>
                                 </div>
                             );

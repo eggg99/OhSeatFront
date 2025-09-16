@@ -8,7 +8,7 @@ interface ScreenSelectorProps {
     onScreenChange: (screen: any) => void
 }
 
-export default function ScreenSelector({ screenList, selectedScreen, onScreenChange }:ScreenSelectorProps){
+export default function ScreenSelector({ screenList = [], selectedScreen, onScreenChange }:ScreenSelectorProps){
     const [emblaRef] = useEmblaCarousel({ loop: false }); // 좌우 스와이프만
     if(screenList.length === 0) return <p>상영관이 없습니다.</p>
     return(

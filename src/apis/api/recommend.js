@@ -6,14 +6,9 @@ import { axiosApi } from "@/apis/utils/instance";
  * param : areaId       지역 구분
  */
 export const getCinemaList = async(multiplexId, areaId) => {
-    try{
-        const params = { multiplexId, areaId };
-        const response = await axiosApi.get('/rcmd/cinemaList', { params })
-        return response.data;
-    } catch (error) {
-        console.error("영화관 조회 실패: ", error);
-        throw error;
-    }
+    const params = { multiplexId, areaId };
+    const response = await axiosApi.get('/rcmd/cinemaList', { params })
+    return response.data;
 }
 
 /**
@@ -22,14 +17,9 @@ export const getCinemaList = async(multiplexId, areaId) => {
  * param : cinemaId     영화관 구분
  */
 export const getScreenList = async(multiplexId, cinemaId) => {
-    try{
-        const params = { multiplexId, cinemaId };
-        const response = await axiosApi.get('/rcmd/screenList', { params })
-        return response.data;
-    } catch (error) {
-        console.error("상영관 조회 실패: ", error);
-        throw error;
-    }
+    const params = { multiplexId, cinemaId };
+    const response = await axiosApi.get('/rcmd/screenList', { params })
+    return response.data;
 }
 
 /**
@@ -55,6 +45,17 @@ export const getPostDetail = async(postId) => {
         return response.data;
     } catch (error) {
         console.error("게시글 상세 조회 실패: ", error);
+        throw error;
+    }
+}
+
+export const getCommentList = async(postId) => {
+    try{
+        const params = { postId }
+        const response = await axiosApi.get('/rcmd/commentList', { params })
+        return response.data;
+    } catch (error) {
+        console.error("댓글 리스트 조회 실패: ", error);
         throw error;
     }
 }

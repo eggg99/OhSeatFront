@@ -1,8 +1,9 @@
-import { getPostDetail, putComment } from "@/apis/api/recommend"
+import { getCommentList, getPostDetail, putComment } from "@/apis/api/recommend"
 import { useEffect, useState } from "react"
 import { useParams } from "react-router-dom";
 import { Input } from "@/components/ui/input"
 import { userStore } from "@/store/userStore";
+import { Link } from "react-router-dom";
 
 interface PostDetail {
     postId: number;
@@ -14,11 +15,19 @@ interface PostDetail {
     commentCount: number;
 }
 
+interface Comment {
+  commentId: number;
+  content: string;
+  authorNickname: string;
+  createdAt: string;
+}
+
 export default function PostDetail(){
      const userId = userStore((state) => state.userId);  // 유저아이디
     // useParams는 항상 객체 반환
     const { postId } = useParams<{ postId: string }>(); 
     const [comment, setComment] = useState("");
+    const [commentList, setcommentList] = useState<Comment[]>([]);
     
     const [detailValue, setDetailValue] = useState<PostDetail>({
         postId: 0,
@@ -31,7 +40,10 @@ export default function PostDetail(){
     });
 
     useEffect(() => {
-        if(postId) getData();
+        if(postId){
+            getData();
+            getDataComment()
+        }
     }, [postId]);
 
 
@@ -44,6 +56,15 @@ export default function PostDetail(){
         }
     }
 
+    const getDataComment = async () => {
+        try {
+            const response = await getCommentList(postId); // 새로운 API
+            setcommentList(response);
+        } catch (error) {
+            console.error("댓글 불러오기 실패", error);
+        }
+    };
+
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setComment(e.target.value);
     };
@@ -52,16 +73,18 @@ export default function PostDetail(){
         if (!comment.trim()) return;
 
         try {
-            await putComment(comment, postId, userId)
-            setComment(""); // 제출 후 input 초기화
+            await putComment(comment, postId, userId);
+            setComment(""); // input 초기화
+            await getData();     // 게시글 다시 불러오기 (commentCount 갱신)
+            await getDataComment(); // 댓글 리스트 갱신
         } catch (error) {
-        console.error("댓글 제출 실패", error);
+            console.error("댓글 제출 실패", error);
         }
     };
 
 
     return (
-        <div className="detail-form shadow rounded-xl border bg-card flex flex-row">
+        <div className="detail-form shadow rounded-xl border bg-card flex flex-col">
             <div>
                 <h2 className="text-2xl">{detailValue.title}</h2>
             </div>
@@ -103,6 +126,20 @@ export default function PostDetail(){
                     <span>{detailValue.commentCount}개</span>
                 </div>
             </div>
+
+            <div className="mt-4">
+                <h3 className="font-bold">댓글</h3>
+                {commentList.length === 0 ? (
+                    <p>아직 댓글이 없습니다.</p>
+                ) : (
+                    commentList.map((c) => (
+                        <div key={c.commentId} className="border-b py-2">
+                            <p>{c.content}</p>
+                            <small>{c.authorNickname} · {c.createdAt}</small>
+                        </div>
+                    ))
+                )}
+            </div>
             <div>
                 <Input 
                     type="text"
@@ -113,6 +150,9 @@ export default function PostDetail(){
                 <button onClick={handleSubmit}>
                     작성
                 </button>
+            </div>
+            <div className="text-right">
+                <Link to={"/recommend/cgv"}>목록</Link>
             </div>
         </div>
     )
