@@ -1,9 +1,13 @@
 import { getCommentList, getPostDetail, putComment } from "@/apis/api/recommend"
 import { useEffect, useState } from "react"
-import { useParams } from "react-router-dom";
+import { useOutletContext, useParams } from "react-router-dom";
 import { Input } from "@/components/ui/input"
 import { userStore } from "@/store/userStore";
 import { Link } from "react-router-dom";
+
+type brand = {
+  brand: string;
+};
 
 interface PostDetail {
     postId: number;
@@ -23,7 +27,8 @@ interface Comment {
 }
 
 export default function PostDetail(){
-     const userId = userStore((state) => state.userId);  // 유저아이디
+    const { brand } = useOutletContext<brand>();
+    const userId = userStore((state) => state.userId);  // 유저아이디
     // useParams는 항상 객체 반환
     const { postId } = useParams<{ postId: string }>(); 
     const [comment, setComment] = useState("");
@@ -35,7 +40,7 @@ export default function PostDetail(){
         content: '',
         authorNickname: '',
         views: 0,
-        createdAt: '-', // 초기값 null
+        createdAt: '-', 
         commentCount: 0,
     });
 
@@ -152,7 +157,7 @@ export default function PostDetail(){
                 </button>
             </div>
             <div className="text-right">
-                <Link to={"/recommend/cgv"}>목록</Link>
+                <Link to={`/recm/${brand}`}>목록</Link>
             </div>
         </div>
     )

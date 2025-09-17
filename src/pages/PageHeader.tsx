@@ -23,10 +23,9 @@ const Header = () => {
                         영화관 좌석 추천
                             <ul className="submenu">
                                 <li><Link to="/recommend/browse">둘러보기(pick!)</Link></li>
-                                <li><Link to="/recommend/cgv">CGV</Link></li>
-                                <li><Link to="/recommend/megabox">메가박스</Link></li>
-                                <li><Link to="/recommend/lotte">롯데시네마</Link></li>
-                                <li><Link to="/recm/cgv">test</Link></li>
+                                <li><Link to="/recm/cgv">CGV</Link></li>
+                                <li><Link to="/recm/megabox">메가박스</Link></li>
+                                <li><Link to="/recm/lotte">롯데시네마</Link></li>
                             </ul>
                         </li>
                         <li><Link to="/chatting">채팅</Link></li>
