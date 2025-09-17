@@ -1,9 +1,9 @@
-import { getCommentList, getPostDetail, putComment } from "@/apis/api/recommend"
+import { deletePost, getCommentList, getPostDetail, putComment } from "@/apis/api/recommend"
 import { useEffect, useState } from "react"
 import { useOutletContext, useParams } from "react-router-dom";
 import { Input } from "@/components/ui/input"
 import { userStore } from "@/store/userStore";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 type brand = {
   brand: string;
@@ -27,6 +27,7 @@ interface Comment {
 }
 
 export default function PostDetail(){
+    const navigate = useNavigate();
     const { brand } = useOutletContext<brand>();
     const userId = userStore((state) => state.userId);  // 유저아이디
     // useParams는 항상 객체 반환
@@ -87,6 +88,15 @@ export default function PostDetail(){
         }
     };
 
+    const handleDelete = async () => {
+        const result = confirm("삭제하시겠습니까?");
+        if(result){
+            const response = await deletePost(detailValue.postId);
+            alert(response);
+            navigate(`/recm/${brand}`);
+        }
+    }
+
 
     return (
         <div className="detail-form shadow rounded-xl border bg-card flex flex-col">
@@ -112,7 +122,8 @@ export default function PostDetail(){
                         <span>{detailValue.views}회</span>
                     </div>
                     <div className="ml-3">
-                        <button>메뉴버튼</button>
+                        <button><Link to={`/recm/${brand}/dtl/update/${postId}`}>수정</Link></button>
+                        <button onClick={handleDelete}>삭제</button>
                     </div>
                 </div>
             </div>

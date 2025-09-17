@@ -16,8 +16,9 @@ import RecommendBrowse from "@/components/recommend/browse/RecommendBrowse";
 
 import PageRecm from "@/pages/PageRecm";
 import PageRecmDetail from "@/pages/PageRecmDetail";
-import PostDetail from "@/components/post/PostDetail";
-import PostReg from "@/components/post/PostReg";
+import PostDetail from "@/components/Post/PostDetail";
+import PostReg from "@/components/Post/PostReg";
+import PostUpdate from "./components/Post/PostUpdate";
 
 
 function AppRoutes(){
@@ -43,7 +44,7 @@ function AppRoutes(){
             <Route path="/recm/:brand/dtl" element={<PageRecmDetail />}>
                 <Route path=":postId" element={<PostDetail />} />
                 <Route path="reg" element={<PostReg />} />
-
+                <Route path="update/:postId" element={<PostUpdate />} />
             </Route>
 
             <Route path="/chatting" element={<PageUser />} />

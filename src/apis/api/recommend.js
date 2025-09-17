@@ -79,6 +79,7 @@ export const putComment = async(content, postId, commenterId) => {
             postId,
             commenterId,
         })
+        return response.data;
     } catch (error) {
         console.error("게시글 댓글 등록 실패: ", error);
         throw error;
@@ -96,8 +97,37 @@ export const putPost = async(authorId,multiplexId,areaId,cinemaId,screenId,title
             title,
             content
         })
+        return response.data;
     } catch (error) {
         console.error("게시글 등록 실패: ", error);
         throw error;
     }
+}
+
+// 게시글 수정
+export const updatePost = async (formData, postId) => {
+    try {
+        const response = await axiosApi.post(`/rcmd/post/${postId}`, formData);
+        return response.data;
+    } catch (error) {
+        if (error.response && error.status === 401) {
+            alert(error.response.data.message);
+            return false;
+        } else {
+            console.error('비밀번호 변경 에러:', error);
+            alert('비밀번호 변경 실패! 다시 시도해주세요.');
+            return false;
+        }
+    }
+}
+
+// 게시글 삭제
+export const deletePost = async (postId) => {
+    try{
+        const response = await axiosApi.delete(`/rcmd/post/${postId}`)
+        return response.data;
+    } catch (error) {
+        console.error("게시글 삭제 실패: ", error);
+        throw error;
+    }        
 }
