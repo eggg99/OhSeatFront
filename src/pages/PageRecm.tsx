@@ -8,6 +8,8 @@ import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { PostPage } from "@/types/Post";
+import { MULTIPLEX_LIST } from "@/constants/multiplex";
+import { AREA_LIST } from "@/constants/area";
 
 const multiplexMap: Record<string, number> = {
   cgv: 1,
@@ -15,18 +17,6 @@ const multiplexMap: Record<string, number> = {
   lotte: 3,
 };
 
-const areaList = [
-    { id: "00", label: "전체" },
-    { id: "11", label: "서울" },
-    { id: "12", label: "경기" },
-    { id: "13", label: "인천" },
-    { id: "14", label: "강원" },
-    { id: "15", label: "대전/충청" },
-    { id: "16", label: "대구" },
-    { id: "17", label: "부산/울산" },
-    { id: "18", label: "경상" },
-    { id: "19", label: "광주/전라/제주" },
-]
 const ALL_CINEMA = { cinemaId: 'all_c', cinemaName: '전체' };
 const ALL_SCREEN = { screenId: 'all_s', screenName: '전체' };
 
@@ -34,8 +24,7 @@ export default function PageRecm() {
     const [emblaRef] = useEmblaCarousel({ loop: false });
     const navigate = useNavigate();
     const { brand } = useParams<{ brand: string }>();
-    const multiplexId = brand ? multiplexMap[brand] : undefined;
-
+    const multiplexId = MULTIPLEX_LIST.find((m) => m.brand === brand)?.id;
     const [selectedAreaId, setSelectedAreaId] = useState<string>("00");
     const [cinemaList, setCinemaList] = useState<any[]>([]);
     const [selectedCinema, setSelectedCinema] = useState<any | null>(ALL_CINEMA);
@@ -70,7 +59,6 @@ export default function PageRecm() {
 
     // 게시글 리스트 조회
     const handlePostList = async() => {
-        console.log(selectedCinema.cinemaId, selectedScreen.screenId)
         const response = await getPostList(multiplexId, selectedAreaId, selectedCinema.cinemaId, selectedScreen.screenId, orderType, page, size);
         setPostList(response);
     }
@@ -100,7 +88,7 @@ export default function PageRecm() {
                 <div className="flex justify-center gap-4 flex-wrap">
                     <div className="embla" ref={emblaRef}>
                         <div className="embla__container">
-                            {areaList.map(({ id, label }) => {
+                            {AREA_LIST.map(({ id, label }) => {
                                 const isChecked = selectedAreaId === id;
                                 return (
                                     <div className="embla__slide" key={id}>
@@ -157,6 +145,7 @@ export default function PageRecm() {
                     </div>
                 </div>
             </section>
+            {/* 영화관 정보 */}
             { (selectedCinema.cinemaId !== 'all_c') &&
                 <section className="content-wrapper py-4">
                     <div className="flex flex-col items-center gap-4 flex-wrap">
@@ -204,7 +193,6 @@ export default function PageRecm() {
             
             {/* 게시글 리스트 */}
             <section>
-                
                 <div className="flex-[6] flex p-4 flex-col content-wrapper vtcal gap-4">
                     {/* 정렬 UI */}
                     <div className="self-end p-2">
@@ -275,7 +263,7 @@ export default function PageRecm() {
                     </Pagination>
                     <button><Link to={`/recm/${brand}/dtl/reg`}>등록</Link></button>
                 </div>
-        </section>
+            </section>
         </div>
     )
 };

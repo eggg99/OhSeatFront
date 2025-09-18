@@ -1,7 +1,6 @@
-import { userStore } from '@/store/userStore';
-import Logo from '@/components/common/Logo';
-import { useState, useEffect } from 'react';
-import { Link, useNavigate } from "react-router-dom";
+import { userStore }            from '@/store/userStore';
+import { Link, useNavigate }    from "react-router-dom";
+import Logo                     from '@/components/common/Logo';
 
 const Header = () => {
     const navigate = useNavigate();
@@ -20,17 +19,20 @@ const Header = () => {
                 <nav className="menu_wrap">
                     <ul>
                         <li className="menu_item">
-                        영화관 좌석 추천
+                        <Link to="/recm/browse">영화관 좌석 추천</Link>
                             <ul className="submenu">
-                                <li><Link to="/recommend/browse">둘러보기(pick!)</Link></li>
+                                <li><Link to="/recm/browse">둘러보기(pick!)</Link></li>
                                 <li><Link to="/recm/cgv">CGV</Link></li>
                                 <li><Link to="/recm/megabox">메가박스</Link></li>
                                 <li><Link to="/recm/lotte">롯데시네마</Link></li>
                             </ul>
                         </li>
                         <li><Link to="/chatting">채팅</Link></li>
+                        <li><Link to="/chatting">씨네광장</Link></li>
+                        <li><Link to="/chatting">이벤트</Link></li>
                     </ul>
                 </nav>
+                
                 {userId ? (
                     <>
                     <span>{userNick}</span>

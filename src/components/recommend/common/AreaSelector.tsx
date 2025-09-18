@@ -1,23 +1,11 @@
 import { useEffect, useState, useCallback } from "react";
 import useEmblaCarousel from "embla-carousel-react";
 import "@/styles/custom.scss";
+import { AREA_LIST } from "@/constants/area";
 
 interface AreaSelectorProps {
     onAreaChange: (areaId: string) => void;
 }
-
-const areaList = [
-    { id: "00", label: "전체" },
-    { id: "11", label: "서울" },
-    { id: "12", label: "경기" },
-    { id: "13", label: "인천" },
-    { id: "14", label: "강원" },
-    { id: "15", label: "대전/충청" },
-    { id: "16", label: "대구" },
-    { id: "17", label: "부산/울산" },
-    { id: "18", label: "경상" },
-    { id: "19", label: "광주/전라/제주" },
-]
 
 export default function AreaSelector({ onAreaChange }: AreaSelectorProps) {
     const [selectedAreaId, setSelectedAreaId] = useState<string>();
@@ -34,7 +22,7 @@ export default function AreaSelector({ onAreaChange }: AreaSelectorProps) {
                 <div className="embla" ref={emblaRef}>
                     <div className="embla__container">
                         {/* 반복 렌더링 */}
-                        {areaList.map(({ id, label }) => {
+                        {AREA_LIST.map(({ id, label }) => {
                             const isChecked = selectedAreaId === id;
                             return (
                                 <div className="embla__slide" key={id}>

@@ -12,13 +12,12 @@ import ChangePw from "@/components/user/ChangePw";
 import Mypage from "@/components/user/Mypage";
 
 import PageRecommend from "@/pages/PageRecommend";
-import RecommendBrowse from "@/components/recommend/browse/RecommendBrowse";
 
 import PageRecm from "@/pages/PageRecm";
 import PageRecmDetail from "@/pages/PageRecmDetail";
-import PostDetail from "@/components/Post/PostDetail";
-import PostReg from "@/components/Post/PostReg";
-import PostUpdate from "./components/Post/PostUpdate";
+import PostDetail from "@/components/post/PostDetail";
+import PostReg from "@/components/post/PostReg";
+import PostUpdate from "@/components/post/PostUpdate";
 
 
 function AppRoutes(){
@@ -36,15 +35,12 @@ function AppRoutes(){
                 <Route path="ChangePw" element={<ChangePw />} />
             </Route>
 
-            <Route path="/recommend" element={<PageRecommend />}>
-                <Route path="browse" element={<RecommendBrowse />}/>
-            </Route>
-
+            <Route path="/recm/browse" element={<PageRecommend />} />
             <Route path="/recm/:brand" element={<PageRecm />}/>
-            <Route path="/recm/:brand/dtl" element={<PageRecmDetail />}>
+            <Route path="/recm/:brand/detail" element={<PageRecmDetail />}>
                 <Route path=":postId" element={<PostDetail />} />
                 <Route path="reg" element={<PostReg />} />
-                <Route path="update/:postId" element={<PostUpdate />} />
+                <Route path="edit/:postId" element={<PostUpdate />} />
             </Route>
 
             <Route path="/chatting" element={<PageUser />} />

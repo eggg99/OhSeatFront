@@ -47,45 +47,32 @@ export const getPostList = async(multiplexId, areaId, cinemaId, screenId, orderT
         return response.data;
     } catch (error) {
         console.error("게시글 조회 실패: ", error);
-        throw error;
     }
 }
 
+/**
+ * 게시글 상세 조회
+ * param : postId       게시글 아이디
+ */
 export const getPostDetail = async(postId) => {
     try{
         const response = await axiosApi.get(`/rcmd/postDetail/${postId}`)
         return response.data;
     } catch (error) {
         console.error("게시글 상세 조회 실패: ", error);
-        throw error;
     }
 }
 
-export const getCommentList = async(postId) => {
-    try{
-        const params = { postId }
-        const response = await axiosApi.get('/rcmd/commentList', { params })
-        return response.data;
-    } catch (error) {
-        console.error("댓글 리스트 조회 실패: ", error);
-        throw error;
-    }
-}
-
-export const putComment = async(content, postId, commenterId) => {
-    try{
-        const response = await axiosApi.put("/rcmd/comment", { 
-            content,
-            postId,
-            commenterId,
-        })
-        return response.data;
-    } catch (error) {
-        console.error("게시글 댓글 등록 실패: ", error);
-        throw error;
-    }
-}
-
+/**
+ * 게시글 등록
+ * param : authorId     게시글 작성자 아이디
+ * param : multiplexId  멀티플렉스 구분
+ * param : areaId       지역 구분
+ * param : cinemaId     영화관 구분
+ * param : screenId     상영관 구분
+ * param : title        제목
+ * param : content      내용
+ */
 export const putPost = async(authorId,multiplexId,areaId,cinemaId,screenId,title,content) => {
     try{
         const response = await axiosApi.put("/rcmd/post", { 
@@ -100,14 +87,24 @@ export const putPost = async(authorId,multiplexId,areaId,cinemaId,screenId,title
         return response.data;
     } catch (error) {
         console.error("게시글 등록 실패: ", error);
-        throw error;
     }
 }
 
-// 게시글 수정
-export const updatePost = async (formData, postId) => {
+/**
+ * 게시글 수정
+ * param : multiplexId  멀티플렉스 구분
+ * param : areaId       지역 구분
+ * param : cinemaId     영화관 구분
+ * param : screenId     상영관 구분
+ * param : title        제목
+ * param : content      내용
+ * param : postId       게시글 아이디
+ */
+export const updatePost = async (multiplexId,areaId,cinemaId,screenId,title,content, postId) => {
     try {
-        const response = await axiosApi.post(`/rcmd/post/${postId}`, formData);
+        const response = await axiosApi.post(`/rcmd/post/edit/${postId}`, {
+            multiplexId,areaId,cinemaId,screenId,title,content
+        });
         return response.data;
     } catch (error) {
         if (error.response && error.status === 401) {
@@ -121,13 +118,49 @@ export const updatePost = async (formData, postId) => {
     }
 }
 
-// 게시글 삭제
+/**
+ * 게시글 삭제
+ * param : postId       게시글 아이디
+ */
 export const deletePost = async (postId) => {
     try{
         const response = await axiosApi.delete(`/rcmd/post/${postId}`)
         return response.data;
     } catch (error) {
         console.error("게시글 삭제 실패: ", error);
-        throw error;
     }        
+}
+
+
+/**
+ * 게시글 상세 - 댓글 리스트 조회
+ * param : postId       게시글 아이디
+ */
+export const getCommentList = async(postId) => {
+    try{
+        const params = { postId }
+        const response = await axiosApi.get('/rcmd/commentList', { params })
+        return response.data;
+    } catch (error) {
+        console.error("댓글 리스트 조회 실패: ", error);
+    }
+}
+
+/**
+ * 게시글 상세 - 댓글 등록
+ * param : content      댓글 내용
+ * param : postId       게시글 아이디
+ * param : commenterId  댓글 작성자 아이디
+ */
+export const putComment = async(content, postId, commenterId) => {
+    try{
+        const response = await axiosApi.put("/rcmd/comment", { 
+            content,
+            postId,
+            commenterId,
+        })
+        return response.data;
+    } catch (error) {
+        console.error("게시글 댓글 등록 실패: ", error);
+    }
 }

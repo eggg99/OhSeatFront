@@ -122,7 +122,7 @@ export default function PostDetail(){
                         <span>{detailValue.views}회</span>
                     </div>
                     <div className="ml-3">
-                        <button><Link to={`/recm/${brand}/dtl/update/${postId}`}>수정</Link></button>
+                        <button><Link to={`/recm/${brand}/dtl/edit/${postId}`}>수정</Link></button>
                         <button onClick={handleDelete}>삭제</button>
                     </div>
                 </div>
