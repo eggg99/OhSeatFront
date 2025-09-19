@@ -10,6 +10,7 @@ import { Link } from "react-router-dom";
 import { PostPage } from "@/types/Post";
 import { MULTIPLEX_LIST } from "@/constants/multiplex";
 import { AREA_LIST } from "@/constants/area";
+import { useQuery } from "@tanstack/react-query";
 
 const multiplexMap: Record<string, number> = {
   cgv: 1,
@@ -81,6 +82,16 @@ export default function PageRecm() {
         }
     }, [brand, selectedAreaId, selectedCinema, selectedScreen, page, orderType]);
 
+    
+    // useQuery 사용해보기
+    const { data: cinemaList2 = [], isLoading, error } = useQuery({
+        queryKey: ["cinemaList", multiplexId, selectedAreaId],  // 캐싱 키
+        queryFn: () => getCinemaList(multiplexId, selectedAreaId),
+        enabled: !!selectedAreaId, // areaId 있을 때만 실행
+    });
+    if (isLoading) return <p>로딩 중...</p>;
+    if (error) return <p>에러 발생: {String(error)}</p>;
+
     return (
         <div className="flex flex-col">
             {/* 지역 선택 */}
@@ -105,6 +116,7 @@ export default function PageRecm() {
                                                 htmlFor={id}
                                                 className={`terms-label ${isChecked ? "checked" : ""}`}
                                             >{label}</label>
+                                            
                                         </div>
                                     </div>
                                 );

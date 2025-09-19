@@ -3,16 +3,22 @@ import { BrowserRouter } from "react-router-dom";
 import Header from "./pages/PageHeader.js";
 import Footer from "./pages/PageFooter.js";
 import AppRoutes from "./routes.jsx";
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 
+const queryClient = new QueryClient()       // react query
 
 function App() {
     return (
         <div className="App">
-            <BrowserRouter>
-                <Header />
-                <AppRoutes />
-                <Footer />
-            </BrowserRouter>
+            <QueryClientProvider client={queryClient}>
+                <ReactQueryDevtools />
+                <BrowserRouter>
+                    <Header />
+                    <AppRoutes />
+                    <Footer />
+                </BrowserRouter>
+            </QueryClientProvider>
         </div>
     );
 }
