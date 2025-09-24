@@ -19,6 +19,12 @@ import PostDetail from "@/components/post/PostDetail";
 import PostReg from "@/components/post/PostReg";
 import PostUpdate from "@/components/post/PostUpdate";
 
+import PageCineSquare from "@/pages/PageCineSquare";
+import CineSqaureList from "./components/cinesquare/CineSquareList";
+import CineSquareDetail from "./components/cinesquare/CineSquareDetail";
+import CineSquareEdit from "./components/cinesquare/CineSqaureEdit";
+import CineSquareReg from "./components/cinesquare/CineSqaureReg";
+
 
 function AppRoutes(){
     return(
@@ -37,16 +43,23 @@ function AppRoutes(){
 
             <Route path="/recm/browse" element={<PageRecommend />} />
             <Route path="/recm/:brand" element={<PageRecm />}/>
-            <Route path="/recm/:brand/detail" element={<PageRecmDetail />}>
+            <Route path="/recm/:brand/dtl" element={<PageRecmDetail />}>
                 <Route path=":postId" element={<PostDetail />} />
                 <Route path="reg" element={<PostReg />} />
                 <Route path="edit/:postId" element={<PostUpdate />} />
+            </Route>
+            <Route path="/cinesquare" element={<PageCineSquare/>}>
+                <Route path="list" element={<CineSqaureList/>}/>
+                <Route path=":postId" element={<CineSquareDetail/>}/>
+                <Route path="reg" element={<CineSquareReg/>}/>
+                <Route path="edit/:postId" element={<CineSquareEdit/>}/>
             </Route>
 
             <Route path="/chatting" element={<PageUser />} />
             <Route path="*" element={<PageNotFound />} />
         </Routes>
         </main>
+        
     )
 }
 

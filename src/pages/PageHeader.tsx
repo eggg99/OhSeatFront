@@ -28,7 +28,7 @@ const Header = () => {
                             </ul>
                         </li>
                         <li><Link to="/chatting">채팅</Link></li>
-                        <li><Link to="/chatting">씨네광장</Link></li>
+                        <li><Link to="/cinesquare/list">씨네광장</Link></li>
                         <li><Link to="/chatting">이벤트</Link></li>
                     </ul>
                 </nav>
