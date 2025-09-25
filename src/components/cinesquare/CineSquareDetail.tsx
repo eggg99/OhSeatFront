@@ -26,8 +26,6 @@ export default function CineSquareDetail(){
         try {
             const response = await deleteCineSquare(postId);
             console.log(response);
-            //alert(response);
-            // navigate(`/cinesquare?categoryId=1`);
         } catch (error) {
             console.error(error);
         }

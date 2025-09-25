@@ -34,11 +34,10 @@ export default function CineSquareReg(){
         );
         alert('저장되었습니다.');
         navigate(`/cinesquare/list?category=1`);
-        
     }
 
     return(
-        <div className="detail-form shadow rounded-xl border bg-card flex flex-col mt-5">
+        <div className="detail-form shadow rounded-xl border bg-card flex flex-col">
             <div className="flex gap-3">
                 <span>카테고리</span>
                 <select name="categoryId" onChange={handleInput} value={inputValue.categoryId}>

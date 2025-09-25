@@ -4,7 +4,7 @@ import '@/styles/login.scss';
 
 export default function PageCineSquare () {
     return (
-        <div >
+        <div className="detail-wrapper">
             <Outlet />
         </div>
     );
