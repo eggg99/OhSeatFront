@@ -28,6 +28,7 @@ export default function PostReg(){
     const [cinemas, setCinemas] = useState<{value: string, label: string}[]>([]);
     const [screens, setScreens] = useState<{value: string, label: string}[]>([]);
     const userId = userStore((state) => state.userId);
+    const { isLogin } = userStore((state) => state.isLogin);
     const [inputValue, setInputValue] = useState({
         title:'',
         content:''
@@ -87,7 +88,8 @@ export default function PostReg(){
     };
 
     const handleSubmit = async () => {
-        if(!inputValue.title){alert('제목을 입력해주세요'); return;}
+        if(!isLogin) {alert('로그인을 해주세요'); return;}
+        else if(!inputValue.title){alert('제목을 입력해주세요'); return;}
         else if(!selectedMultiplex){alert('멀티플렉스를 선택해주세요'); return;}
         else if(!selectedArea){alert('지역을 선택해주세요'); return;}
         else if(!selectedCinema){alert('영화관을 선택해주세요'); return;}

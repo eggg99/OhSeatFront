@@ -1,15 +1,13 @@
 import { userStore }            from '@/store/userStore';
-import { Link, useNavigate }    from "react-router-dom";
+import { Link }    from "react-router-dom";
 import Logo                     from '@/components/common/Logo';
 
 const Header = () => {
-    const navigate = useNavigate();
     const { userId, userNick, clearUser } = userStore();
 
     const logout = () => {
         alert('로그아웃 되었습니다');
         clearUser();
-        navigate('/');
     }
 
     return (

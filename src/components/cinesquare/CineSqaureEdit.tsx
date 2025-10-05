@@ -86,7 +86,7 @@ export default function CineSquareEdit(){
                 />
             </div>
             <div>
-                <button onClick={() => handleSubmit()}>작성</button>
+                <button onClick={() => handleSubmit()}>수정</button>
             </div>
         </div>
     )

@@ -1,15 +1,17 @@
-export interface PostData {
+export interface CineSquareData {
   postId: number;
+  categoryId: number;
+  categoryName: string;
   title: string;
   content: string;
-  authorNickname: string;
   views: number;
   createdAt: string;
-  commentCount: number;
+  authorId: number;
+  authorNickname : string;
 }
 
-export interface PostPage {
-  content: PostData[];
+export interface CineSquarePage {
+  content: CineSquareData[];
   totalPages: number;
   totalElements: number;
   number: number; // 현재 페이지 (1부터 시작)

@@ -164,3 +164,16 @@ export const putComment = async(content, postId, commenterId) => {
         console.error("게시글 댓글 등록 실패: ", error);
     }
 }
+
+/**
+ * 게시글 상세 - 댓글 등록
+ * param : commentId      댓글 아이디
+ */
+export const deleteComment = async(commentId) => {
+    try{
+        const response = await axiosApi.delete(`/rcmd/comment/${commentId}`)
+        return response.data;
+    } catch (error) {
+        console.error("게시글 삭제 실패: ", error);
+    }      
+}

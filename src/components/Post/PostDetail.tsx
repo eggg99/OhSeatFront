@@ -1,4 +1,4 @@
-import { deletePost, getCommentList, getPostDetail, putComment } from "@/apis/api/recommend"
+import { deletePost, getCommentList, getPostDetail, putComment, deleteComment } from "@/apis/api/recommend"
 import { useEffect, useState } from "react"
 import { useOutletContext, useParams } from "react-router-dom";
 import { Input } from "@/components/ui/input"
@@ -13,6 +13,7 @@ interface PostDetail {
     postId: number;
     title: string;
     content: string;
+    authorId : string;
     authorNickname: string;
     views: number;
     createdAt: string; // Date 타입
@@ -22,6 +23,7 @@ interface PostDetail {
 interface Comment {
   commentId: number;
   content: string;
+  commenterId : string;
   authorNickname: string;
   createdAt: string;
 }
@@ -30,6 +32,8 @@ export default function PostDetail(){
     const navigate = useNavigate();
     const { brand } = useOutletContext<brand>();
     const userId = userStore((state) => state.userId);  // 유저아이디
+    const isLogin = userStore((state) => state.isLogin);
+
     // useParams는 항상 객체 반환
     const { postId } = useParams<{ postId: string }>(); 
     const [comment, setComment] = useState("");
@@ -39,6 +43,7 @@ export default function PostDetail(){
         postId: 0,
         title: '',
         content: '',
+        authorId: '',
         authorNickname: '',
         views: 0,
         createdAt: '-', 
@@ -77,6 +82,7 @@ export default function PostDetail(){
 
     const handleSubmit = async () => {
         if (!comment.trim()) return;
+        else if (!isLogin) {alert('로그인해주세요'); navigate(`/user/login`);return;}
 
         try {
             await putComment(comment, postId, userId);
@@ -97,6 +103,15 @@ export default function PostDetail(){
         }
     }
 
+    const handleDeleteComment = async(commentId:number) => {
+        const result = confirm("삭제하시겠습니까?");
+        if(result){
+            const response = await deleteComment(commentId);
+            alert(response);
+            await getData();     // 게시글 다시 불러오기 (commentCount 갱신)
+            await getDataComment(); // 댓글 리스트 갱신
+        }
+    }
 
     return (
         <div className="detail-form shadow rounded-xl border bg-card flex flex-col">
@@ -121,10 +136,12 @@ export default function PostDetail(){
                         <span>조회수</span>
                         <span>{detailValue.views}회</span>
                     </div>
+                    {detailValue.authorId === userId &&
                     <div className="ml-3">
                         <button><Link to={`/recm/${brand}/dtl/edit/${postId}`}>수정</Link></button>
                         <button onClick={handleDelete}>삭제</button>
                     </div>
+                    }
                 </div>
             </div>
 
@@ -150,7 +167,13 @@ export default function PostDetail(){
                 ) : (
                     commentList.map((c) => (
                         <div key={c.commentId} className="border-b py-2">
-                            <p>{c.content}</p>
+                            <div className="flex justify-between">
+                                <p>{c.content}</p>
+                                { c.commenterId == userId && 
+                                    <button onClick={() => handleDeleteComment(c.commentId)}>삭제</button>
+                                }
+                                
+                            </div>
                             <small>{c.authorNickname} · {c.createdAt}</small>
                         </div>
                     ))

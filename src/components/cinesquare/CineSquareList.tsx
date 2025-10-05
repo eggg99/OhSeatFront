@@ -3,11 +3,11 @@ import { Pagination, PaginationContent, PaginationItem, PaginationLink, Paginati
 import { useEffect, useState } from "react";
 import { getCineSqaureList } from "@/apis/api/cinesquare";
 import { Link, useNavigate } from "react-router-dom";
-import { CineSquarePage } from "@/types/Post";
+import { CineSquarePage } from "@/types/CineSquare";
 
 export default function CineSqaureList () {
     const navigate = useNavigate();
-    const [cineSquareList, setCineSquareList] = useState<CineSquarePage | null>(null);
+    const [cineSquareList, setCineSquareList] = useState<CineSquarePage | null >(null);
     const [page, setPage] = useState<number>(0);
     const [categoryId, setCategoryId] = useState<number>(1);
     const [orderType, setOrderType] = useState<string>("latest");
@@ -15,6 +15,7 @@ export default function CineSqaureList () {
 
     const getList = async() => {
         const response = await getCineSqaureList(categoryId);
+        console.log(response);
         setCineSquareList(response);
     }
 
@@ -59,7 +60,7 @@ export default function CineSqaureList () {
                             </TableRow>
                         </TableHeader>
                         <TableBody>
-                            {cineSquareList && cineSquareList.content && cineSquareList.content.map((item:any) => (
+                            {cineSquareList && cineSquareList.content.map((item:any) => (
                                 <TableRow key={item.postId}  
                                     onClick={() => navigate(`/cinesquare/${item.postId}`)} 
                                     className="cursor-pointer hover:bg-gray-100">
@@ -67,7 +68,7 @@ export default function CineSqaureList () {
                                     <TableCell>
                                         <Link to={`/cinesquare/${item.postId}`}>{item.title}</Link>
                                     </TableCell>
-                                    <TableCell>{item.authorId}</TableCell>
+                                    <TableCell>{item.authorNickname}</TableCell>
                                     <TableCell>{item.createdAt}</TableCell>
                                     <TableCell>{item.views}회</TableCell>
                                 </TableRow>

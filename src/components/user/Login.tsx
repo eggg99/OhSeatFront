@@ -30,7 +30,13 @@ export default function Login(){
             return;
         } else {
             alert('로그인이 완료되었습니다!');
-            setUser({'userId': response.userId, 'userNick': response.nickname, 'userEmail': response.email, 'token':response.token})
+            setUser({
+                'userId': response.userId, 
+                'userNick': response.nickname, 
+                'userEmail': response.email, 
+                'token':response.token, 
+                'isLogin':true
+            })
             navigate('/');
         }
     }

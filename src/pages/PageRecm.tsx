@@ -11,6 +11,7 @@ import { PostPage } from "@/types/Post";
 import { MULTIPLEX_LIST } from "@/constants/multiplex";
 import { AREA_LIST } from "@/constants/area";
 import { useQuery } from "@tanstack/react-query";
+import { userStore } from "@/store/userStore";
 
 const multiplexMap: Record<string, number> = {
   cgv: 1,
@@ -22,6 +23,7 @@ const ALL_CINEMA = { cinemaId: 'all_c', cinemaName: '전체' };
 const ALL_SCREEN = { screenId: 'all_s', screenName: '전체' };
 
 export default function PageRecm() {
+    const { isLogin } = userStore((state) => state.isLogin);
     const [emblaRef] = useEmblaCarousel({ loop: false });
     const navigate = useNavigate();
     const { brand } = useParams<{ brand: string }>();
@@ -273,7 +275,9 @@ export default function PageRecm() {
                             </PaginationItem>
                         </PaginationContent>
                     </Pagination>
+                    {isLogin === true &&
                     <button><Link to={`/recm/${brand}/dtl/reg`}>등록</Link></button>
+                    }
                 </div>
             </section>
         </div>
