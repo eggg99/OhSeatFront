@@ -177,3 +177,16 @@ export const deleteComment = async(commentId) => {
         console.error("게시글 삭제 실패: ", error);
     }      
 }
+
+/**
+ * 조회수 증가
+ * param : postId       게시글 아이디
+ */
+export const postIncrementViews = async (postId) => {
+    try{
+        const repsonse = await axiosApi.post(`/rcmd/incrementViews/${postId}`, {})
+        return response.data;
+    } catch (error) {
+        console.error("조회수 증가 실패: ", error);
+    }
+}

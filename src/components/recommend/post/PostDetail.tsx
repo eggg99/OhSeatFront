@@ -1,13 +1,9 @@
-import { deletePost, getCommentList, getPostDetail, putComment, deleteComment } from "@/apis/api/recommend"
-import { useEffect, useState } from "react"
+import { deletePost, getCommentList, getPostDetail, putComment, deleteComment, postIncrementViews } from "@/apis/api/recommend"
+import { useEffect, useState, useRef } from "react"
 import { useOutletContext, useParams } from "react-router-dom";
 import { Input } from "@/components/ui/input"
 import { userStore } from "@/store/userStore";
 import { Link, useNavigate } from "react-router-dom";
-
-type brand = {
-  brand: string;
-};
 
 interface PostDetail {
     postId: number;
@@ -30,12 +26,11 @@ interface Comment {
 
 export default function PostDetail(){
     const navigate = useNavigate();
-    const { brand } = useOutletContext<brand>();
+    const { brand } = useParams<{ brand: string }>();
+    const { postId } = useParams<{ postId: string }>(); 
     const userId = userStore((state) => state.userId);  // 유저아이디
     const isLogin = userStore((state) => state.isLogin);
 
-    // useParams는 항상 객체 반환
-    const { postId } = useParams<{ postId: string }>(); 
     const [comment, setComment] = useState("");
     const [commentList, setcommentList] = useState<Comment[]>([]);
     
@@ -49,11 +44,22 @@ export default function PostDetail(){
         createdAt: '-', 
         commentCount: 0,
     });
+    
+    const hasViewed = useRef(false);
+
+    const handleViews = async () => {
+        // 로그인한 유저만 조회수 증가 가능
+        if(userId){
+            await postIncrementViews(postId);
+        }
+    }
 
     useEffect(() => {
-        if(postId){
+        if (postId && !hasViewed.current) {
+            hasViewed.current = true; // ✅ 한 번만 실행되도록 막음
             getData();
-            getDataComment()
+            getDataComment();
+            handleViews();
         }
     }, [postId]);
 
@@ -99,7 +105,7 @@ export default function PostDetail(){
         if(result){
             const response = await deletePost(detailValue.postId);
             alert(response);
-            navigate(`/recm/${brand}`);
+            navigate(`/recommend/${brand}`);
         }
     }
 
@@ -138,7 +144,7 @@ export default function PostDetail(){
                     </div>
                     {detailValue.authorId === userId &&
                     <div className="ml-3">
-                        <button><Link to={`/recm/${brand}/dtl/edit/${postId}`}>수정</Link></button>
+                        <button><Link to={`/recommend/${brand}/edit/${postId}`}>수정</Link></button>
                         <button onClick={handleDelete}>삭제</button>
                     </div>
                     }
@@ -191,7 +197,7 @@ export default function PostDetail(){
                 </button>
             </div>
             <div className="text-right">
-                <Link to={`/recm/${brand}`}>목록</Link>
+                <Link to={`/recommend/${brand}`}>목록</Link>
             </div>
         </div>
     )

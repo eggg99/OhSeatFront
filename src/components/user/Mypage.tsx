@@ -75,7 +75,7 @@ export default function Mypage(){
                 <h1 className='title'>마이페이지</h1>
                 
                 <div className='input-group'>
-                    <Link to="/user/changePw" className="w-1/4 m-0 bg-black text-white text-center rounded-sm p-1 outline-2 outline-offset-4">비밀번호 수정</Link>
+                    <Link to="/user/change-password" className="w-1/4 m-0 bg-black text-white text-center rounded-sm p-1 outline-2 outline-offset-4">비밀번호 수정</Link>
                 </div>
                 <div className='input-group'>
                     <Input type="text" placeholder="이름" value={inputValue.name} disabled/>

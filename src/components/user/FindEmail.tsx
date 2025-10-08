@@ -30,7 +30,7 @@ export default function FindId() {
         if(!response){
             return;
         } else {
-            navigate('/user/find/result');
+            navigate('/user/find-result');
         }
     }
 

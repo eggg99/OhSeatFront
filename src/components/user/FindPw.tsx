@@ -47,7 +47,7 @@ export default function FindPw(){
             alert(response.message);
             
             setUser({'token':response.changePwToken})
-            navigate('/user/changePw');
+            navigate('/user/change-password');
         }
     }
 

@@ -28,7 +28,7 @@ export default function PostReg(){
     const [cinemas, setCinemas] = useState<{value: string, label: string}[]>([]);
     const [screens, setScreens] = useState<{value: string, label: string}[]>([]);
     const userId = userStore((state) => state.userId);
-    const { isLogin } = userStore((state) => state.isLogin);
+    const isLogin = userStore((state) => state.isLogin);
     const [inputValue, setInputValue] = useState({
         title:'',
         content:''

@@ -10,22 +10,19 @@ import { Link } from "react-router-dom";
 import { PostPage } from "@/types/Post";
 import { MULTIPLEX_LIST } from "@/constants/multiplex";
 import { AREA_LIST } from "@/constants/area";
-import { useQuery } from "@tanstack/react-query";
 import { userStore } from "@/store/userStore";
-
-const multiplexMap: Record<string, number> = {
-  cgv: 1,
-  megabox: 2,
-  lotte: 3,
-};
 
 const ALL_CINEMA = { cinemaId: 'all_c', cinemaName: '전체' };
 const ALL_SCREEN = { screenId: 'all_s', screenName: '전체' };
 
-export default function PageRecm() {
-    const { isLogin } = userStore((state) => state.isLogin);
-    const [emblaRef] = useEmblaCarousel({ loop: false });
+export default function BrandIndex() {
     const navigate = useNavigate();
+    
+    const isLogin = userStore((state) => state.isLogin);
+    const [emblaRef1] = useEmblaCarousel({ loop: false });
+    const [emblaRef2] = useEmblaCarousel({ loop: false });
+    const [emblaRef3] = useEmblaCarousel({ loop: false });
+    
     const { brand } = useParams<{ brand: string }>();
     const multiplexId = MULTIPLEX_LIST.find((m) => m.brand === brand)?.id;
     const [selectedAreaId, setSelectedAreaId] = useState<string>("00");
@@ -84,22 +81,12 @@ export default function PageRecm() {
         }
     }, [brand, selectedAreaId, selectedCinema, selectedScreen, page, orderType]);
 
-    
-    // useQuery 사용해보기
-    const { data: cinemaList2 = [], isLoading, error } = useQuery({
-        queryKey: ["cinemaList", multiplexId, selectedAreaId],  // 캐싱 키
-        queryFn: () => getCinemaList(multiplexId, selectedAreaId),
-        enabled: !!selectedAreaId, // areaId 있을 때만 실행
-    });
-    if (isLoading) return <p>로딩 중...</p>;
-    if (error) return <p>에러 발생: {String(error)}</p>;
-
     return (
         <div className="flex flex-col">
             {/* 지역 선택 */}
             <section className="content-wrapper py-4">
                 <div className="flex justify-center gap-4 flex-wrap">
-                    <div className="embla" ref={emblaRef}>
+                    <div className="embla" ref={emblaRef1}>
                         <div className="embla__container">
                             {AREA_LIST.map(({ id, label }) => {
                                 const isChecked = selectedAreaId === id;
@@ -130,7 +117,7 @@ export default function PageRecm() {
             {/* 영화관 선택 */}
             <section className="content-wrapper py-4">
                 <div className="flex justify-center gap-4 flex-wrap">
-                    <div className="embla" ref={emblaRef}>
+                    <div className="embla" ref={emblaRef2}>
                         <div className="embla__container">
                             {cinemaList.map((cinema) => {
                                 const isChecked = selectedCinema?.cinemaId === cinema.cinemaId;
@@ -177,7 +164,7 @@ export default function PageRecm() {
             {/* 상영관 선택 */}
             <section className="content-wrapper py-4">
                 <div className="flex justify-center gap-4 flex-wrap">
-                    <div className="embla" ref={emblaRef}>
+                    <div className="embla" ref={emblaRef3}>
                         <div className="embla__container">
                             {screenList.map((screen) => {
                                 const isChecked = selectedScreen?.screenId === screen.screenId;
@@ -214,6 +201,9 @@ export default function PageRecm() {
                         <button onClick={() =>handleOrderChange('views')}>조회순</button> | 
                         <button onClick={() =>handleOrderChange('comments')}>댓글순</button>
                     </div>
+                    {isLogin &&
+                    <button><Link to={`/recommend/${brand}/reg`}>등록</Link></button>
+                    }
 
                     {/* 게시글 테이블 */}
                     <Table>
@@ -229,10 +219,10 @@ export default function PageRecm() {
                         <TableBody>
                             {postList && postList.content.map((item:any) => (
                                 <TableRow key={item.postId}  
-                                    onClick={() => navigate(`/recm/${brand}/dtl/${item.postId}`)} 
+                                    onClick={() => navigate(`/recommend/${brand}/${item.postId}`)} 
                                     className="cursor-pointer hover:bg-gray-100">
                                     <TableCell>
-                                        <Link to={`/recm/${brand}/dtl/${item.postId}`}>{item.title}</Link>
+                                        <Link to={`/recommend/${brand}/${item.postId}`}>{item.title}</Link>
                                     </TableCell>
                                     <TableCell>{item.authorNickname}</TableCell>
                                     <TableCell>{item.createdAt}</TableCell>
@@ -275,9 +265,6 @@ export default function PageRecm() {
                             </PaginationItem>
                         </PaginationContent>
                     </Pagination>
-                    {isLogin === true &&
-                    <button><Link to={`/recm/${brand}/dtl/reg`}>등록</Link></button>
-                    }
                 </div>
             </section>
         </div>

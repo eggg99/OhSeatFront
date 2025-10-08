@@ -22,7 +22,7 @@ export default function FindResult() {
             <Link to="/user/login">
                 <button className="btn btn-primary w-full text-sm">로그인 화면으로 이동하기</button>
             </Link>
-            <Link to="/user/find/pw">
+            <Link to="/user/find-password">
                 <button className="btn btn-primary w-full text-sm">비밀번호 찾기</button>
             </Link>
         </div>

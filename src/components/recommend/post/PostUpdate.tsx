@@ -28,7 +28,7 @@ const areas = [
 export default function PostUpdate() {
     const navigate = useNavigate();
     const { userId } = userStore();
-    const { brand } = useOutletContext<brand>();
+    const { brand } = useParams<{ brand: string }>();
     const { postId } = useParams<{ postId: string }>(); 
     const [selectedMultiplex, setSelectedMultiplex] = useState("");
     const [selectedArea, setSelectedArea] = useState("");
@@ -137,7 +137,7 @@ export default function PostUpdate() {
         );
 
         alert("게시글이 수정되었습니다.");
-        navigate(`/recm/${brand}/dtl/${postId}`); // 수정 후 상세 페이지로 이동
+        navigate(`/recommend/${brand}/${postId}`); // 수정 후 상세 페이지로 이동
     };
 
     return (
