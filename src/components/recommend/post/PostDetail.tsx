@@ -1,4 +1,4 @@
-import { deletePost, getCommentList, getPostDetail, putComment, deleteComment, postIncrementViews } from "@/apis/api/recommend"
+import { deletePost, getCommentList, getPostDetail, putComment, deleteComment, postIncrementViews, updatePostLike } from "@/apis/api/recommend"
 import { useEffect, useState, useRef } from "react"
 import { useOutletContext, useParams } from "react-router-dom";
 import { Input } from "@/components/ui/input"
@@ -14,6 +14,8 @@ interface PostDetail {
     views: number;
     createdAt: string; // Date 타입
     commentCount: number;
+    likeCount:number;
+    liked : boolean;
 }
 
 interface Comment {
@@ -43,6 +45,8 @@ export default function PostDetail(){
         views: 0,
         createdAt: '-', 
         commentCount: 0,
+        likeCount: 0,
+        liked: false,
     });
     
     const hasViewed = useRef(false);
@@ -67,6 +71,7 @@ export default function PostDetail(){
     const getData = async () => {
         try {
             const response = await getPostDetail(postId);
+            console.log(response)
             setDetailValue(response);
         } catch (error) {
             console.error(error);
@@ -119,6 +124,23 @@ export default function PostDetail(){
         }
     }
 
+    const handleLike = async () => {
+    try {
+        const response = await updatePostLike(postId);
+
+        // response = { Liked: true or false }
+        setDetailValue((prev) => ({
+            ...prev,
+            liked: response.Liked, // ✅ liked 값 업데이트
+            likeCount: response.Liked 
+                ? prev.likeCount + 1 
+                : Math.max(prev.likeCount - 1, 0), // 좋아요 수 증감 처리
+        }));
+    } catch (error) {
+        console.error("좋아요 처리 실패", error);
+    }
+};
+
     return (
         <div className="detail-form shadow rounded-xl border bg-card flex flex-col">
             <div>
@@ -157,8 +179,11 @@ export default function PostDetail(){
 
             <div className="flex">
                 <div className="flex gap-3">
+                    <button onClick={handleLike} className="text-2xl">
+                        {detailValue.liked ? "♥" : "♡"}
+                    </button>
                     <span>좋아요</span>
-                    <span>0개</span>
+                    <span>{detailValue.likeCount}개</span>
                 </div>
                 <div className="flex gap-3 ml-3">
                     <span>댓글</span>

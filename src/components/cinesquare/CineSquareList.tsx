@@ -60,19 +60,27 @@ export default function CineSqaureList () {
                             </TableRow>
                         </TableHeader>
                         <TableBody>
-                            {cineSquareList && cineSquareList.content.map((item:any) => (
-                                <TableRow key={item.postId}  
-                                    onClick={() => navigate(`/cinesquare/${item.postId}`)} 
-                                    className="cursor-pointer hover:bg-gray-100">
-                                    <TableCell>{item.categoryName}</TableCell>
-                                    <TableCell>
-                                        <Link to={`/cinesquare/${item.postId}`}>{item.title}</Link>
+                            {cineSquareList && cineSquareList.content.length > 0 ? (
+                                cineSquareList.content.map((item:any) => (
+                                    <TableRow key={item.postId} 
+                                        onClick={() => navigate(`/cinesquare/${item.postId}`)} 
+                                        className="cursor-pointer hover:bg-gray-100">
+                                        <TableCell>{item.categoryName}</TableCell>
+                                        <TableCell>
+                                            <Link to={`/cinesquare/${item.postId}`}>{item.title}</Link>
+                                        </TableCell>
+                                        <TableCell>{item.authorNickname}</TableCell>
+                                        <TableCell>{item.createdAt}</TableCell>
+                                        <TableCell>{item.views}회</TableCell>
+                                    </TableRow>
+                                ))
+                            ) : (
+                                <TableRow>
+                                    <TableCell colSpan={5} className="text-center py-6 text-gray-500">
+                                        내용이 없습니다 🥲
                                     </TableCell>
-                                    <TableCell>{item.authorNickname}</TableCell>
-                                    <TableCell>{item.createdAt}</TableCell>
-                                    <TableCell>{item.views}회</TableCell>
                                 </TableRow>
-                            ))}
+                            )}
                         </TableBody>
                     </Table>
 

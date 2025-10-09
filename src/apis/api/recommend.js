@@ -184,9 +184,22 @@ export const deleteComment = async(commentId) => {
  */
 export const postIncrementViews = async (postId) => {
     try{
-        const repsonse = await axiosApi.post(`/rcmd/incrementViews/${postId}`, {})
+        const response = await axiosApi.post(`/rcmd/incrementViews/${postId}`, {})
         return response.data;
     } catch (error) {
         console.error("조회수 증가 실패: ", error);
+    }
+}
+
+/**
+ * 좋아요/좋아요취소
+ * param : postId       게시글 아이디
+ */
+export const updatePostLike = async (postId) => {
+    try{
+        const response = await axiosApi.post(`/rcmd/post/like/${postId}`, {})
+        return response.data;
+    } catch (error) {
+        console.error("좋아요 실패: ", error);
     }
 }

@@ -217,19 +217,29 @@ export default function BrandIndex() {
                             </TableRow>
                         </TableHeader>
                         <TableBody>
-                            {postList && postList.content.map((item:any) => (
-                                <TableRow key={item.postId}  
-                                    onClick={() => navigate(`/recommend/${brand}/${item.postId}`)} 
-                                    className="cursor-pointer hover:bg-gray-100">
+                            {postList && postList.content.length > 0 ? (
+                                postList.content.map((item: any) => (
+                                <TableRow
+                                    key={item.postId}
+                                    onClick={() => navigate(`/recommend/${brand}/${item.postId}`)}
+                                    className="cursor-pointer hover:bg-gray-100"
+                                >
                                     <TableCell>
-                                        <Link to={`/recommend/${brand}/${item.postId}`}>{item.title}</Link>
+                                    <Link to={`/recommend/${brand}/${item.postId}`}>{item.title}</Link>
                                     </TableCell>
                                     <TableCell>{item.authorNickname}</TableCell>
                                     <TableCell>{item.createdAt}</TableCell>
                                     <TableCell>{item.views}회</TableCell>
                                     <TableCell>{item.commentCount}개</TableCell>
                                 </TableRow>
-                            ))}
+                                ))
+                            ) : (
+                                <TableRow>
+                                <TableCell colSpan={5} className="text-center py-6 text-gray-500">
+                                    추천 내용이 없습니다 🥲
+                                </TableCell>
+                                </TableRow>
+                            )}
                         </TableBody>
                     </Table>
 
