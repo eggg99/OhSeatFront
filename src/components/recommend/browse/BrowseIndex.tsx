@@ -1,4 +1,40 @@
+import { getTrendingCinema } from "@/apis/api/recommend";
+import { useEffect, useState } from "react";
+
+interface Cinema {
+    multiplexId: number;
+    areaId: number;
+    cinemaId: string;
+    cinemaName: string;
+    cinemaAddr: string;
+    postCount: number;
+    totalLike: number;
+}
+
 export default function BrowseIndex() {
+    const [trendingCinema, setTrendingCinema] = useState<Cinema>({
+        multiplexId: 0,
+        areaId: 0,
+        cinemaId: '',
+        cinemaName: '',
+        cinemaAddr: '',
+        postCount: 0,
+        totalLike: 0, 
+    });
+
+    const getData = async () => {
+        try {
+            const response = await getTrendingCinema();
+            console.log(response)
+            setTrendingCinema(response);
+        } catch (error) {
+            console.error(error);
+        }
+    }
+    useEffect(() => {
+        getData(); // 마운트 될 때 데이터 가져오기
+    }, []);
+
     return (
         <div>
             <section className="flex flex-col">
@@ -19,3 +55,4 @@ export default function BrowseIndex() {
         </div>
     )
 }
+

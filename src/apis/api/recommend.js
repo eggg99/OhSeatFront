@@ -1,6 +1,18 @@
 import { axiosApi } from "@/apis/utils/instance";
 
 /**
+ * 최근 일주일간 언급 많이 된 영화관
+ */
+export const getTrendingCinema = async() => {
+    try{
+        const response = await axiosApi.get('/rcmd/trendingCinema', { })
+        return response.data;
+    } catch (error) {
+        console.error("최근 일주일간 언급 많이 된 영화관 조회 실패: ", error);
+    }
+}
+
+/**
  * 영화관 리스트 조회
  * param : multiplexId  멀티플렉스 구분
  * param : areaId       지역 구분
@@ -75,7 +87,7 @@ export const getPostDetail = async(postId) => {
  */
 export const putPost = async(authorId,multiplexId,areaId,cinemaId,screenId,title,content) => {
     try{
-        const response = await axiosApi.put("/rcmd/post", { 
+        const response = await axiosApi.put("/rcmd/post/reg", { 
             authorId,
             multiplexId,
             areaId,

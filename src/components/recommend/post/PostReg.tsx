@@ -2,6 +2,8 @@ import { useState } from "react";
 import { Input } from "@/components/ui/input"
 import { getCinemaList, getScreenList, putPost } from "@/apis/api/recommend";
 import { userStore } from "@/store/userStore";
+import { useNavigate } from "react-router-dom";
+import { MULTIPLEX_LIST } from "@/constants/multiplex";
 
 const multiplexes = [
     {value: "1", label: "CGV"},
@@ -21,6 +23,7 @@ const areas = [
 ]
 
 export default function PostReg(){
+    const navigate = useNavigate();
     const [selectedMultiplex, setSelectedMultiplex] = useState("");
     const [selectedArea, setSelectedArea] = useState("");
     const [selectedCinema, setSelectedCinema] = useState("");
@@ -104,6 +107,10 @@ export default function PostReg(){
             inputValue.title,
             inputValue.content
         );
+        alert('게시글 등록이 완료되었습니다.');
+        const multiplexName = MULTIPLEX_LIST.find(m => m.id === Number(selectedMultiplex))?.brand  || "";
+
+        navigate(`/recommend/${multiplexName}/${response}`);
     }
     
     return(

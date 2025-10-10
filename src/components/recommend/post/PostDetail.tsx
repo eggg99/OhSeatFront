@@ -128,7 +128,6 @@ export default function PostDetail(){
     try {
         const response = await updatePostLike(postId);
 
-        // response = { Liked: true or false }
         setDetailValue((prev) => ({
             ...prev,
             liked: response.Liked, // ✅ liked 값 업데이트
