@@ -1,4 +1,5 @@
 export interface PostData {
+  multiplexId: number;
   postId: number;
   title: string;
   content: string;
