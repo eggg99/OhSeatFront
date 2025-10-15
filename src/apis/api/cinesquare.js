@@ -4,10 +4,9 @@ import { axiosApi } from "@/apis/utils/instance";
  * 씨네광장 카테고리별 게시글 전체 조회
  * param : categoryId   카테고리시퀀스
  */
-export const getCineSqaureList = async(categoryId) => {
+export const getCineSqaureList = async(param) => {
     try{
-        const params = { categoryId };
-        const response = await axiosApi.get('/cinesquare/list', { params })
+        const response = await axiosApi.get('/cinesquare/list', { params: param })
         return response.data;
     } catch (error) {
         console.error("씨네광장 카테고리별 게시글 전체 조회 실패: ", error);

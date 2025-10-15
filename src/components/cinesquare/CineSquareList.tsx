@@ -1,40 +1,94 @@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@/components/ui/pagination";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { getCineSqaureList } from "@/apis/api/cinesquare";
 import { Link, useNavigate } from "react-router-dom";
-import { CineSquarePage } from "@/types/CineSquare";
 
 export default function CineSqaureList () {
     const navigate = useNavigate();
-    const [cineSquareList, setCineSquareList] = useState<CineSquarePage | null >(null);
-    const [page, setPage] = useState<number>(0);
-    const [categoryId, setCategoryId] = useState<number>(1);
-    const [orderType, setOrderType] = useState<string>("latest");
-    const size = 10;
+    const [cineSquareList, setCineSquareList] = useState<any[]>([]);
+    const [categoryId, setCategoryId] = useState<number>(0);
+    const [lastPostId, setLastPostId] = useState<number | null>(null);
+    const [orderType, setOrderType] = useState<string>('');
+    
+    const loaderRef = useRef<HTMLDivElement | null>(null);  // 무한스크롤의 관찰 대상 div를 가리키는 참조
+    const [isLoading, setIsLoading] = useState(false);      // 로딩 중 여부
+    const [hasMore, setHasMore] = useState(true);           // 더 불러올 데이터가 있는지 여부
 
     const getList = async() => {
-        const response = await getCineSqaureList(categoryId);
-        console.log(response);
-        setCineSquareList(response);
+        // 로딩중 or 불러올 데이터 X
+        if(isLoading || !hasMore) return;   // 중복 요청 방지
+        // 로딩중으로 만들기
+        setIsLoading(true);
+
+        const param = {
+            categoryId : categoryId,
+            lastPostId : lastPostId,
+            orderType : orderType
+        }
+        try {
+            const response = await getCineSqaureList(param);
+            console.log(response);
+            // 불러올 데이터 O
+            if (response && response.length > 0) {
+                setCineSquareList(response);
+                // 기존 리스트에 가져온 데이터 추가
+                setCineSquareList(prev => [...prev, ...response]);
+                // 마지막 postId 갱신시키기
+                setLastPostId(response[response.length - 1].postId)
+            }
+            // 불러올 데이터 X 
+            else {
+                setHasMore(false);      
+            }
+        } finally {
+            // 로딩중 화면 끄기
+            setIsLoading(false)
+        }
+        
     }
 
     const handleCategory = (newCategoryId : number) => setCategoryId(newCategoryId)
 
-    // 페이지 변경
-    const handlePageChange = (newPage: number) => setPage(newPage);
-
     // 정렬 변경
     const handleOrderChange = (newOrder: string) => setOrderType(newOrder);
-    
+
     // 첫 진입 시, 리스트 불러오기
     useEffect(() => {
+        setCineSquareList([]);
+        setLastPostId(null);
+        setHasMore(true);
         getList();
-    }, [categoryId]);
+    }, [categoryId, orderType]);
+
+    // Intersection Observer로 무한 스크롤 감지
+    useEffect(() => {
+        // 어떤 요소가 다른 요소와 겹치는지 비동기식으로 알려주는 브라우저 api
+        // entries : 관찰중인 요소의 변화 목록 
+        const observer = new IntersectionObserver((entries) => {
+            const target = entries[0];      // 하나의 요소만 관찰하므로 첫번째 항목만 target 지정
+            // 조건 : 관찰대상이 화면에 보이는지 && 더 불러올 데이터가 있는지 && 불러오는 중이 아닌지
+            if (target.isIntersecting && hasMore && !isLoading) {
+                getList();
+            }
+        }, {
+            // 관찰 요소가 얼마만큼 보일 때 콜백을 트리거할지 정하는 값
+            // 0.0 ~ 1.0 사이
+            threshold : 0.5,   // 50% 보이면 트리거
+        });
+        // div가 화면에 보이게 되면 알려주는 동작 시작
+        // 실제 DOM 노드와 연결되어 있으면 요소를 observer가 관찰하도록 등록
+        if (loaderRef.current) observer.observe(loaderRef.current);
+
+        // 컴포넌트 언마운트 or effect가 재실행되기전에 정리함수 호출
+        return () => {
+            // 관찰을 멈추고 리소스 정리
+            if (loaderRef.current) observer.unobserve(loaderRef.current);
+        };
+    }, [hasMore, isLoading]);
 
     return(
         <section>
-                <div className="flex-[6] flex p-4 flex-col content-wrapper vtcal gap-4">
+                <div className="flex-[6] flex p-4 flex-col content-wrapper vtcal gap-4 h-[80vh]">
                     {/* 정렬 UI */}
                     <div className="self-end p-2">
                         <button onClick={() =>handleOrderChange('latest')}>최신순</button> | 
@@ -49,73 +103,49 @@ export default function CineSqaureList () {
                     </div>
 
                     {/* 게시글 테이블 */}
-                    <Table>
-                        <TableHeader>
-                            <TableRow>
-                                <TableHead>카테고리명</TableHead>
-                                <TableHead>제목</TableHead>
-                                <TableHead>작성자</TableHead>
-                                <TableHead>작성일</TableHead>
-                                <TableHead>조회수</TableHead>
-                            </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                            {cineSquareList && cineSquareList.content.length > 0 ? (
-                                cineSquareList.content.map((item:any) => (
-                                    <TableRow key={item.postId} 
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>카테고리명</th>
+                                <th>제목</th>
+                                <th>작성자</th>
+                                <th>작성일</th>
+                                <th>조회수</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {cineSquareList && cineSquareList.length > 0 ? (
+                                cineSquareList.map((item:any) => (
+                                    <tr key={item.postId} 
                                         onClick={() => navigate(`/cinesquare/${item.postId}`)} 
                                         className="cursor-pointer hover:bg-gray-100">
-                                        <TableCell>{item.categoryName}</TableCell>
-                                        <TableCell>
+                                        <td>{item.categoryName}</td>
+                                        <td>
                                             <Link to={`/cinesquare/${item.postId}`}>{item.title}</Link>
-                                        </TableCell>
-                                        <TableCell>{item.authorNickname}</TableCell>
-                                        <TableCell>{item.createdAt}</TableCell>
-                                        <TableCell>{item.views}회</TableCell>
-                                    </TableRow>
+                                        </td>
+                                        <td>{item.authorNickname}</td>
+                                        <td>{item.createdAt}</td>
+                                        <td>{item.views}회</td>
+                                    </tr>
                                 ))
                             ) : (
-                                <TableRow>
-                                    <TableCell colSpan={5} className="text-center py-6 text-gray-500">
+                                <tr>
+                                    <td colSpan={5} className="text-center py-6 text-gray-500">
                                         내용이 없습니다 🥲
-                                    </TableCell>
-                                </TableRow>
+                                    </td>
+                                </tr>
                             )}
-                        </TableBody>
-                    </Table>
+                        </tbody>
+                    </table>
 
-                    {/* 페이지네이션 */}
-                    <Pagination>
-                        <PaginationContent>
-                            <PaginationItem>
-                                <PaginationPrevious
-                                    href="#"
-                                    onClick={() => cineSquareList && cineSquareList.number > 0 && handlePageChange(cineSquareList.number - 1)}
-                                />
-                            </PaginationItem>
+                    {/* 로딩 데이터 */}
+                    <div
+                        ref={loaderRef}
+                        className="h-10 mt-8 flex justify-center items-center text-gray-400"
+                    >
+                        {isLoading ? "불러오는 중..." : hasMore ? "" : "마지막 글이에요!"}
+                    </div>
 
-                            {cineSquareList &&
-                                Array.from({ length: cineSquareList.totalPages }, (_, i) => (
-                                    <PaginationItem key={i}>
-                                        <PaginationLink
-                                            href="#"
-                                            isActive={i === cineSquareList.number} // 0 기반
-                                            onClick={() => handlePageChange(i)}
-                                        >
-                                            {i + 1}
-                                        </PaginationLink>
-                                    </PaginationItem>
-                                ))
-                            }
-
-                            <PaginationItem>
-                                <PaginationNext
-                                    href="#"
-                                    onClick={() => cineSquareList && cineSquareList.number < cineSquareList.totalPages - 1 && handlePageChange(cineSquareList.number + 1)}
-                                />
-                            </PaginationItem>
-                        </PaginationContent>
-                    </Pagination>
                     <button><Link to={`/cinesquare/reg`}>등록</Link></button>
                 </div>
             </section>

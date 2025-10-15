@@ -28,6 +28,7 @@ export default function CineSquareEdit(){
         else if(!inputValue.title){alert('제목을 입력해주세요'); return;}
         else if(!inputValue.content){alert('내용을 입력해주세요'); return;}
         const response = await putCineSquare(
+            postId,
             inputValue.categoryId,
             inputValue.title,
             inputValue.content
