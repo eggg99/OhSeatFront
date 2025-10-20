@@ -20,7 +20,7 @@ export default function BrowseIndex() {
     const navigate = useNavigate();
     const [topCinemas, setTopCinemas] = useState<Cinema[]>([]);
     const [postList, setPostList] = useState<PostPage | null>(null);
-    const [page, setPage] = useState<number>(0);
+    const [page, setPage] = useState<number>(1);
     const [orderType, setOrderType] = useState<string>("latest");
     const size = 10;
 
@@ -63,7 +63,8 @@ export default function BrowseIndex() {
     const firstCinema = topCinemas[0];
 
     // 페이지 변경
-    const handlePageChange = (newPage: number) => setPage(newPage);
+    const handlePageChange = (newPage: number) => {
+        console.log(newPage); setPage(newPage);}
 
     // 정렬 변경
     const handleOrderChange = (newOrder: string) => setOrderType(newOrder);
@@ -103,7 +104,7 @@ export default function BrowseIndex() {
             </section>
             <section>
                 <h4>영화관 좌석 추천 전체글 보기</h4>
-                
+                <p>전체 {postList?.totalElements ?? 0}개</p>
                 {/* 게시글 리스트 */}
             <section>
                 <div className="flex-[6] flex p-4 flex-col content-wrapper vtcal gap-4">
@@ -168,7 +169,7 @@ export default function BrowseIndex() {
                                         <PaginationLink
                                             href="#"
                                             isActive={i === postList.number} // 0 기반
-                                            onClick={() => handlePageChange(i)}
+                                            onClick={() => handlePageChange(i+1)}
                                         >
                                             {i + 1}
                                         </PaginationLink>
