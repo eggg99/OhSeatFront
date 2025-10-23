@@ -77,3 +77,16 @@ export const deleteCineSquare = async(postId) => {
         console.error("게시글 삭제 실패: ", error);
     }
 }
+
+/**
+ * 씨네광장 사용자 위치 정보 가져오기
+ * param : postId   게시글 시퀀스
+ */
+export const getLocation = async(latitude, longitude) => {
+    try{
+        const response = await axiosApi.get(`/cinesquare/location?lat=${latitude}&lng=${longitude}`);
+        return response.data;
+    } catch (error) {
+        console.error("씨네광장 사용자 위치 정보 조회 실패: ", error);
+    }
+}
