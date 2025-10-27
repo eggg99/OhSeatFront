@@ -2,6 +2,9 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { useEffect, useState, useRef } from "react";
 import { getCineSqaureList } from "@/apis/api/cinesquare";
 import { Link, useNavigate } from "react-router-dom";
+import Location from "@/components/common/Location";
+
+const PAGE_SIZE = 10;
 
 export default function CineSqaureList () {
     const navigate = useNavigate();
@@ -25,16 +28,26 @@ export default function CineSqaureList () {
             lastPostId : lastPostId,
             orderType : orderType
         }
+
+        // ✅ 처음 요청이 아닐 때만 lastPostId 포함
+        if (lastPostId !== null) {
+            param.lastPostId = lastPostId;
+        }
+
         try {
             const response = await getCineSqaureList(param);
-            console.log(response);
+
             // 불러올 데이터 O
             if (response && response.length > 0) {
-                setCineSquareList(response);
                 // 기존 리스트에 가져온 데이터 추가
                 setCineSquareList(prev => [...prev, ...response]);
                 // 마지막 postId 갱신시키기
-                setLastPostId(response[response.length - 1].postId)
+                setLastPostId(response[response.length - 1].postId);
+
+                // ✅ 불러온 데이터가 페이지 사이즈보다 작으면 마지막 페이지
+                if (response.length < PAGE_SIZE) {
+                    setHasMore(false);
+                }
             }
             // 불러올 데이터 X 
             else {
@@ -88,18 +101,23 @@ export default function CineSqaureList () {
 
     return(
         <section>
-                <div className="flex-[6] flex p-4 flex-col content-wrapper vtcal gap-4 h-[80vh]">
+            <div className="flex-[6] flex p-4 flex-col content-wrapper vtcal gap-4 h-[80vh]">
+                {/* 위치 */}
+                <div>
+                    <Location></Location>
+                </div>
+                    {/* 카테고리 */}
+                    <div>
+                        <button onClick={() =>handleCategory(0)}>전체</button> | 
+                        <button onClick={() =>handleCategory(1)}>공지사항</button> | 
+                        <button onClick={() =>handleCategory(2)}>자유수다</button> | 
+                        <button onClick={() =>handleCategory(3)}>구인구직</button>
+                    </div>
                     {/* 정렬 UI */}
                     <div className="self-end p-2">
                         <button onClick={() =>handleOrderChange('latest')}>최신순</button> | 
                         <button onClick={() =>handleOrderChange('views')}>조회순</button> | 
                         <button onClick={() =>handleOrderChange('comments')}>댓글순</button>
-                    </div>
-                    {/* 카테고리 */}
-                    <div className="self-end p-2">
-                        <button onClick={() =>handleCategory(1)}>공지사항</button> | 
-                        <button onClick={() =>handleCategory(2)}>자유수다</button> | 
-                        <button onClick={() =>handleCategory(3)}>구인구직</button>
                     </div>
 
                     {/* 게시글 테이블 */}
@@ -115,11 +133,11 @@ export default function CineSqaureList () {
                         </thead>
                         <tbody>
                             {cineSquareList && cineSquareList.length > 0 ? (
-                                cineSquareList.map((item:any) => (
-                                    <tr key={item.postId} 
+                                cineSquareList.map((item: any, index: number) => (
+                                    <tr key={`${item.postId}-${index}`}
                                         onClick={() => navigate(`/cinesquare/${item.postId}`)} 
-                                        className="cursor-pointer hover:bg-gray-100">
-                                        <td>{item.categoryName}</td>
+                                        className="cursor-pointer hover:bg-gray-100 h-24">
+                                        <td>{item.postId} , {item.categoryName}</td>
                                         <td>
                                             <Link to={`/cinesquare/${item.postId}`}>{item.title}</Link>
                                         </td>

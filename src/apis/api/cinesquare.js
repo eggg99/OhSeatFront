@@ -32,12 +32,14 @@ export const getCineSqaureItem = async(postId) => {
  * param : title        제목
  * param : content      내용
  */
-export const postCineSquare = async(categoryId, title, content) => {
+export const postCineSquare = async(categoryId, title, content, city, district) => {
     try{
         const response = await axiosApi.post("/cinesquare", { 
             categoryId,
             title,
-            content
+            content,
+            city, 
+            district
         })
         return response.data;
     } catch (error) {
@@ -75,5 +77,44 @@ export const deleteCineSquare = async(postId) => {
         return response.data;
     } catch (error) {
         console.error("게시글 삭제 실패: ", error);
+    }
+}
+
+/**
+ * 위치 정보 가져오기
+ * param : longitude    x축
+ * param : latitude     y축
+ */
+export const getLocation = async (param) => {
+    try{
+        const response = await axiosApi.get(`/cinesquare/location`, { params: param });
+        return response.data;
+    } catch (error) {
+        console.error("위치 정보 가져오기 실패: ", error);
+    }
+}
+
+export const postComment = async(comment, cinesquareId, commenterId) => {
+    try{
+        const response = await axiosApi.post("/cinesquare/comment", { 
+            comment, cinesquareId, commenterId
+        })
+        return response.data;
+    } catch (error) {
+        console.error("게시글 댓글 등록 실패: ", error);
+    }
+}
+
+/**
+ * 댓글 가져오기
+ * param : cinesquareId     게시글 아이디
+ */
+export const getCommentList = async (cinesquareId) => {
+    try{
+        const params = { cinesquareId }
+        const response = await axiosApi.get(`/cinesquare/comment`, { params });
+        return response.data;
+    } catch (error) {
+        console.error("댓글 리스트 조회 실패: ", error);
     }
 }

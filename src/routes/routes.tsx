@@ -28,6 +28,7 @@ import CineSqaureList from "../components/cinesquare/CineSquareList";
 import CineSquareDetail from "../components/cinesquare/CineSquareDetail";
 import CineSquareEdit from "../components/cinesquare/CineSqaureEdit";
 import CineSquareReg from "../components/cinesquare/CineSqaureReg";
+import CinesquareSearch from "@/components/cinesquare/CineSquareSearch";
 
 
 function AppRoutes(){
@@ -60,6 +61,7 @@ function AppRoutes(){
             {/* 씨네광장 */}
             <Route path="/cinesquare" element={<PageCineSquare/>}>
                 <Route path="list" element={<CineSqaureList/>}/>
+                <Route path="search" element={<CinesquareSearch/>}/>
                 <Route path=":postId" element={<CineSquareDetail/>}/>
                 <Route path="reg" element={<CineSquareReg/>}/>
                 <Route path="edit/:postId" element={<CineSquareEdit/>}/>

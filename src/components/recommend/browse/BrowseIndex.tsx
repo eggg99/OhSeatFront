@@ -36,7 +36,6 @@ export default function BrowseIndex() {
     // 게시글 전체 리스트 조회
     const getPostData = async() => {
         const response = await getPostList(0, '00', 'all_c', 'all_s', orderType, page, size);
-        console.log(response);
         setPostList(response);
     }
 
@@ -119,6 +118,7 @@ export default function BrowseIndex() {
                     <Table>
                         <TableHeader>
                             <TableRow>
+                                <TableHead></TableHead>
                                 <TableHead>제목</TableHead>
                                 <TableHead>작성자</TableHead>
                                 <TableHead>작성일</TableHead>
@@ -134,8 +134,9 @@ export default function BrowseIndex() {
                                     onClick={() => navigate(`/recommend/${getMultiplexBrand(item.multiplexId)}/${item.postId}`)}
                                     className="cursor-pointer hover:bg-gray-100"
                                 >
+                                    <TableCell>{item.multiplexName} {item.cinemaName}</TableCell>
                                     <TableCell>
-                                    <Link to={`/recommend/${getMultiplexBrand(item.multiplexId)}/${item.postId}`}>{item.title}</Link>
+                                        <Link to={`/recommend/${getMultiplexBrand(item.multiplexId)}/${item.postId}`}>{item.title}</Link>
                                     </TableCell>
                                     <TableCell>{item.authorNickname}</TableCell>
                                     <TableCell>{item.createdAt}</TableCell>
