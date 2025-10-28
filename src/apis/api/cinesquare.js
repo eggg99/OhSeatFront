@@ -94,6 +94,20 @@ export const getLocation = async (param) => {
     }
 }
 
+/**
+ * 위치 정보 가져오기
+ * param : longitude    x축
+ * param : latitude     y축
+ */
+export const searchLocation = async (param) => {
+    try{
+        const response = await axiosApi.get(`/cinesquare/searchLocation`, { params: param });
+        return response.data;
+    } catch (error) {
+        console.error("위치 정보 가져오기 실패: ", error);
+    }
+}
+
 export const postComment = async(comment, cinesquareId, commenterId) => {
     try{
         const response = await axiosApi.post("/cinesquare/comment", { 

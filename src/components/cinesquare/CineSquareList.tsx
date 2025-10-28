@@ -99,11 +99,18 @@ export default function CineSqaureList () {
         };
     }, [hasMore, isLoading]);
 
+
+  const search = () => {
+    navigate("/cinesquare/search")
+  }
+
     return(
         <section>
             <div className="flex-[6] flex p-4 flex-col content-wrapper vtcal gap-4 h-[80vh]">
                 {/* 위치 */}
                 <div>
+                    <button onClick={search}>위치검색버튼</button>
+                    <br/>
                     <Location></Location>
                 </div>
                     {/* 카테고리 */}

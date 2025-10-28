@@ -1,4 +1,4 @@
-import { getLocation } from "@/apis/api/cinesquare";
+import { getLocation, searchLocation } from "@/apis/api/cinesquare";
 import { useEffect, useState } from "react";
 import { locationStore } from "@/store/userLocation";
 import { useNavigate } from "react-router-dom";
@@ -28,6 +28,11 @@ export default function Location() {
     }
   }, []);
 
+  const getPostion = () => {
+    navigator.geolocation.getCurrentPosition(success, error);
+  }
+  
+
   const success = async (position: { coords: { latitude: number; longitude: number } }) => {
     const { latitude, longitude } = position.coords;
     const param = { x: longitude, y: latitude };
@@ -55,14 +60,10 @@ export default function Location() {
     alert("위치 정보를 가져오지 못했습니다.");
   };
 
-  const search = () => {
-    navigate("/cinesquare/search")
-  }
 
   return (
     <div>
-      {/* TODO : search 다른 곳으로 빼고, Location.tsx에서는 받아온 값을 부모로 전달하는 역할만하는 곳으로 만들기 */}
-      <button onClick={search}>{location ? `${location.city} ${location.district}` : "불러오는 중..."}</button>
+      <button onClick={getPostion}>{location ? `${location.city} ${location.district}` : "불러오는 중..."}</button>
     </div>
   );
 }
