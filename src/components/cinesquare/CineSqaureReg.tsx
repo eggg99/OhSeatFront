@@ -2,11 +2,13 @@ import { postCineSquare } from "@/apis/api/cinesquare";
 import { useState } from "react"
 import { Input } from "../ui/input";
 import { useNavigate } from "react-router-dom";
+import Location from "@/components/common/Location";
+import { locationStore } from "@/store/userLocation";
 
 
 export default function CineSquareReg(){
     const navigate = useNavigate();
-
+    const location = locationStore();
     const [inputValue, setInputValue] = useState({
         categoryId : '',
         title : '',
@@ -30,25 +32,37 @@ export default function CineSquareReg(){
         const response = await postCineSquare(
             inputValue.categoryId,
             inputValue.title,
-            inputValue.content
+            inputValue.content,
+            location.city,
+            location.district
         );
         alert('저장되었습니다.');
         navigate(`/cinesquare/list?category=1`);
     }
 
+    const list = () => {
+        navigate(`/cinesquare/list?category=0`);
+    }
     return(
-        <div className="detail-form shadow rounded-xl border bg-card flex flex-col">
-            <div className="flex gap-3">
-                <span>카테고리</span>
-                <select name="categoryId" onChange={handleInput} value={inputValue.categoryId}>
-                    <option value="">카테고리를 선택하세요</option>
-                    <option value="1">공지사항</option>
-                    <option value="2">자유수다</option>
-                    <option value="3">구인구직</option>
-                </select>
+        <div className="detail-form shadow rounded-xl border bg-card flex flex-col w-5/6 m-auto mt-6">
+            <div className="flex justify-between">
+                <div><button onClick={list}>목록으로</button></div>
+                <div><button onClick={() => handleSubmit()}>등록</button></div>
             </div>
-            <div className="flex gap-4">
-                <div><span>제목</span></div>
+            <div className="flex justify-between">
+                <Location />
+            </div>
+
+            <div className="flex gap-3">
+                <div>
+                    <span>카테고리</span>
+                    <select name="categoryId" onChange={handleInput} value={inputValue.categoryId}>
+                        <option value="">카테고리를 선택하세요</option>
+                        <option value="1">공지사항</option>
+                        <option value="2">자유수다</option>
+                        <option value="3">구인구직</option>
+                    </select>
+                </div>
                 <div>
                     <Input
                         type="text"
@@ -73,7 +87,12 @@ export default function CineSquareReg(){
                 />
             </div>
             <div>
-                <button onClick={() => handleSubmit()}>작성</button>
+                <button>이미지 첨부 버튼</button>
+            </div>
+
+            <div>
+                <button onClick={list}>취소</button>
+                <button onClick={() => handleSubmit()}>등록</button>
             </div>
         </div>
     )

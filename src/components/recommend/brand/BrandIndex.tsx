@@ -209,6 +209,7 @@ export default function BrandIndex() {
                     <Table>
                         <TableHeader>
                             <TableRow>
+                                <TableHead></TableHead>
                                 <TableHead>제목</TableHead>
                                 <TableHead>작성자</TableHead>
                                 <TableHead>작성일</TableHead>
@@ -224,8 +225,9 @@ export default function BrandIndex() {
                                     onClick={() => navigate(`/recommend/${brand}/${item.postId}`)}
                                     className="cursor-pointer hover:bg-gray-100"
                                 >
+                                    <TableCell>{item.multiplexName} {item.cinemaName}</TableCell>
                                     <TableCell>
-                                    <Link to={`/recommend/${brand}/${item.postId}`}>{item.title}</Link>
+                                        <Link to={`/recommend/${brand}/${item.postId}`}>{item.title}</Link>
                                     </TableCell>
                                     <TableCell>{item.authorNickname}</TableCell>
                                     <TableCell>{item.createdAt}</TableCell>

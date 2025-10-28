@@ -178,7 +178,7 @@ export const putComment = async(content, postId, commenterId) => {
 }
 
 /**
- * 게시글 상세 - 댓글 등록
+ * 게시글 상세 - 댓글 삭제
  * param : commentId      댓글 아이디
  */
 export const deleteComment = async(commentId) => {
