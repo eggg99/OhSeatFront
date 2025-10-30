@@ -70,19 +70,20 @@ export default function CinesquareSearch () {
                     onChange={handleInput}/>
                 <button onClick={() => search()}>검색</button>
             </div>
+
             <div>
-                    {resultSearch && resultSearch.length > 0 ? (
-                        resultSearch.map((item: any) => (
-                            <div>
-                                {item.city} {item.district}
-                            </div>
-                        ))
-                    ) : (
-                        <div>
-                            검색 결과가 없습니다 🥲
-                        </div>
-                    )}
-                </div>
+                {resultSearch && resultSearch.length > 0 ? (
+                    resultSearch.slice(0, 5).map((item: any, idx: number) => (
+                    <div key={idx} >
+                        {item.city} {item.district}
+                    </div>
+                    ))
+                ) : (
+                    <div>
+                    검색 결과가 없습니다 🥲
+                    </div>
+                )}
+            </div>
 
             <div>
                 내 위치 :: <Location></Location>
