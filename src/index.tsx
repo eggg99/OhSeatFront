@@ -2,12 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import '@/styles/css/common.scss'
 import '@/styles/css/default.scss'
-import '@/styles/css/main.scss'
-import '@/styles/css/sub.scss'
-import '@/styles/css/table.scss'
 
-
-import '@/index.css'
+// import '@/index.css'
 import App from './App.jsx';
 
 const container = document.getElementById('root');

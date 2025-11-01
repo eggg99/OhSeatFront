@@ -33,7 +33,6 @@ import CinesquareSearch from "@/components/cinesquare/CineSquareSearch";
 
 function AppRoutes(){
     return(
-        <main className="os_main_contents">
         <Routes >
             {/* 메인 */}
             <Route path="/" element={<PageMain />} />
@@ -70,7 +69,6 @@ function AppRoutes(){
             <Route path="/chatting" element={<PageUser />} />
             <Route path="*" element={<PageNotFound />} />
         </Routes>
-        </main>
         
     )
 }

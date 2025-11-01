@@ -1,8 +1,6 @@
 import { useEffect, useState, useCallback } from "react";
 import { getCinemaList, getPostList, getScreenList } from "@/apis/api/recommend";
 import useEmblaCarousel from "embla-carousel-react";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@/components/ui/pagination";
 
 import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
@@ -11,6 +9,7 @@ import { PostPage } from "@/types/Post";
 import { MULTIPLEX_LIST } from "@/constants/multiplex";
 import { AREA_LIST } from "@/constants/area";
 import { userStore } from "@/store/userStore";
+import { PaginationComponent } from "@/components/common/Pagination";
 
 const ALL_CINEMA = { cinemaId: 'all_c', cinemaName: '전체' };
 const ALL_SCREEN = { screenId: 'all_s', screenName: '전체' };
@@ -64,7 +63,9 @@ export default function BrandIndex() {
     }
 
     // 페이지 변경
-    const handlePageChange = (newPage: number) => setPage(newPage);
+    const handlePageChange = (newPage: number) => {
+        setPage(newPage);
+    }
 
     // 정렬 변경
     const handleOrderChange = (newOrder: string) => setOrderType(newOrder);
@@ -82,201 +83,199 @@ export default function BrandIndex() {
     }, [brand, selectedAreaId, selectedCinema, selectedScreen, page, orderType]);
 
     return (
-        <div className="flex flex-col">
-            {/* 지역 선택 */}
-            <section className="content-wrapper py-4">
-                <div className="flex justify-center gap-4 flex-wrap">
+        <div className="os_sub_contents">
+            <div className="os_sub_navigation clear">
+                {/* 브랜드 이름 한글로 바꾸기 (메가박스랑 롯데시네마) */}
+                <h1>{brand}</h1>
+
+                <ul className="breadcrumbs_list clear">
+                    <li className="home"><Link to="/"><i className="blind">홈</i></Link></li>
+                    <li><Link to="/recommend/browse">영화관 좌석 추천</Link></li>
+                    <li><Link to={`/recommend/${brand}`}>{brand}</Link></li>
+                </ul>
+            </div>
+
+            <section className="os_category_wrap">
+                {/* 지역 선택 */}
+                <div className="os_area">
                     <div className="embla" ref={emblaRef1}>
                         <div className="embla__container">
+                            <ul className="os_area_list clear">
                             {AREA_LIST.map(({ id, label }) => {
                                 const isChecked = selectedAreaId === id;
                                 return (
-                                    <div className="embla__slide" key={id}>
-                                        <div className="checkbox-item">
-                                            <input
-                                                type="radio"
-                                                id={id}
-                                                name="area"
-                                                className="checkbox"
-                                                checked={isChecked}
-                                                onChange={() => handleAreaChange(id)}
-                                            />
-                                            <label
-                                                htmlFor={id}
-                                                className={`terms-label ${isChecked ? "checked" : ""}`}
-                                            >{label}</label>
-                                            
-                                        </div>
-                                    </div>
+                                    <li key={id} className={`embla__slide ${isChecked ? "on" : ""}`}>
+                                        <a
+                                            href="#"
+                                            onClick={(e) => {
+                                            e.preventDefault(); 
+                                            handleAreaChange(id);
+                                            }}
+                                        >
+                                        {label}
+                                        </a>
+                                    </li>
                                 );
                             })}
+                            </ul>
                         </div>
                     </div>
                 </div>
-            </section>
-            {/* 영화관 선택 */}
-            <section className="content-wrapper py-4">
-                <div className="flex justify-center gap-4 flex-wrap">
-                    <div className="embla" ref={emblaRef2}>
-                        <div className="embla__container">
-                            {cinemaList.map((cinema) => {
-                                const isChecked = selectedCinema?.cinemaId === cinema.cinemaId;
-                                return (
-                                    <div className="embla__slide" key={cinema.cinemaId}>
-                                        <div className="checkbox-item">
-                                            <input
-                                                type="radio"
-                                                id={cinema.cinemaId}
-                                                name="cinema"
-                                                className="checkbox"
-                                                checked={isChecked}
-                                                onChange={() => handleCinemaChange(cinema)} // ✅ 객체 전체 전달
-                                            />
-                                            <label
-                                                htmlFor={cinema.cinemaId}
-                                                className={`terms-label ${isChecked ? "checked" : ""}`}
-                                                >
+                {/* 영화관 선택 */}
+                <div className="os_branch">
+                    <div className="inner">
+                        <div className="embla overflow-hidden" ref={emblaRef2}>
+                            <div className="embla__container">
+                                <ul className="os_brunch_list clear flex flex-nowrap">
+                                {cinemaList.map((cinema) => {
+                                    const isChecked = selectedCinema?.cinemaId === cinema.cinemaId;
+                                    return (
+                                        <li key={cinema.cinemaId} className={`embla__slide flex-none ${isChecked ? "on" : ""}`}>
+                                            <a
+                                                href="#"
+                                                onClick={() => handleCinemaChange(cinema)}
+                                            >
                                                 {cinema.cinemaName}
-                                            </label>
-                                        </div>
-                                    </div>
-                                );
-                            })}
+                                            </a>
+                                            
+                                        </li>
+                                    );
+                                })}
+                                </ul>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </section>
-            {/* 영화관 정보 */}
-            { (selectedCinema.cinemaId !== 'all_c') &&
-                <section className="content-wrapper py-4">
-                    <div className="flex flex-col items-center gap-4 flex-wrap">
-                        <p>
-                            <span>지점명 : </span>
-                            <span>{selectedCinema.cinemaName}</span>
-                        </p>
-                        <p>
-                            <span>지점 주소 : </span>
-                            <span>{selectedCinema.cinemaAddr}</span>
-                        </p>
+
+                {/* 영화관 정보 */}
+                <div className="os_branch_info_wrap">
+                    { (selectedCinema.cinemaId !== 'all_c') &&
+                    <div className="info_banner">
+                        <h2>{selectedCinema.cinemaName}</h2>
+                        <p>{selectedCinema.cinemaAddr}</p>
                     </div>
-                </section>
-            }
-            {/* 상영관 선택 */}
-            <section className="content-wrapper py-4">
-                <div className="flex justify-center gap-4 flex-wrap">
+                    }
+                </div>
+                
+                {/* 상영관 선택 */}
+                <div className="branch_screen">
                     <div className="embla" ref={emblaRef3}>
                         <div className="embla__container">
+                            <ul className="branch_screen_list clear flex flex-nowrap">
                             {screenList.map((screen) => {
                                 const isChecked = selectedScreen?.screenId === screen.screenId;
                                 return(
-                                    <div className="embla__slide" key={screen.screenId}>
-                                        <div className="checkbox-item">
-                                            <input
-                                                type="radio"
-                                                id={screen.screenId}
-                                                name="screen"
-                                                className="checkbox"
-                                                checked={isChecked}
-                                                onChange={() => handleScreenChange(screen)} // ✅ 객체 전체 전달
-                                            />
-                                            <label
-                                                htmlFor={screen.screenId}
-                                                className={`terms-label ${isChecked ? "checked" : ""}`}
-                                            >{ screen.screenName }</label>
-                                        </div>
-                                    </div>
+                                    <li key={screen.screenId} className={`embla__slide flex-none ${isChecked ? "on" : ""}`}>
+                                        <a
+                                            href="#"
+                                            onClick={() => handleScreenChange(screen)}
+                                        >
+                                            { screen.screenName }
+                                        </a>
+                                   </li>         
                                 );
                             })}
+                            </ul>
                         </div>
                     </div>
                 </div>
-            </section>
-            
-            {/* 게시글 리스트 */}
-            <section>
-                <div className="flex-[6] flex p-4 flex-col content-wrapper vtcal gap-4">
-                    {/* 정렬 UI */}
-                    <div className="self-end p-2">
-                        <button onClick={() =>handleOrderChange('latest')}>최신순</button> | 
-                        <button onClick={() =>handleOrderChange('views')}>조회순</button> | 
-                        <button onClick={() =>handleOrderChange('comments')}>댓글순</button>
-                    </div>
-                    {isLogin &&
-                    <button><Link to={`/recommend/${brand}/reg`}>등록</Link></button>
-                    }
 
+                {/* 게시글 리스트 */}
+                <div className="theater_total_board_wrap">
+                    {isLogin &&<button><Link to={`/recommend/${brand}/reg`}>등록</Link></button>}
+                    <h2>1관</h2>
+                    <div className="board_control_wrap clear">
+                        <p>25개의 글</p>
+
+                        <select>
+                            <option>10개씩</option>
+                            <option>20개씩</option>
+                        </select>
+                        {/* 정렬 UI */}
+                        <select>
+                            <option onClick={() =>handleOrderChange('latest')}>최신순</option>
+                            <option onClick={() =>handleOrderChange('views')}>조회순</option>
+                            <option onClick={() =>handleOrderChange('comments')}>댓글순</option>
+                        </select>
+                    </div>
+                
                     {/* 게시글 테이블 */}
-                    <Table>
-                        <TableHeader>
-                            <TableRow>
-                                <TableHead></TableHead>
-                                <TableHead>제목</TableHead>
-                                <TableHead>작성자</TableHead>
-                                <TableHead>작성일</TableHead>
-                                <TableHead>조회수</TableHead>
-                                <TableHead>댓글</TableHead>
-                            </TableRow>
-                        </TableHeader>
-                        <TableBody>
+                    <table className="basic_board1">
+                        <colgroup>
+                            <col style={{ width: '8%' }}/>
+                            <col style={{ width: '8%' }}/>
+                            <col style={{ width: '47%' }}/>
+                            <col style={{ width: '8%' }}/>
+                            <col style={{ width: '8%' }}/>
+                            <col style={{ width: '8%' }}/>
+                            <col style={{ width: '8%' }}/>
+                        </colgroup>
+                        <thead>
+                            <tr>
+                                <th colSpan={3}>제목</th>
+                                <th>작성자</th>
+                                <th>작성일</th>
+                                <th>조회수</th>
+                                <th>좋아요</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {/* 공지, 필독 넣기 */}
+                            <tr>
+                                <th><span className="notice">필독</span></th>
+                                <th colSpan={2} className="txtl"><a href="#">필독 게시글 제목 <span>[4]</span></a></th>
+                                <th>작성자 아이디</th>
+                                <th>2025.09.17</th>
+                                <th>0,000</th>
+                                <th>0</th>
+                            </tr>
+                            <tr>
+                                <th><span className="notice">공지</span></th>
+                                <th colSpan={2} className="txtl"><a href="#">공지 게시글 제목</a></th>
+                                <th>작성자 아이디</th>
+                                <th>2025.09.17</th>
+                                <th>0,000</th>
+                                <th>0</th>
+                            </tr>
+                            <tr>
+                                <th><span className="notice">공지</span></th>
+                                <th colSpan={2} className="txtl"><a href="#">공지 게시글 제목</a></th>
+                                <th>작성자 아이디</th>
+                                <th>2025.09.17</th>
+                                <th>0,000</th>
+                                <th>0</th>
+                            </tr>
                             {postList && postList.content.length > 0 ? (
                                 postList.content.map((item: any) => (
-                                <TableRow
+                                <tr
                                     key={item.postId}
                                     onClick={() => navigate(`/recommend/${brand}/${item.postId}`)}
-                                    className="cursor-pointer hover:bg-gray-100"
                                 >
-                                    <TableCell>{item.multiplexName} {item.cinemaName}</TableCell>
-                                    <TableCell>
-                                        <Link to={`/recommend/${brand}/${item.postId}`}>{item.title}</Link>
-                                    </TableCell>
-                                    <TableCell>{item.authorNickname}</TableCell>
-                                    <TableCell>{item.createdAt}</TableCell>
-                                    <TableCell>{item.views}회</TableCell>
-                                    <TableCell>{item.commentCount}개</TableCell>
-                                </TableRow>
+                                    <td className="txtc">{item.multiplexName}</td>
+                                    <td className="board_fix">{item.cinemaName}</td>
+                                    <td>{item.title}</td>
+                                    <td className="txtc">{item.authorNickname}</td>
+                                    <td className="txtc">{item.createdAt}</td>
+                                    <td className="txtc">{item.views}회</td>
+                                    <td className="txtc">{item.commentCount}개</td>
+                                </tr>
                                 ))
-                            ) : (
-                                <TableRow>
-                                <TableCell colSpan={5} className="text-center py-6 text-gray-500">
-                                    추천 내용이 없습니다 🥲
-                                </TableCell>
-                                </TableRow>
-                            )}
-                        </TableBody>
-                    </Table>
-
-                    {/* 페이지네이션 */}
-                    <Pagination>
-                        <PaginationContent>
-                            <PaginationItem>
-                                <PaginationPrevious
-                                    href="#"
-                                    onClick={() => postList && postList.number > 0 && handlePageChange(postList.number - 1)}
-                                />
-                            </PaginationItem>
-
-                            {postList &&
-                                Array.from({ length: postList.totalPages }, (_, i) => (
-                                    <PaginationItem key={i}>
-                                        <PaginationLink
-                                            href="#"
-                                            isActive={i === postList.number} // 0 기반
-                                            onClick={() => handlePageChange(i)}
-                                        >
-                                            {i + 1}
-                                        </PaginationLink>
-                                    </PaginationItem>
-                                ))
-                            }
-
-                            <PaginationItem>
-                                <PaginationNext
-                                    href="#"
-                                    onClick={() => postList && postList.number < postList.totalPages - 1 && handlePageChange(postList.number + 1)}
-                                />
-                            </PaginationItem>
-                        </PaginationContent>
-                    </Pagination>
+                                ) : (
+                                <tr>
+                                    <td colSpan={5}>
+                                        추천 내용이 없습니다 🥲
+                                    </td>
+                                </tr>
+                                )}
+                        </tbody>
+                    </table>
+                    {postList &&
+                        <PaginationComponent
+                            currentPage={postList.number}
+                            totalPages={postList.totalPages}
+                            onPageChange={handlePageChange}
+                        />
+                    }
                 </div>
             </section>
         </div>
