@@ -1,0 +1,256 @@
+$color_1: inherit;
+$color_2: #747474;
+$font-family_1: 'Pretendard', Helvetica, "Apple SD Gothic Neo", sans-serif;
+
+/* reset */
+/* 본문서체인 프리텐다드(Pretendard) */
+@font-face {
+	font-family: 'Pretendard';
+	font-weight: 900;
+	font-display: swap;
+	src: local('Pretendard Black'), url('../fonts/Pretendard-Black.subset.woff2') format('woff2'), url('../fonts/Pretendard-Black.subset.woff') format('woff');
+}
+@font-face {
+	font-family: 'Pretendard';
+	font-weight: 800;
+	font-display: swap;
+	src: local('Pretendard ExtraBold'), url('../fonts/Pretendard-ExtraBold.subset.woff2') format('woff2'), url('../fonts/Pretendard-ExtraBold.subset.woff') format('woff');
+}
+@font-face {
+	font-family: 'Pretendard';
+	font-weight: 700;
+	font-display: swap;
+	src: local('Pretendard Bold'), url('../fonts/Pretendard-Bold.subset.woff2') format('woff2'), url('../fonts/Pretendard-Bold.subset.woff') format('woff');
+}
+@font-face {
+	font-family: 'Pretendard';
+	font-weight: 600;
+	font-display: swap;
+	src: local('Pretendard SemiBold'), url('../fonts/Pretendard-SemiBold.subset.woff2') format('woff2'), url('../fonts/Pretendard-SemiBold.subset.woff') format('woff');
+}
+@font-face {
+	font-family: 'Pretendard';
+	font-weight: 500;
+	font-display: swap;
+	src: local('Pretendard Medium'), url('../fonts/Pretendard-Medium.subset.woff2') format('woff2'), url('../fonts/Pretendard-Medium.subset.woff') format('woff');
+}
+@font-face {
+	font-family: 'Pretendard';
+	font-weight: 400;
+	font-display: swap;
+	src: local('Pretendard Regular'), url('../fonts/Pretendard-Regular.subset.woff2') format('woff2'), url('../fonts/Pretendard-Regular.subset.woff') format('woff');
+}
+@font-face {
+	font-family: 'Pretendard';
+	font-weight: 300;
+	font-display: swap;
+	src: local('Pretendard Light'), url('../fonts/Pretendard-Light.subset.woff2') format('woff2'), url('../fonts/Pretendard-Light.subset.woff') format('woff');
+}
+@font-face {
+	font-family: 'Pretendard';
+	font-weight: 200;
+	font-display: swap;
+	src: local('Pretendard ExtraLight'), url('../fonts/Pretendard-ExtraLight.subset.woff2') format('woff2'), url('../fonts/Pretendard-ExtraLight.subset.woff') format('woff');
+}
+@font-face {
+	font-family: 'Pretendard';
+	font-weight: 100;
+	font-display: swap;
+	src: local('Pretendard Thin'), url('../fonts/Pretendard-Thin.subset.woff2') format('woff2'), url('../fonts/Pretendard-Thin.subset.woff') format('woff');
+}
+/* 타이틀 서체인 지마켓 산스(GmarketSans) */
+@font-face {
+	font-family: 'GmarketSans';
+	font-weight: 300;
+	font-style: normal;
+	src: url('../fonts/GmarketSansLight.eot');
+	src: url('../fonts/GmarketSansLight.eot?#iefix') format('embedded-opentype'), url('../fonts/GmarketSansLight.woff2') format('woff2'), url('../fonts/GmarketSansLight.woff') format('woff'), url('../fonts/GmarketSansLight.ttf') format("truetype");
+	font-display: swap;
+}
+@font-face {
+	font-family: 'GmarketSans';
+	font-weight: 500;
+	font-style: normal;
+	src: url('../fonts/GmarketSansMedium.eot');
+	src: url('../fonts/GmarketSansMedium.eot?#iefix') format('embedded-opentype'), url('../fonts/GmarketSansMedium.woff2') format('woff2'), url('../fonts/GmarketSansMedium.woff') format('woff'), url('../fonts/GmarketSansMedium.ttf') format("truetype");
+	font-display: swap;
+}
+@font-face {
+	font-family: 'GmarketSans';
+	font-weight: 700;
+	font-style: normal;
+	src: url('../fonts/GmarketSansBold.eot');
+	src: url('../fonts/GmarketSansBold.eot?#iefix') format('embedded-opentype'), url('../fonts/GmarketSansBold.woff2') format('woff2'), url('../fonts/GmarketSansBold.woff') format('woff'), url('../fonts/GmarketSansBold.ttf') format("truetype");
+	font-display: swap;
+}
+* {
+	font-family: $font-family_1;
+}
+body {
+	margin: 0;
+	margin: 0;
+	font-family: $font-family_1;
+	vertical-align: top;
+	letter-spacing: -0.2px;
+}
+h1 {
+	margin: 0;
+	padding: 0;
+}
+h2 {
+	margin: 0;
+	padding: 0;
+}
+h3 {
+	margin: 0;
+	padding: 0;
+}
+h4 {
+	margin: 0;
+	padding: 0;
+}
+h5 {
+	margin: 0;
+	padding: 0;
+}
+h6 {
+	margin: 0;
+	padding: 0;
+}
+ul {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	>li {
+		>table {
+			th {
+				text-align: center;
+			}
+		}
+	}
+}
+ol {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+dl {
+	margin: 0;
+	padding: 0;
+}
+dd {
+	margin: 0;
+	padding: 0;
+}
+p {
+	margin: 0;
+	padding: 0;
+}
+fieldset {
+	margin: 0;
+	padding: 0;
+	border: 0;
+}
+legend {
+	margin: 0;
+	padding: 0;
+}
+table {
+	width: 100%;
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+em {
+	font-style: normal;
+}
+a {
+	color: $color_1;
+	text-decoration: none;
+	vertical-align: top;
+}
+img {
+	vertical-align: top;
+}
+input {
+	margin: 0;
+	font-family: $font-family_1;
+	vertical-align: top;
+	letter-spacing: -0.2px;
+	border: 1px solid #ddd;
+	box-sizing: border-box;
+	width: 100%;
+	line-height: inherit;
+	vertical-align: top;
+	&:read-only {
+		background-color: #f1f1f1;
+		color: $color_2;
+	}
+}
+textarea {
+	margin: 0;
+	font-family: $font-family_1;
+	vertical-align: top;
+	letter-spacing: -0.2px;
+	width: 100%;
+	box-sizing: border-box;
+	font-size: 17px;
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 10px;
+	vertical-align: top;
+	&:read-only {
+		background-color: #f2f2f2;
+	}
+}
+select {
+	margin: 0;
+	font-family: $font-family_1;
+	vertical-align: top;
+	letter-spacing: -0.2px;
+	width: 100%;
+	box-sizing: border-box;
+	padding: 0 5px;
+	border: 1px solid #ddd;
+	background: url(../img/selectbox.png) no-repeat right 10px center;
+	appearance: none;
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	-o-appearance: none;
+	line-height: inherit;
+	vertical-align: top;
+}
+button {
+	margin: 0;
+	font-family: $font-family_1;
+	vertical-align: top;
+	letter-spacing: -0.2px;
+	display: block;
+	width: 100%;
+	border: 0;
+	cursor: pointer;
+}
+pre {
+	margin: 0;
+	font-family: $font-family_1;
+	vertical-align: top;
+	letter-spacing: -0.2px;
+	white-space: pre-wrap;
+}
+.blind {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	margin: -1px;
+	overflow: hidden;
+	clip: rect(0 0 0 0);
+}
+.clear {
+	&::after {
+		content: '';
+		display: block;
+		clear: both;
+	}
+}
+caption {
+	display: none;
+}

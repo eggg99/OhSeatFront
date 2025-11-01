@@ -1,6 +1,5 @@
 import { useEffect, useState, useCallback } from "react";
 import useEmblaCarousel from "embla-carousel-react";
-import "@/styles/custom.scss";
 import { AREA_LIST } from "@/constants/area";
 
 interface AreaSelectorProps {

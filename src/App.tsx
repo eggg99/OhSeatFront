@@ -10,7 +10,7 @@ const queryClient = new QueryClient()       // react query
 
 function App() {
     return (
-        <div className="App">
+        <div className="wrap">
             <QueryClientProvider client={queryClient}>
                 <ReactQueryDevtools />
                 <BrowserRouter>

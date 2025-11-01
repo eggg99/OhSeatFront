@@ -1,6 +1,5 @@
 import { useEffect, useState, useCallback } from "react";
 import useEmblaCarousel from "embla-carousel-react";
-import '@/styles/custom.scss'
 
 interface CinemaSelectorProps {
     cinemaList: any[];

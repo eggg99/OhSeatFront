@@ -3,7 +3,7 @@ import { getCinemaList, getPostList, getScreenList } from "@/apis/api/recommend"
 import useEmblaCarousel from "embla-carousel-react";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@/components/ui/pagination";
-import "@/styles/custom.scss";
+
 import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";

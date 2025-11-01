@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 
 const Logo = () => {
-    return <h1 className="logo"><Link to="/">OhSeat</Link></h1>
+    return <Link to="/" className="os_top_logo">Oh Seat!</Link>
 }
 
 export default Logo;

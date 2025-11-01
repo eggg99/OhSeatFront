@@ -33,7 +33,7 @@ import CinesquareSearch from "@/components/cinesquare/CineSquareSearch";
 
 function AppRoutes(){
     return(
-        <main className="App_main">
+        <main className="os_main_contents">
         <Routes >
             {/* 메인 */}
             <Route path="/" element={<PageMain />} />

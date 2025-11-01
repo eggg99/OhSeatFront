@@ -11,36 +11,41 @@ const Header = () => {
     }
 
     return (
-        <header className="App_header">
+        <header className="os_header">
             <div className="inner">
                 <Logo />
-                <nav className="menu_wrap">
-                    <ul>
-                        <li className="menu_item">
+                
+                <ul className="os_gnb">
+                    <li>
                         <Link to="/recommend/browse">영화관 좌석 추천</Link>
-                            <ul className="submenu">
-                                <li><Link to="/recommend/browse">둘러보기(pick!)</Link></li>
-                                <li><Link to="/recommend/cgv">CGV</Link></li>
-                                <li><Link to="/recommend/megabox">메가박스</Link></li>
-                                <li><Link to="/recommend/lottecinema">롯데시네마</Link></li>
-                            </ul>
-                        </li>
-                        <li><Link to="/chatting">채팅</Link></li>
-                        <li><Link to="/cinesquare/list">씨네광장</Link></li>
-                        <li><Link to="/chatting">이벤트</Link></li>
-                    </ul>
-                </nav>
+                        <ul className="os_gnb2">
+                            <li><Link to="/recommend/browse">둘러보기(pick!)</Link></li>
+                            <li><Link to="/recommend/cgv">CGV</Link></li>
+                            <li><Link to="/recommend/megabox">메가박스</Link></li>
+                            <li><Link to="/recommend/lottecinema">롯데시네마</Link></li>
+                        </ul>
+                    </li>
+                    <li><Link to="/chatting">채팅</Link></li>
+                    <li><Link to="/cinesquare/list">씨네광장</Link></li>
+                    <li>
+                        <Link to="/chatting">이벤트</Link>
+                        <ul className="os_gnb2">
+                            <li><Link to="/">이벤트 둘러보기</Link></li>
+                            <li><Link to="/">이벤트 당첨발표</Link></li>
+                        </ul>
+                    </li>
+                </ul>
                 
                 {userId ? (
                     <>
-                    <span>{userNick}</span>
-                    <Link to="/user/mypage"  className="btn btn-secondary btn-jelly white">마이페이지</Link>
-                    <button className="btn btn-primary btn-jelly white" onClick={logout}>로그아웃</button>
+                    <span className="os_nickname">{userNick}</span>
+                    <Link to="/user/mypage"  className="os_login_button mypage">마이페이지</Link>
+                    <button className="os_login_button logout" onClick={logout}>로그아웃</button>
                     </>
                 ) : (
                     <>
-                    <Link to="/user/join"   className="btn btn-primary btn-jelly white">회원가입</Link>
-                    <Link to="/user/login"  className="btn btn-secondary btn-jelly white">로그인</Link>
+                    <Link to="/user/join"   className="os_login_button mypage">회원가입</Link>
+                    <Link to="/user/login"  className="os_login_button logout">로그인</Link>
                     </>
                 )}
             </div>

@@ -1,0 +1,539 @@
+$color_1: #fff;
+$color_2: #121212;
+$color_3: #ae0200;
+$color_4: #747474;
+$color_5: #AE0200;
+$color_6: #575757;
+$color_7: #B17C7B;
+
+/*서브페이지 콘텐츠*/
+/*최근 언급 많이 되는 영화관은?*/
+/*CGV*/
+/*메가박스*/
+/*롯데시네마*/
+/*영화관별 퀵메뉴*/
+/*영화관 언급량 TOP5, 배너*/
+/*전체글 게시판 목록*/
+/*페이지네이션*/
+.os_sub_contents {
+	padding: 50px 0;
+	margin-top: 90px;
+}
+.hot_theater_weekly {
+	width: 1280px;
+	margin: 0 auto;
+	>a {
+		display: block;
+		position: relative;
+		height: 240px;
+		padding: 80px;
+		background: url(../img/hot_theater_weekly2.png) repeat-y 0 0, url(../img/hot_theater_weekly.jpg) no-repeat center;
+		background-size: 100%;
+		border-radius: 30px;
+		>span {
+			position: relative;
+			padding-left: 35px;
+			font-size: 20px;
+			line-height: 125%;
+			font-weight: 600;
+			color: $color_1;
+			&::before {
+				content: '';
+				position: absolute;
+				top: 50%;
+				left: 0;
+				width: 20px;
+				height: 1px;
+				margin-top: -0.5px;
+				background-color: #fff;
+			}
+		}
+		>h1 {
+			padding-top: 45px;
+			margin-top: 30px;
+			font-size: 52px;
+			line-height: 125%;
+			font-weight: 700;
+			color: $color_1;
+		}
+		>h1.theater1 {
+			background: url(../img/theater1.png) no-repeat 0 0;
+		}
+		>h1.theater2 {
+			background: url(../img/theater2.png) no-repeat 0 0;
+		}
+		>h1.theater3 {
+			background: url(../img/theater3.png) no-repeat 0 0;
+		}
+		>i {
+			position: absolute;
+			left: 80px;
+			bottom: 80px;
+			padding-left: 31px;
+			font-size: 20px;
+			line-height: 150%;
+			font-style: normal;
+			color: $color_1;
+			background: url(../img/hot_theater_weekly_i.png) no-repeat left center;
+		}
+		>.post_like_wrap {
+			position: absolute;
+			right: 30px;
+			bottom: 30px;
+			padding: 35px 155px 35px 35px;
+			background-color: #fff;
+			border-radius: 35px;
+			box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
+			&::after {
+				content: '';
+				position: absolute;
+				top: 50%;
+				right: 30px;
+				width: 80px;
+				height: 80px;
+				margin-top: -40px;
+				background: url(../img/post_like_wrap_after.png) no-repeat center;
+				background-color: #121212;
+				border-radius: 100%;
+			}
+		}
+	}
+}
+.post_like_list {
+	>li {
+		float: left;
+		+ {
+			li {
+				position: relative;
+				padding-left: 41px;
+				margin-left: 40px;
+				&::before {
+					content: '';
+					position: absolute;
+					top: 50%;
+					left: 0;
+					width: 1px;
+					height: 50px;
+					margin-top: -25px;
+					background-color: #E2E2E2;
+				}
+			}
+		}
+		>span {
+			display: block;
+			font-size: 16px;
+			line-height: 125%;
+			font-weight: 500;
+		}
+		>i {
+			display: block;
+			margin-top: 14px;
+			font-style: normal;
+			font-size: 40px;
+			line-height: 1;
+			font-weight: 700;
+		}
+	}
+	>li.post {
+		>span {
+			color: $color_2;
+		}
+		>i {
+			padding-left: 34px;
+			color: $color_2;
+			background: url(../img/post_like_list_i1.png) no-repeat left center;
+		}
+	}
+	>li.like {
+		>span {
+			color: $color_3;
+		}
+		>i {
+			padding-left: 36px;
+			color: $color_3;
+			background: url(../img/post_like_list_i2.png) no-repeat left center;
+		}
+	}
+}
+.sub_quick_menu {
+	width: 1280px;
+	margin: 50px auto;
+	>.sub_quick_menu_list {
+		display: flex;
+		flex-wrap: wrap;
+	}
+}
+.sub_quick_menu_list {
+	>li {
+		flex: 1;
+		+ {
+			li {
+				padding-left: 10px;
+			}
+		}
+		>a {
+			display: block;
+			position: relative;
+			font-size: 26px;
+			line-height: 120px;
+			font-weight: 700;
+			background-color: #EDEDED;
+			border-radius: 30px;
+			&::after {
+				content: '';
+				position: absolute;
+				top: 50%;
+				right: 35px;
+				width: 50px;
+				height: 50px;
+				margin-top: -25px;
+				background: url(../img/sub_quick_menu_list_a.png) no-repeat center;
+				background-color: #121212;
+				border-radius: 100%;
+			}
+		}
+	}
+	>li.sub1 {
+		>a {
+			padding: 0 35px 0 138px;
+			background: url(../img/theater1.png) no-repeat left 35px center;
+			background-color: #EDEDED;
+		}
+	}
+	>li.sub2 {
+		>a {
+			padding: 0 35px 0 177px;
+			background: url(../img/theater2.png) no-repeat left 35px center;
+			background-color: #EDEDED;
+		}
+	}
+	>li.sub3 {
+		>a {
+			padding: 0 35px 0 196px;
+			background: url(../img/theater3.png) no-repeat left 35px center;
+			background-color: #EDEDED;
+		}
+	}
+}
+.rank_banner_wrap {
+	width: 1280px;
+	margin: 0 auto;
+	+ {
+		.theater_total_board_wrap {
+			margin-top: 50px;
+		}
+	}
+}
+.rank5_wrap {
+	float: left;
+	width: 50%;
+	padding-right: 10px;
+	box-sizing: border-box;
+	>.inner {
+		padding: 39px;
+		border: 1px solid #ddd;
+		border-radius: 30px;
+	}
+}
+.rank5_title {
+	>h2 {
+		float: left;
+		margin: 1.5px 0;
+		font-size: 26px;
+		line-height: 125%;
+		font-weight: 700;
+	}
+	>i {
+		float: right;
+		display: block;
+		padding: 0 16px 0 40px;
+		font-style: normal;
+		line-height: 33px;
+		color: $color_4;
+		background: url(../img/rank5_title_i.png) no-repeat left 16px center;
+		border: 1px solid #747474;
+		border-radius: 30px;
+	}
+}
+.rank5_list {
+	margin-top: 30px;
+	>li {
+		+ {
+			li {
+				padding-top: 15px;
+				margin-top: 15px;
+				border-top: 1px solid #f1f1f1;
+			}
+		}
+		>a {
+			display: block;
+			position: relative;
+			padding-left: 65px;
+			>span.number {
+				position: absolute;
+				top: 50%;
+				left: 0;
+				width: 40px;
+				height: 40px;
+				margin-top: -20px;
+				font-size: 20px;
+				line-height: 40px;
+				font-weight: 700;
+				color: $color_1;
+				text-align: center;
+				background-color: #121212;
+				border-radius: 100%;
+			}
+			>p {
+				font-size: 20px;
+				line-height: 125%;
+				font-weight: 600;
+			}
+			>i {
+				display: block;
+				margin-top: 1px;
+				font-style: normal;
+				font-size: 12px;
+				line-height: 150%;
+				color: $color_4;
+			}
+			>span.total_post {
+				position: absolute;
+				top: 50%;
+				right: 0;
+				padding-right: 32px;
+				margin-top: -11px;
+				font-size: 14px;
+				line-height: 22px;
+				color: $color_5;
+				&::after {
+					content: '';
+					position: absolute;
+					top: 0;
+					right: 0;
+					width: 22px;
+					height: 22px;
+					background: url(../img/total_post_after.png) no-repeat center;
+					background-color: #d17674;
+					border-radius: 100%;
+				}
+				>b {
+					margin-left: 7px;
+					font-size: 16px;
+					line-height: 22px;
+				}
+			}
+		}
+	}
+}
+.banner_wrap {
+	float: right;
+	width: 50%;
+	padding-left: 10px;
+	box-sizing: border-box;
+}
+.banner_event_list {
+	border: 1px solid #ddd;
+	border-radius: 30px;
+}
+.theater_total_board_wrap {
+	width: 1280px;
+	margin: 0 auto;
+	>h2 {
+		font-size: 24px;
+		line-height: 125%;
+		font-weight: 600;
+	}
+}
+.board_control_wrap {
+	margin: 20px 0 10px;
+	>p {
+		float: left;
+		font-size: 14px;
+		line-height: 36px;
+	}
+	>select {
+		float: right;
+		width: 93px;
+		height: 36px;
+		padding: 0 0 0 12px;
+		font-size: 14px;
+		line-height: 34px;
+		background: url(../img/select_option.png) no-repeat right 12px center;
+		border: 1px solid #ddd;
+		border-radius: 6px;
+	}
+}
+.pagination_wrap {
+	margin-top: 50px;
+}
+.pagination_list {
+	text-align: center;
+	>li {
+		display: inline-block;
+		vertical-align: top;
+		>a {
+			display: block;
+			min-width: 24px;
+			height: 24px;
+			font-size: 13px;
+			line-height: 24px;
+			box-sizing: border-box;
+		}
+		>a.before {
+			border: 1px solid #ddd;
+			border-radius: 3px;
+			background: url(../img/pagination_before.png) no-repeat center;
+		}
+		>a.after {
+			border: 1px solid #ddd;
+			border-radius: 3px;
+			background: url(../img/pagination_after.png) no-repeat center;
+		}
+	}
+	>li.on {
+		>a {
+			background-color: #E9E9E9;
+			border-radius: 3px;
+		}
+	}
+}
+.os_sub_navigation {
+	width: 1280px;
+	margin: 0 auto;
+	>h1 {
+		float: left;
+		font-size: 52px;
+		line-height: 125%;
+		font-weight: 700;
+	}
+}
+.breadcrumbs_list {
+	float: right;
+	padding: 17.5px 0;
+	>li {
+		float: left;
+		+ {
+			li {
+				padding-left: 28px;
+				margin-left: 20px;
+				background: url(../img/breadcrumbs_list_li.png) no-repeat left center;
+			}
+		}
+		>a {
+			display: block;
+			font-size: 20px;
+			line-height: 150%;
+			color: $color_4;
+		}
+	}
+	>li.home {
+		>a {
+			width: 16px;
+			height: 30px;
+			background: url(../img/breadcrumbs_list_home.png) no-repeat left center;
+		}
+	}
+}
+.os_category_wrap {
+	margin-top: 70px;
+}
+.os_area {
+	width: 1280px;
+	margin: 0 auto;
+}
+.os_area_list {
+	>li {
+		float: left;
+		+ {
+			li {
+				margin-left: 10px;
+			}
+		}
+		>a {
+			display: block;
+			padding: 0 20px;
+			font-size: 18px;
+			line-height: 48px;
+			color: $color_6;
+			border: 1px solid #ddd;
+			border-radius: 30px;
+		}
+	}
+	>li.on {
+		>a {
+			color: $color_1;
+			background-color: #AE0200;
+			border: 1px solid #AE0200;
+		}
+	}
+}
+.os_branch {
+	margin-top: 25px;
+	background-color: #FDFAFA;
+	border-top: 1px solid #F7E8E7;
+	border-bottom: 1px solid #F7E8E7;
+	>.inner {
+		width: 1280px;
+		margin: 0 auto;
+		overflow-x: scroll;
+		overflow-y: hidden;
+		&::-webkit-scrollbar {
+			display: none;
+		}
+	}
+}
+.os_brunch_list {
+	>li {
+		float: left;
+		padding: 20px 0;
+		+ {
+			li {
+				margin-left: 30px;
+			}
+		}
+		>a {
+			display: block;
+			font-size: 18px;
+			line-height: 40px;
+			color: $color_7;
+		}
+	}
+	>li.on {
+		>a {
+			font-weight: 700;
+			color: $color_5;
+		}
+	}
+}
+.os_branch_info_wrap {
+	width: 1280px;
+	margin: 50px auto 40px;
+}
+.info_banner {
+	padding: 50px 0 50px 60px;
+	background: url(../img/info_banner.png) repeat-y 0 0, url(../img/info_banner.jpg) no-repeat center;
+	background-size: 100%;
+	background-color: #ddd;
+	border-radius: 30px;
+	>h2 {
+		font-size: 40px;
+		line-height: 125%;
+		font-weight: 700;
+		color: $color_1;
+	}
+	>p {
+		margin-top: 30px;
+		font-size: 20px;
+		line-height: 150%;
+		color: $color_1;
+	}
+}
+.branch_screen {
+	margin-top: 50px;
+}
+.branch_screen_list {
+	>li {
+		float: left;
+	}
+}

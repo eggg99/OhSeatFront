@@ -1,6 +1,4 @@
 import { Outlet } from "react-router-dom";
-import '@/styles/login.scss';
-
 
 const PageUser = () => {
     return (
