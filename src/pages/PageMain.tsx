@@ -1,6 +1,6 @@
 import '@/styles/css/main.scss'
 import { MULTIPLEX_LIST } from "@/constants/multiplex";
-import { getTrendingCinema, getPostList } from "@/apis/api/recommend";
+import { getTrendingCinema, top3Post } from "@/apis/api/recommend";
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import WeekString from '@/components/common/WeekString';
@@ -16,6 +16,7 @@ interface Cinema {
 }
 function PageMain(){
     const [topCinemas, setTopCinemas] = useState<Cinema>();
+    const [recentPost, setRecentPost] = useState<any[]>([]);
 
     // 언급량 top1 조회
     const getData = async () => {
@@ -27,13 +28,33 @@ function PageMain(){
         }
     }
 
+    // 게시글 최신순 3개 조회
+    const getTop3Post = async () => {
+        try {
+            const response = await top3Post(); // 최신 3개
+            if(response){
+                getMultiplexBrand(response.multiplexName);
+                
+            }
+            setRecentPost(response);
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
     // ✅ multiplexId를 label로 변환
     const getMultiplexLabel = (multiplexId: number) =>
         MULTIPLEX_LIST.find(m => m.id === multiplexId)?.label || "Unknown";
 
+    // ✅ label을 multiplex의 brand로 변환
+    const getMultiplexBrand = (multiplexName: string): string | undefined => {
+        return MULTIPLEX_LIST.find(item => item.label === multiplexName)?.brand;
+    };
+
     // 마운트 될 때 데이터 가져오기
     useEffect(() => {
-        getData(); 
+        getData();
+        getTop3Post();
     }, []);
 
     return(
@@ -58,27 +79,21 @@ function PageMain(){
                     )}
                     {/* 실제 최신 글 3개 가져오기 */}
                     <ul className="lately_post_list">
-                        <li>
-                            <a href="#">
-                                <span>1관</span>
-                                <p>J열 7번</p>
-                                <i>동해물과 백두산이 마르고 닳도록 하느님이 보우하사 우리나라 만세 무궁화 삼천리 화려강산 대한사람 대한으로 길이 보전하세</i>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#">
-                                <span>1관</span>
-                                <p>J열 7번</p>
-                                <i>동해물과 백두산이 마르고 닳도록 하느님이 보우하사 우리나라 만세 무궁화 삼천리 화려강산 대한사람 대한으로 길이 보전하세</i>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#">
-                                <span>1관</span>
-                                <p>J열 7번</p>
-                                <i>동해물과 백두산이 마르고 닳도록 하느님이 보우하사 우리나라 만세 무궁화 삼천리 화려강산 대한사람 대한으로 길이 보전하세</i>
-                            </a>
-                        </li>
+                        {recentPost && recentPost.length > 0 ? (
+                            recentPost.map((item: any) => (
+                                <li>
+                                    <Link to={`/recommend/${getMultiplexBrand(item.multiplexName)}/${item.postId}`}>
+                                        <span>{item.screenName}</span>
+                                        <p>{item.multiplexName} {item.cinemaName}</p>
+                                        <i>{item.content}</i>
+                                    </Link>
+                                </li>
+                            ))
+                            ) : (
+                                <li>
+                                    데이터가 없습니다.
+                                </li>
+                            )}
                     </ul>
                 </div>
             </div>

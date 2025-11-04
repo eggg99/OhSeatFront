@@ -141,7 +141,7 @@ export default function PostDetail(){
 };
 
     return (
-        <div className="detail-form shadow rounded-xl border bg-card flex flex-col">
+        <div className="os_sub_contents">
             <div>
                 <h2 className="text-2xl">{detailValue.title}</h2>
             </div>

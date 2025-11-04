@@ -215,3 +215,16 @@ export const updatePostLike = async (postId) => {
         console.error("좋아요 실패: ", error);
     }
 }
+
+/**
+ * 최신 게시글 3개 조회
+ * param : postId       게시글 아이디
+ */
+export const top3Post = async () => {
+    try {
+        const response = await axiosApi.get(`/rcmd/post/top3List`, {});
+        return response.data;
+    } catch (error) {
+        console.error("최신 게시글 3개 조회 실패: ", error);
+    }
+}

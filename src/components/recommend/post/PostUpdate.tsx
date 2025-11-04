@@ -141,7 +141,7 @@ export default function PostUpdate() {
     };
 
     return (
-        <div className="detail-form shadow rounded-xl border bg-card flex flex-col">
+        <div className="os_sub_contents">
             <div>
                 <Input
                     type="text"

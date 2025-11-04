@@ -232,7 +232,7 @@ export default function BrowseIndex() {
                             ))
                             ) : (
                             <tr>
-                                <td colSpan={5}>
+                                <td colSpan={7} className="txtc">
                                     추천 내용이 없습니다 🥲
                                 </td>
                             </tr>
