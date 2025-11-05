@@ -44,7 +44,7 @@ export default function CineSquareReg(){
         navigate(`/cinesquare/list?category=0`);
     }
     return(
-        <div className="detail-form shadow rounded-xl border bg-card flex flex-col w-5/6 m-auto mt-6">
+        <div className="os_sub_contents">
             <div className="flex justify-between">
                 <div><button onClick={list}>목록으로</button></div>
                 <div><button onClick={() => handleSubmit()}>등록</button></div>

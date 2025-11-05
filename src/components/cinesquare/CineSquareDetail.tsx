@@ -60,7 +60,7 @@ export default function CineSquareDetail(){
     };
     
     return(
-        <div className="detail-form shadow rounded-xl border bg-card flex flex-col">
+        <div className="os_sub_contents">
             <div className="flex">
                 <div><button onClick={list}>목록으로</button></div>
                 <div><h2 className="text-2xl">씨네광장 소식</h2></div>

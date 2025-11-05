@@ -50,7 +50,7 @@ export default function CinesquareSearch() {
   const list = () => navigate(`/cinesquare/list?category=0`);
 
   return (
-    <div className="detail-form shadow rounded-xl border bg-card flex flex-col">
+    <div className="os_sub_contents">
       <div className="flex">
         <div><button onClick={list} className="btn btn-secondary">목록으로</button></div>
         <div><h2 className="text-2xl">지역 검색</h2></div>

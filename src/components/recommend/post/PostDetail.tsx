@@ -142,86 +142,87 @@ export default function PostDetail(){
 
     return (
         <div className="os_sub_contents">
-            <div>
-                <h2 className="text-2xl">{detailValue.title}</h2>
-            </div>
-            <div className="flex gap-3">
-                <span>작성자</span>
-                <span>{detailValue.authorNickname}</span>
-            </div>
-            <div className="flex justify-between">
-                <div className="flex gap-3">
-                    <span>작성일자</span>
-                    <span>{detailValue.createdAt}</span>
+            <div className="hot_theater_weekly">
+                <div>
+                    <h2 className="text-2xl">{detailValue.title}</h2>
                 </div>
+                <div className="flex gap-3">
+                    <span>작성자</span>
+                    <span>{detailValue.authorNickname}</span>
+                </div>
+                <div className="flex justify-between">
+                    <div className="flex gap-3">
+                        <span>작성일자</span>
+                        <span>{detailValue.createdAt}</span>
+                    </div>
+                    <div className="flex">
+                        <div className="flex gap-3">
+                            <span>댓글</span>
+                            <span>{detailValue.commentCount}개</span>
+                        </div>
+                        <div className="flex gap-3 ml-3">
+                            <span>조회수</span>
+                            <span>{detailValue.views}회</span>
+                        </div>
+                        {detailValue.authorId == userId &&
+                            <div className="ml-3">
+                                <button><Link to={`/recommend/${brand}/edit/${postId}`}>수정</Link></button>
+                                <button onClick={handleDelete}>삭제</button>
+                            </div>
+                        }
+                    </div>
+                </div>
+                <div>
+                    {detailValue.content}
+                </div>
+
                 <div className="flex">
                     <div className="flex gap-3">
+                        <button onClick={handleLike} className="text-2xl">
+                            {detailValue.liked ? "♥" : "♡"}
+                        </button>
+                        <span>좋아요</span>
+                        <span>{detailValue.likeCount}개</span>
+                    </div>
+                    <div className="flex gap-3 ml-3">
                         <span>댓글</span>
                         <span>{detailValue.commentCount}개</span>
                     </div>
-                    <div className="flex gap-3 ml-3">
-                        <span>조회수</span>
-                        <span>{detailValue.views}회</span>
-                    </div>
-                    {detailValue.authorId === userId &&
-                    <div className="ml-3">
-                        <button><Link to={`/recommend/${brand}/edit/${postId}`}>수정</Link></button>
-                        <button onClick={handleDelete}>삭제</button>
-                    </div>
-                    }
                 </div>
-            </div>
 
-            <div>
-                {detailValue.content}
-            </div>
-
-            <div className="flex">
-                <div className="flex gap-3">
-                    <button onClick={handleLike} className="text-2xl">
-                        {detailValue.liked ? "♥" : "♡"}
-                    </button>
-                    <span>좋아요</span>
-                    <span>{detailValue.likeCount}개</span>
-                </div>
-                <div className="flex gap-3 ml-3">
-                    <span>댓글</span>
-                    <span>{detailValue.commentCount}개</span>
-                </div>
-            </div>
-
-            <div className="mt-4">
-                <h3 className="font-bold">댓글</h3>
-                {commentList.length === 0 ? (
-                    <p>아직 댓글이 없습니다.</p>
-                ) : (
-                    commentList.map((c) => (
-                        <div key={c.commentId} className="border-b py-2">
-                            <div className="flex justify-between">
-                                <p>{c.content}</p>
-                                { c.commenterId == userId && 
-                                    <button onClick={() => handleDeleteComment(c.commentId)}>삭제</button>
-                                }
-                                
+                <div className="mt-4">
+                    <h3 className="font-bold">댓글</h3>
+                    {commentList.length === 0 ? (
+                        <p>아직 댓글이 없습니다.</p>
+                    ) : (
+                        commentList.map((c) => (
+                            <div key={c.commentId} className="border-b py-2">
+                                <div className="flex justify-between">
+                                    <p>{c.content}</p>
+                                    { c.commenterId == userId && 
+                                        <button onClick={() => handleDeleteComment(c.commentId)}>삭제</button>
+                                    }
+                                    
+                                </div>
+                                <small>{c.authorNickname} · {c.createdAt}</small>
                             </div>
-                            <small>{c.authorNickname} · {c.createdAt}</small>
-                        </div>
-                    ))
-                )}
-            </div>
-            <div>
-                <Input 
-                    type="text"
-                    value={comment}
-                    onChange={handleChange}
-                    placeholder="댓글을 작성해주세요"
-                />
-                <button onClick={handleSubmit}>
-                    작성
-                </button>
-            </div>
-            <div className="text-right">
-                <Link to={`/recommend/${brand}`}>목록</Link>
+                        ))
+                    )}
+                </div>
+                <div>
+                    <Input 
+                        type="text"
+                        value={comment}
+                        onChange={handleChange}
+                        placeholder="댓글을 작성해주세요"
+                    />
+                    <button onClick={handleSubmit}>
+                        작성
+                    </button>
+                </div>
+                <div className="text-right">
+                    <Link to={`/recommend/${brand}`}>목록</Link>
+                </div>
             </div>
         </div>
     )

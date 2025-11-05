@@ -106,7 +106,7 @@ export default function CineSqaureList () {
 
     return(
         <section>
-            <div className="flex-[6] flex p-4 flex-col content-wrapper vtcal gap-4 h-[80vh]">
+            <div className="os_sub_contents">
                 {/* 위치 */}
                 <div>
                     <button onClick={search} className="btn btn-primary">위치검색</button>

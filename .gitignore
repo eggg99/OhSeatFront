@@ -22,3 +22,10 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 .env
+.idea/.gitignore
+.idea/material_theme_project_new.xml
+.idea/OhSeatFront.iml
+.idea/modules.xml
+.idea/misc.xml
+.idea/vcs.xml
+.gitignore

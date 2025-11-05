@@ -28,9 +28,9 @@ const Header = () => {
                     <li><Link to="/chatting">채팅</Link></li>
                     <li><Link to="/cinesquare/list">씨네광장</Link></li>
                     <li>
-                        <Link to="/chatting">이벤트</Link>
+                        <Link to="/event">이벤트</Link>
                         <ul className="os_gnb2">
-                            <li><Link to="/">이벤트 둘러보기</Link></li>
+                            <li><Link to="/event/browse">이벤트 둘러보기</Link></li>
                             <li><Link to="/">이벤트 당첨발표</Link></li>
                         </ul>
                     </li>

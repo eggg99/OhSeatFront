@@ -21,7 +21,7 @@ function PageMain(){
     // 언급량 top1 조회
     const getData = async () => {
         try {
-            const response: Cinema[] = await getTrendingCinema(); // Top 5 반환
+            const response: Cinema[] = await getTrendingCinema(); // Top1 반환
             setTopCinemas(response[0]);
         } catch (error) {
             console.error(error);

@@ -51,7 +51,7 @@ export default function CineSquareEdit(){
     }, [postId]);
 
     return(
-        <div className="detail-form shadow rounded-xl border bg-card flex flex-col">
+        <div className="os_sub_contents">
             <div className="flex gap-3">
                 <span>카테고리</span>
                 <select name="categoryId" onChange={handleInput} value={inputValue.categoryId}>

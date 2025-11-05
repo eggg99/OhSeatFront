@@ -66,6 +66,10 @@ function AppRoutes(){
                 <Route path="edit/:postId" element={<CineSquareEdit/>}/>
             </Route>
 
+            {/* 이벤트 */}
+            <Route path="/event" element={<PageCineSquare/>}>
+            </Route>
+
             <Route path="/chatting" element={<PageUser />} />
             <Route path="*" element={<PageNotFound />} />
         </Routes>
