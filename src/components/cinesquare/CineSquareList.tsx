@@ -110,21 +110,23 @@ export default function CineSqaureList () {
                 {/* 위치 */}
                 <div>
                     <button onClick={search} className="btn btn-primary">위치검색</button>
-                    <br/>
                     <Location></Location>
                 </div>
-                    {/* 카테고리 */}
-                    <div>
-                        <button onClick={() =>handleCategory(0)}>전체</button> | 
-                        <button onClick={() =>handleCategory(1)}>공지사항</button> | 
-                        <button onClick={() =>handleCategory(2)}>자유수다</button> | 
-                        <button onClick={() =>handleCategory(3)}>구인구직</button>
-                    </div>
-                    {/* 정렬 UI */}
-                    <div className="self-end p-2">
-                        <button onClick={() =>handleOrderChange('latest')}>최신순</button> | 
-                        <button onClick={() =>handleOrderChange('views')}>조회순</button> | 
-                        <button onClick={() =>handleOrderChange('comments')}>댓글순</button>
+                    <div className="w-20">
+                        {/* 카테고리 */}
+                        <select>
+                            <option onClick={() =>handleCategory(0)}>전체</option>
+                            <option onClick={() =>handleCategory(1)}>공지사항</option>
+                            <option onClick={() =>handleCategory(2)}>자유수다</option>
+                            <option onClick={() =>handleCategory(3)}>구인구직</option>
+                        </select>
+                        
+                        {/* 정렬 UI */}
+                        <select>
+                            <option onClick={() =>handleOrderChange('latest')}>최신순</option>
+                            <option onClick={() =>handleOrderChange('views')}>조회순</option>
+                            <option onClick={() =>handleOrderChange('comments')}>댓글순</option>
+                        </select>
                     </div>
 
                     {/* 게시글 테이블 */}

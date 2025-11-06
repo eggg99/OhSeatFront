@@ -28,24 +28,18 @@ export const getCineSqaureItem = async(postId) => {
 
 /**
  * 씨네광장 게시글 작성
- * param : categoryId   카테고리시퀀스
- * param : title        제목
- * param : content      내용
+ * param : data : 게시글 내용
+ * param : files : 파일 첨부
  */
-export const postCineSquare = async(categoryId, title, content, city, district) => {
-    try{
-        const response = await axiosApi.post("/cinesquare", { 
-            categoryId,
-            title,
-            content,
-            city, 
-            district
-        })
-        return response.data;
-    } catch (error) {
-        console.error("게시글 등록 실패: ", error);
-    }
-}
+export const postCineSquare = async (formData) => {
+  try {
+    const response = await axiosApi.post("/cinesquare", formData);
+    return response.data;
+  } catch (error) {
+    console.error("게시글 등록 실패: ", error);
+  }
+};
+
 
 /**
  * 씨네광장 게시글 수정

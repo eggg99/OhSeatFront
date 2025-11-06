@@ -12,14 +12,21 @@ export const axiosApi = axios.create({
 });
 
 axiosApi.interceptors.request.use(
-  (config) => {
-    const { token } = userStore.getState();
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
+    (config) => {
+        const { token } = userStore.getState();
+
+        // 파일 업로드면 multipart/form-data로 변경
+        if (config.data instanceof FormData) {
+            config.headers["Content-Type"] = "multipart/form-data";
+        }
+        
+        // 토큰이 있으면 Authorization 추가
+        if (token) {
+            config.headers.Authorization = `Bearer ${token}`;
+        }
+        return config;
+    },
+    (error) => {
+        return Promise.reject(error);
     }
-    return config;
-  },
-  (error) => {
-    return Promise.reject(error);
-  }
 );

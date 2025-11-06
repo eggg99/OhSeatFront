@@ -3,16 +3,8 @@ import { locationStore } from "@/store/userLocation";
 import { getLocation } from "@/apis/api/cinesquare";
 
 export default function Location() {
-  // store 구독: currentLocation 변경 시 자동 리렌더링
-  // const { currentLocation, setCurrentLocation } = locationStore(
-  //   (state) => ({
-  //     currentLocation: state.currentLocation,
-  //     setCurrentLocation: state.setCurrentLocation,
-  //   })
-  // );
-
     const currentLocation = locationStore((state) => state.currentLocation);
-  const setCurrentLocation = locationStore((state) => state.setCurrentLocation);
+    const setCurrentLocation = locationStore((state) => state.setCurrentLocation);
 
   // 내 위치 버튼 클릭 시 geolocation 가져오기
   const handleGetPosition = () => {

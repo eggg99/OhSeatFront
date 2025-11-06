@@ -99,6 +99,7 @@ export const putPost = async(authorId,multiplexId,areaId,cinemaId,screenId,title
         return response.data;
     } catch (error) {
         console.error("게시글 등록 실패: ", error);
+        return false;
     }
 }
 

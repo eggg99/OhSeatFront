@@ -13,15 +13,6 @@ export default function CinesquareSearch() {
   const currentLocation = locationStore((state) => state.currentLocation);
   const setCurrentLocation = locationStore((state) => state.setCurrentLocation);
 
-//   const { recentSearches, addRecentSearch, currentLocation, setCurrentLocation } = locationStore(
-//     (state) => ({
-//       recentSearches: state.recentSearches,
-//       addRecentSearch: state.addRecentSearch,
-//       currentLocation: state.currentLocation,
-//       setCurrentLocation: state.setCurrentLocation,
-//     })
-//   );
-
   const [inputValue, setInputValue] = useState('');
   const [resultSearch, setResultSearch] = useState<{ city: string; district: string }[]>([]);
 
@@ -51,10 +42,10 @@ export default function CinesquareSearch() {
 
   return (
     <div className="os_sub_contents">
-      <div className="flex">
-        <div><button onClick={list} className="btn btn-secondary">목록으로</button></div>
-        <div><h2 className="text-2xl">지역 검색</h2></div>
-      </div>
+        <div className="flex">
+            <div><button onClick={list} className="btn btn-secondary">목록으로</button></div>
+            <div><h2 className="text-2xl">지역 검색</h2></div>
+        </div>
       <hr />
 
       <div className="mt-3">
