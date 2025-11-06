@@ -30,6 +30,9 @@ import CineSquareEdit from "../components/cinesquare/CineSqaureEdit";
 import CineSquareReg from "../components/cinesquare/CineSqaureReg";
 import CinesquareSearch from "@/components/cinesquare/CineSquareSearch";
 
+// 이벤트 관련
+import PageEvent from "@/pages/PageEvent";
+import EventList from "@/components/event/EventList";
 
 function AppRoutes(){
     return(
@@ -67,7 +70,13 @@ function AppRoutes(){
             </Route>
 
             {/* 이벤트 */}
-            <Route path="/event" element={<PageCineSquare/>}>
+            <Route path="/event" element={<PageEvent/>}>
+                <Route path="list" element={<EventList/>}></Route>  {/* 이벤트 둘러보기 */}
+                <Route path=":id" element={<EventList/>}></Route>   {/* 이벤트 상세페이지 */}
+                <Route path="reg" element={<EventList/>}></Route>   {/* 이벤트 작성페이지 */}
+                <Route path="reg" element={<EventList/>}></Route>   {/* 이벤트 당첨확인 리스트*/}
+                <Route path="reg" element={<EventList/>}></Route>   {/* 이벤트 당첨확인 상세페이지*/}
+                <Route path="reg" element={<EventList/>}></Route>   {/* 이벤트 당첨확인 작성페이지*/}
             </Route>
 
             <Route path="/chatting" element={<PageUser />} />
