@@ -1,7 +1,8 @@
 $color_1: #ae0200;
 $color_2: #747474;
-$color_3: #fff;
-$color_4: #d9d9d9;
+$color_3: #3D3D3D;
+$color_4: #fff;
+$color_5: #d9d9d9;
 $font-family_1: 'GmarketSans', sans-serif;
 
 /*헤더*/
@@ -11,11 +12,11 @@ $font-family_1: 'GmarketSans', sans-serif;
 	top: 0;
 	right: 0;
 	left: 0;
-	// height: 45px;
+	height: 45px;
 	padding: 22px 0;
 	background-color: #fff;
 	border-bottom: 1px solid #F1F1F1;
-	z-index: 1;
+	z-index: 10;
 	>.inner {
 		position: relative;
 		width: 1280px;
@@ -37,7 +38,7 @@ $font-family_1: 'GmarketSans', sans-serif;
 				display: inline-block;
 				+ {
 					li {
-						margin-left: 70px;
+						margin-left: 50px;
 					}
 				}
 				>a {
@@ -108,35 +109,81 @@ $font-family_1: 'GmarketSans', sans-serif;
 					display: block;
 				}
 			}
+			>li.two_depth {
+				>.os_gnb2 {
+					>li {
+						&:hover {
+							>a {
+								font-weight: 500;
+								color: $color_3;
+							}
+						}
+					}
+				}
+			}
+		}
+		>.os_user_wrap {
+			position: absolute;
+			top: 6px;
+			right: 0;
+			font-size: 14px;
+			line-height: 33px;
+			z-index: 1;
+		}
+	}
+}
+.os_gnb {
+	>li.two_depth {
+		&:hover {
+			height: 87px;
+			>.os_gnb2 {
+				display: block;
+			}
+		}
+	}
+}
+.os_user_list {
+	>li {
+		float: left;
+		+ {
+			li {
+				margin-left: 8px;
+			}
+		}
+		>a {
+			display: block;
+			padding: 0 15px 0 36px;
+			color: $color_4;
 		}
 		>.os_login_button {
-			position: absolute;
-			top: 0;
-			right: 0;
-			width: 130px;
-			line-height: 45px;
-			color: $color_3;
+			background: url(../img/os_login_button.png) no-repeat left 15px center;
 			background-color: #AE0200;
 			border-radius: 22px;
-			z-index: 1;
-			
-			&.logout{
-				right: -50px;
-			}
-			&.mypage{
-				right: 90px;
-				background-color: #000000;
+		}
+		>.os_nickname {
+			padding: 0 10px 0 21px;
+			color: $color_2;
+			background: url(../img/os_nickname.png) no-repeat left center;
+			>i {
+				display: inline-block;
+				width: 60px;
+				font-style: normal;
+				text-overflow: ellipsis;
+				white-space: nowrap;
+				word-wrap: normal;
+				overflow: hidden;
+				vertical-align: top;
 			}
 		}
-		>.os_nickname{
-			position: absolute;
-			top: 0;
-			right: 210px;
-			width: 130px;
-			line-height: 45px;
-			color: #000000;
+		>.os_mypage_button {
+			background: url(../img/os_mypage_button.png) no-repeat left 15px center;
+			background-color: #666666;
 			border-radius: 22px;
-			z-index: 1;
+		}
+		>.os_logout_button {
+			background: url(../img/os_logout_button.png) no-repeat left 15px center;
+			background-color: #121212;
+			border-radius: 22px;
 		}
 	}
 }
@@ -166,7 +213,7 @@ $font-family_1: 'GmarketSans', sans-serif;
 					left: 0;
 					width: 1px;
 					height: 15px;
-					background-color: #D9D9D9;
+					background-color: #5b5b5b;
 				}
 			}
 		}
@@ -174,7 +221,7 @@ $font-family_1: 'GmarketSans', sans-serif;
 			display: block;
 			font-size: 15px;
 			line-height: 29px;
-			color: $color_3;
+			color: $color_4;
 		}
 	}
 }
@@ -190,7 +237,7 @@ $font-family_1: 'GmarketSans', sans-serif;
 			font-size: 32px;
 			line-height: 63px;
 			font-weight: 700;
-			color: $color_4;
+			color: $color_5;
 		}
 		>.address_list {
 			float: left;
@@ -198,7 +245,7 @@ $font-family_1: 'GmarketSans', sans-serif;
 			>li {
 				font-size: 14px;
 				line-height: 150%;
-				color: $color_4;
+				color: $color_5;
 			}
 		}
 	}

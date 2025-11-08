@@ -16,7 +16,7 @@ const Header = () => {
                 <Logo />
                 
                 <ul className="os_gnb">
-                    <li>
+                    <li className='two_depth'>
                         <Link to="/recommend/browse">영화관 좌석 추천</Link>
                         <ul className="os_gnb2">
                             <li><Link to="/recommend/browse">둘러보기(pick!)</Link></li>
@@ -25,7 +25,7 @@ const Header = () => {
                             <li><Link to="/recommend/lottecinema">롯데시네마</Link></li>
                         </ul>
                     </li>
-                    <li><Link to="/chatting">채팅</Link></li>
+                    {/* <li><Link to="/chatting">채팅</Link></li> */}
                     <li><Link to="/cinesquare/list">씨네광장</Link></li>
                     <li>
                         <Link to="/event">이벤트</Link>
@@ -35,19 +35,23 @@ const Header = () => {
                         </ul>
                     </li>
                 </ul>
-                
-                {userId ? (
-                    <>
-                    <span className="os_nickname">{userNick}</span>
-                    <Link to="/user/mypage"  className="os_login_button mypage">마이페이지</Link>
-                    <button className="os_login_button logout" onClick={logout}>로그아웃</button>
-                    </>
-                ) : (
-                    <>
-                    <Link to="/user/join"   className="os_login_button mypage">회원가입</Link>
-                    <Link to="/user/login"  className="os_login_button logout">로그인</Link>
-                    </>
-                )}
+
+                <div className="os_user_wrap">
+                    <ul className='os_user_list clear'>
+                        {userId ? (
+                            <>
+                            <li><span className="os_nickname">{userNick}</span></li>
+                            <li><Link to="/user/mypage"  className="os_mypage_button">마이페이지</Link></li>
+                            <li><a href="#" className="os_logout_button" onClick={logout}>로그아웃</a></li>
+                            </>
+                        ) : (
+                            <>
+                            <li><Link to="/user/join"   className="os_login_button">회원가입</Link></li>
+                            <li><Link to="/user/login"  className="os_login_button">로그인</Link></li>
+                            </>
+                        )}
+                    </ul>
+                </div>
             </div>
         </header>
     );

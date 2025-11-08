@@ -24,6 +24,7 @@ export default function BrandIndex() {
     
     const { brand } = useParams<{ brand: string }>();
     const multiplexId = MULTIPLEX_LIST.find((m) => m.brand === brand)?.id;
+    const multiplexName = MULTIPLEX_LIST.find((m) => m.brand === brand)?.label;
     const [selectedAreaId, setSelectedAreaId] = useState<string>("00");
     const [cinemaList, setCinemaList] = useState<any[]>([]);
     const [selectedCinema, setSelectedCinema] = useState<any | null>(ALL_CINEMA);
@@ -33,7 +34,7 @@ export default function BrandIndex() {
     const [postList, setPostList] = useState<PostPage | null>(null);
     const [page, setPage] = useState<number>(0);
     const [orderType, setOrderType] = useState<string>("latest");
-    const size = 10;
+    const [size, setSize] = useState<number>(10);
 
     // 지역 선택
     const handleAreaChange = async (areaId: string) => {
@@ -63,12 +64,13 @@ export default function BrandIndex() {
     }
 
     // 페이지 변경
-    const handlePageChange = (newPage: number) => {
-        setPage(newPage);
-    }
+    const handlePageChange = (newPage: number) => setPage(newPage);
 
     // 정렬 변경
     const handleOrderChange = (newOrder: string) => setOrderType(newOrder);
+
+    // 사이즈 변경
+    const handleSizeChange = (newSize: number) => setSize(newSize);
 
     // 첫 진입 시, 지역 전체로 선택
     useEffect(() => {
@@ -80,18 +82,17 @@ export default function BrandIndex() {
         if (selectedAreaId && selectedCinema && selectedScreen) {
             handlePostList();
         }
-    }, [brand, selectedAreaId, selectedCinema, selectedScreen, page, orderType]);
+    }, [brand, selectedAreaId, selectedCinema, selectedScreen, page, orderType, size]);
 
     return (
         <div className="os_sub_contents">
             <div className="os_sub_navigation clear">
-                {/* 브랜드 이름 한글로 바꾸기 (메가박스랑 롯데시네마) */}
-                <h1>{brand}</h1>
+                <h1>{multiplexName}</h1>
 
                 <ul className="breadcrumbs_list clear">
                     <li className="home"><Link to="/"><i className="blind">홈</i></Link></li>
                     <li><Link to="/recommend/browse">영화관 좌석 추천</Link></li>
-                    <li><Link to={`/recommend/${brand}`}>{brand}</Link></li>
+                    <li><Link to={`/recommend/${brand}`}>{multiplexName}</Link></li>
                 </ul>
             </div>
 
@@ -125,7 +126,7 @@ export default function BrandIndex() {
                 <div className="os_branch">
                     <div className="inner">
                         <div className="embla overflow-hidden" ref={emblaRef2}>
-                            <div className="embla__container">
+                            <div className="embla__container list_wrap">
                                 <ul className="os_brunch_list clear flex flex-nowrap">
                                 {cinemaList.map((cinema) => {
                                     const isChecked = selectedCinema?.cinemaId === cinema.cinemaId;
@@ -146,17 +147,17 @@ export default function BrandIndex() {
                         </div>
                     </div>
                 </div>
+            </section>
 
-                {/* 영화관 정보 */}
-                <div className="os_branch_info_wrap">
-                    { (selectedCinema.cinemaId !== 'all_c') &&
-                    <div className="info_banner">
-                        <h2>{selectedCinema.cinemaName}</h2>
-                        <p>{selectedCinema.cinemaAddr}</p>
-                    </div>
-                    }
+            {/* 영화관 정보 */}
+            <section className="os_branch_info_wrap">
+                {(selectedCinema.cinemaId !== 'all_c') &&
+                <div className={`info_banner theater${multiplexId}`}>
+                    <h2>{selectedCinema.cinemaName}</h2>
+                    <p>{selectedCinema.cinemaAddr}</p>
                 </div>
-                
+                }
+
                 {/* 상영관 선택 */}
                 <div className="branch_screen">
                     <div className="embla" ref={emblaRef3}>
@@ -179,17 +180,21 @@ export default function BrandIndex() {
                         </div>
                     </div>
                 </div>
+            </section>
+                
+                
 
-                {/* 게시글 리스트 */}
-                <div className="theater_total_board_wrap">
-                    {isLogin &&<button><Link to={`/recommend/${brand}/reg`}>등록</Link></button>}
-                    <h2>1관</h2>
-                    <div className="board_control_wrap clear">
-                        <p>25개의 글</p>
+            {/* 게시글 리스트 */}
+            <section className="theater_total_board_wrap">
+                <h2>{selectedScreen.screenName}</h2>
 
+                <div className="board_control_wrap clear">
+                    <p>{postList?.totalElements ?? 0}개의 글</p>
+
+                    <div className="post_filter_wrap clear">
                         <select>
-                            <option>10개씩</option>
-                            <option>20개씩</option>
+                            <option onClick={() =>handleSizeChange(10)}>10개씩</option>
+                            <option onClick={() =>handleSizeChange(20)}>20개씩</option>
                         </select>
                         {/* 정렬 UI */}
                         <select>
@@ -198,85 +203,96 @@ export default function BrandIndex() {
                             <option onClick={() =>handleOrderChange('comments')}>댓글순</option>
                         </select>
                     </div>
+                </div>
                 
-                    {/* 게시글 테이블 */}
-                    <table className="basic_board1">
-                        <colgroup>
-                            <col style={{ width: '8%' }}/>
-                            <col style={{ width: '8%' }}/>
-                            <col style={{ width: '47%' }}/>
-                            <col style={{ width: '8%' }}/>
-                            <col style={{ width: '8%' }}/>
-                            <col style={{ width: '8%' }}/>
-                            <col style={{ width: '8%' }}/>
-                        </colgroup>
-                        <thead>
-                            <tr>
-                                <th colSpan={3}>제목</th>
-                                <th>작성자</th>
-                                <th>작성일</th>
-                                <th>조회수</th>
-                                <th>좋아요</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {/* 공지, 필독 넣기 */}
-                            <tr>
-                                <th><span className="notice">필독</span></th>
-                                <th colSpan={2} className="txtl"><a href="#">필독 게시글 제목 <span>[4]</span></a></th>
-                                <th>작성자 아이디</th>
-                                <th>2025.09.17</th>
-                                <th>0,000</th>
-                                <th>0</th>
-                            </tr>
-                            <tr>
-                                <th><span className="notice">공지</span></th>
-                                <th colSpan={2} className="txtl"><a href="#">공지 게시글 제목</a></th>
-                                <th>작성자 아이디</th>
-                                <th>2025.09.17</th>
-                                <th>0,000</th>
-                                <th>0</th>
-                            </tr>
-                            <tr>
-                                <th><span className="notice">공지</span></th>
-                                <th colSpan={2} className="txtl"><a href="#">공지 게시글 제목</a></th>
-                                <th>작성자 아이디</th>
-                                <th>2025.09.17</th>
-                                <th>0,000</th>
-                                <th>0</th>
-                            </tr>
-                            {postList && postList.content.length > 0 ? (
-                                postList.content.map((item: any) => (
+                {/* 게시글 테이블 */}
+                <table className="basic_board1">
+                    <colgroup>
+                        <col style={{ width: '8%' }}/>
+                        <col style={{ width: '8%' }}/>
+                        <col style={{ width: '47%' }}/>
+                        <col style={{ width: '8%' }}/>
+                        <col style={{ width: '8%' }}/>
+                        <col style={{ width: '8%' }}/>
+                        <col style={{ width: '8%' }}/>
+                    </colgroup>
+                    <thead>
+                        <tr>
+                            <th colSpan={3}>제목</th>
+                            <th>작성자</th>
+                            <th>작성일</th>
+                            <th>조회수</th>
+                            <th>좋아요</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {/* 공지, 필독 넣기 */}
+                        <tr>
+                            <th><span className="notice">필독</span></th>
+                            <th colSpan={2} className="txtl"><a href="#">필독 게시글 제목 <span>[4]</span></a></th>
+                            <th>작성자 아이디</th>
+                            <th>2025.09.17</th>
+                            <th>0,000</th>
+                            <th>0</th>
+                        </tr>
+                        <tr>
+                            <th><span className="notice">공지</span></th>
+                            <th colSpan={2} className="txtl"><a href="#">공지 게시글 제목</a></th>
+                            <th>작성자 아이디</th>
+                            <th>2025.09.17</th>
+                            <th>0,000</th>
+                            <th>0</th>
+                        </tr>
+                        <tr>
+                            <th><span className="notice">공지</span></th>
+                            <th colSpan={2} className="txtl"><a href="#">공지 게시글 제목</a></th>
+                            <th>작성자 아이디</th>
+                            <th>2025.09.17</th>
+                            <th>0,000</th>
+                            <th>0</th>
+                        </tr>
+                    
+                        {postList && postList.content.length > 0 ? (
+                            postList.content.map((item: any) => (
                                 <tr
                                     key={item.postId}
                                     onClick={() => navigate(`/recommend/${brand}/${item.postId}`)}
                                 >
-                                    <td className="txtc">{item.multiplexName}</td>
-                                    <td className="board_fix">{item.cinemaName}</td>
-                                    <td>{item.title}</td>
+                                    <td className="txtc"><a href="#">{item.multiplexName}</a></td>
+                                    <td><a href="#" className="board_fix">{item.cinemaName}</a></td>
+                                    <td><a href="#">{item.title}</a></td>
                                     <td className="txtc">{item.authorNickname}</td>
                                     <td className="txtc">{item.createdAt}</td>
                                     <td className="txtc">{item.views}회</td>
                                     <td className="txtc">{item.commentCount}개</td>
                                 </tr>
-                                ))
+                            ))
                                 ) : (
                                 <tr>
                                     <td colSpan={7} className="txtc">
                                         추천 내용이 없습니다 🥲
                                     </td>
                                 </tr>
-                                )}
-                        </tbody>
-                    </table>
-                    {postList &&
-                        <PaginationComponent
-                            currentPage={postList.number}
-                            totalPages={postList.totalPages}
-                            onPageChange={handlePageChange}
-                        />
-                    }
+                            )}
+                    </tbody>
+                </table>
+
+                <div className="post_button_wrap clear">
+                        <div className="left"></div>
+
+                        <div className="right">
+                            {/* <a href="#" className="post_button move">이동</a> */}
+                            {/* <a href="#" className="post_button del">삭제</a> */}
+                            {isLogin &&<Link to={`/recommend/${brand}/reg`} className="post_button write">글쓰기</Link>}
+                        </div>
                 </div>
+                {postList &&
+                    <PaginationComponent
+                        currentPage={postList.number}
+                        totalPages={postList.totalPages}
+                        onPageChange={handlePageChange}
+                    />
+                }
             </section>
         </div>
     )

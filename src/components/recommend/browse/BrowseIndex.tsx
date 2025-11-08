@@ -24,7 +24,7 @@ export default function BrowseIndex() {
     const [postList, setPostList] = useState<PostPage | null>(null);
     const [page, setPage] = useState<number>(1);
     const [orderType, setOrderType] = useState<string>("latest");
-    const size = 10;
+    const [size, setSize] = useState<number>(10);
 
     // 언급량 top5 조회
     const getData = async () => {
@@ -56,7 +56,7 @@ export default function BrowseIndex() {
     const getMultiplexLabel = (multiplexId: number) =>
         MULTIPLEX_LIST.find(m => m.id === multiplexId)?.label || "Unknown";
 
-        // ✅ multiplexId를 label로 변환
+        // ✅ multiplexId를 브랜드로 변환
     const getMultiplexBrand = (multiplexId: number) =>
         MULTIPLEX_LIST.find(m => m.id === multiplexId)?.brand || "Unknown";
 
@@ -70,29 +70,29 @@ export default function BrowseIndex() {
     // 정렬 변경
     const handleOrderChange = (newOrder: string) => setOrderType(newOrder);
 
+    // 사이즈 변경
+    const handleSizeChange = (newSize: number) => setSize(newSize);
+
     return (
         <div className="os_sub_contents">
             <section className="hot_theater_weekly">
-                {/* TODO : 언급된 영화관으로 링크 추가 */}
                 {firstCinema && (
-                <Link to="/">
+                <Link to={`/recommend/${getMultiplexBrand(firstCinema.multiplexId)}`} className={`theater${firstCinema.multiplexId}`}>
                     <span>최근 언급 많이 되는 영화관은?</span>
-                        <h1 className={`theater${firstCinema.multiplexId}`}>
-                            {getMultiplexLabel(firstCinema.multiplexId)} {firstCinema?.cinemaName}점
-                        </h1>
-                        <i>{firstCinema?.cinemaAddr}</i>
-                        <div className="post_like_wrap">
-                            <ul className="post_like_list clear">
-                                <li className="post">
-                                    <span>주간 게시글</span>
-                                    <i>{firstCinema?.postCount}</i>
-                                </li>
-                                <li className="like">
-                                    <span>게시글 통합 좋아요</span>
-                                    <i>{firstCinema?.totalLike}</i>
-                                </li>
-                            </ul>
-                        </div>
+                    <h1>{getMultiplexLabel(firstCinema.multiplexId)} {firstCinema?.cinemaName}점</h1>
+                    <i>{firstCinema?.cinemaAddr}</i>
+                    <div className="post_like_wrap">
+                        <ul className="post_like_list clear">
+                            <li className="post">
+                                <span>주간 게시글</span>
+                                <i>{firstCinema?.postCount}개</i>
+                            </li>
+                            <li className="like">
+                                <span>게시글 통합 좋아요</span>
+                                <i>{firstCinema?.totalLike}개</i>
+                            </li>
+                        </ul>
+                    </div>
                 </Link>
                 )}
             </section>
@@ -112,20 +112,20 @@ export default function BrowseIndex() {
                             <h2>영화관 언급량 TOP5</h2>
                             <i><WeekString/></i> 
                         </div>
+
                         <ul className="rank5_list">
                             {topCinemas.map((cinema, idx) => (
-                            <li key={cinema.cinemaId}>
-                                {/* 해당하는 영화관 링크 걸기 */}
-                                <Link to="#">
-                                    <span className="number">{idx + 1}</span>
+                                <li key={cinema.cinemaId}>
+                                    <Link to={`/recommend/${getMultiplexBrand(cinema.multiplexId)}`} >
+                                        <span className="number">{idx + 1}</span>
 
-                                    <p>{getMultiplexLabel(cinema.multiplexId)} {cinema.cinemaName}점</p>
+                                        <p>{getMultiplexLabel(cinema.multiplexId)} {cinema.cinemaName}점</p>
 
-                                    <i>{cinema.cinemaAddr}</i>
+                                        <i>{cinema.cinemaAddr}</i>
 
-                                    <span className="total_post">게시글<b>{cinema.postCount}</b></span>
-                                </Link>                                    
-                            </li>
+                                        <span className="total_post">게시글<b>{cinema.postCount}</b></span>
+                                    </Link>                                    
+                                </li>
                             ))}
                         </ul>
                     </div>
@@ -133,19 +133,37 @@ export default function BrowseIndex() {
                 <div className="banner_wrap">
                         <div className="inner">
                             <ul className="banner_event_list">
-                                <li>
+                                <li className="n1 on">
                                     <a href="#">
-                                        <div>
+                                        <div className="inner_info">
                                             <span>시사회</span>
                                             <h3>보스 룩 시사회 이벤트</h3>
-                                            <img src=""/>
+                                            <img src="./img/event_banner_1.png" className="poster_img"/>
                                             <p>예고편을 감상하고 기대평을 남겨주세요!<br/>추첨을 통해 시사회에 초대합니다.</p>
-                                            <ul>
+                                            <ul className="inner_info_list">
                                                 <li><b>이벤트 일정</b>9/8(월) ~ 9/21(일)</li>
                                                 <li><b>당첨 인원</b>30명 (1인 2석, 총 60석)</li>
                                             </ul>
                                         </div>
-                                        <img src=""/>
+                                        <img src="./img/event_banner_1_2.png" className="background_img"/>
+                                    </a>
+                                </li>
+                                <li className="n2">
+                                    <a href="#">
+                                        <div className="inner_info">
+                                            <span>예매권</span>
+                                            <h3>위키드: 포 굿 예매권 증정</h3>
+                                            <img src="./img/event_banner_2.png" className="poster_img"/>
+                                            <p>이벤트에 참여해주시는 분들 중<br/>추첨을 통해 예매권을 증정합니다.</p>
+                                            <ul className="inner_info_list">
+                                                <li><b>이벤트 일정</b>11/3(월) ~ 11/9(일)</li>
+                                                <li><b>당첨 인원</b>25명</li>
+                                            </ul>
+                                        </div>
+
+                                        <p>이벤트 바로가기</p>
+                                        
+                                        <img src="./img/event_banner_2_2.png" className="background_img"/>
                                     </a>
                                 </li>
                             </ul>
@@ -158,17 +176,18 @@ export default function BrowseIndex() {
                 
                 <div className="board_control_wrap clear">
                     <p>{postList?.totalElements ?? 0}개의 글</p>
-
-                    {/* TODO : 게시글 불러오는 개수 변경 함수 붙이기 */}
-                    <select>
-                        <option>10개씩</option>
-                        <option>20개씩</option>
-                    </select>
-                    <select>
-                        <option onClick={() =>handleOrderChange('latest')}>최신순</option>
-                        <option onClick={() =>handleOrderChange('views')}>조회순</option>
-                        <option onClick={() =>handleOrderChange('comments')}>댓글순</option>
-                    </select>
+                    
+                    <div className="post_filter_wrap clear">
+                        <select>
+                            <option onClick={() =>handleSizeChange(10)}>10개씩</option>
+                            <option onClick={() =>handleSizeChange(20)}>20개씩</option>
+                        </select>
+                        <select>
+                            <option onClick={() =>handleOrderChange('latest')}>최신순</option>
+                            <option onClick={() =>handleOrderChange('views')}>조회순</option>
+                            <option onClick={() =>handleOrderChange('comments')}>댓글순</option>
+                        </select>
+                    </div>
                 </div>
                 <table className="basic_board1">
                     <colgroup>
@@ -221,9 +240,9 @@ export default function BrowseIndex() {
                                 key={item.postId}
                                 onClick={() => navigate(`/recommend/${getMultiplexBrand(item.multiplexId)}/${item.postId}`)}
                             >
-                                <td className="txtc">{item.multiplexName}</td>
-                                <td className="board_fix">{item.cinemaName}</td>
-                                <td>{item.title}</td>
+                                <td className="txtc"><a href="#">{item.multiplexName}</a></td>
+                                <td><a href="#" className="board_fix">{item.cinemaName}</a></td>
+                                <td><a href="#">{item.title}</a></td>
                                 <td className="txtc">{item.authorNickname}</td>
                                 <td className="txtc">{item.createdAt}</td>
                                 <td className="txtc">{item.views}회</td>
@@ -246,36 +265,6 @@ export default function BrowseIndex() {
                         onPageChange={handlePageChange}
                     />
                 }
-                {/* 페이지네이션 */}
-                {/* <Pagination className="pagination_wrap">
-                    <PaginationContent>
-                        <PaginationItem>
-                            <PaginationPrevious
-                                className="before"
-                                href="#"
-                                onClick={() => postList && postList.number > 0 && handlePageChange(postList.number - 1)}
-                            />
-                        </PaginationItem>
-                        {postList &&
-                            Array.from({ length: postList.totalPages }, (_, i) => (
-                                <PaginationItem key={i}>
-                                    <PaginationLink
-                                        href="#"
-                                        isActive={i === postList.number} // 0 기반
-                                        onClick={() => handlePageChange(i+1)}
-                                    >{i + 1}
-                                    </PaginationLink>
-                                </PaginationItem>
-                            ))
-                        }
-                        <PaginationItem>
-                            <PaginationNext
-                                href="#"
-                                onClick={() => postList && postList.number < postList.totalPages - 1 && handlePageChange(postList.number + 1)}
-                            />
-                        </PaginationItem>
-                    </PaginationContent>
-                </Pagination> */}
             </section>
         </div>
     )
