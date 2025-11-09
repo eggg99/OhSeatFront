@@ -48,13 +48,9 @@ export const postCineSquare = async (formData) => {
  * param : title        제목
  * param : content      내용
  */
-export const putCineSquare = async(postId, categoryId, title, content) => {
+export const putCineSquare = async(postId, formData) => {
     try{
-        const response = await axiosApi.put(`/cinesquare/${postId}`, { 
-            categoryId,
-            title,
-            content
-        })
+        const response = await axiosApi.put(`/cinesquare/${postId}`, formData)
         return response.data;
     } catch (error) {
         console.error("게시글 수정 실패: ", error);

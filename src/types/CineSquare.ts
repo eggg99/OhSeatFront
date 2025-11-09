@@ -10,6 +10,7 @@ export interface CineSquareData {
   createdAt: string;
   authorId: number;
   authorNickname : string;
+  files : [];
 }
 
 export interface CineSquarePage {

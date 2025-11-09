@@ -3,6 +3,7 @@ import { useEffect, useState, useRef } from "react";
 import { getCineSqaureList } from "@/apis/api/cinesquare";
 import { Link, useNavigate } from "react-router-dom";
 import Location from "@/components/common/Location";
+import {FilePreview} from '@/components/common/file/FilePreview';
 
 const PAGE_SIZE = 10;
 
@@ -133,10 +134,15 @@ export default function CineSqaureList () {
                     <table>
                         <thead>
                             <tr>
-                                <th>카테고리명</th>
-                                <th>제목</th>
+                                <th>번호</th>
+                                <th>카테고리</th>
                                 <th>작성자</th>
-                                <th>작성일</th>
+                                <th>작성일자</th>
+                                <th>작성위치</th>
+                                <th>제목</th>
+                                <th>이미지</th>
+                                <th>이미지추가개수</th>
+                                <th>좋아요</th>
                                 <th>조회수</th>
                             </tr>
                         </thead>
@@ -146,18 +152,39 @@ export default function CineSqaureList () {
                                     <tr key={`${item.postId}-${index}`}
                                         onClick={() => navigate(`/cinesquare/${item.postId}`)} 
                                         className="cursor-pointer hover:bg-gray-100 h-24">
-                                        <td>{item.postId} , {item.categoryName}</td>
-                                        <td>
-                                            <Link to={`/cinesquare/${item.postId}`}>{item.title}</Link>
-                                        </td>
+                                        <td>{item.postId}</td>
+                                        <td>{item.categoryName}</td>
                                         <td>{item.authorNickname}</td>
                                         <td>{item.createdAt}</td>
+                                        <td>{item?.city} {item?.district}</td>
+                                        <td><Link to={`/cinesquare/${item.postId}`}>{item.title}</Link></td>
+
+                                        {item?.representativeFile ? (
+                                            // 파일이 1개일때
+                                            item.totalFiles === 1 ? (
+                                                <>
+                                                    <td colSpan={2}>
+                                                        <FilePreview file = {item?.representativeFile ?? []} />
+                                                    </td>
+                                                </>
+                                            ) : (
+                                                <>
+                                                    <td>
+                                                        <FilePreview file = {item?.representativeFile ?? []} />
+                                                    </td>
+                                                    <td>{item.totalFiles - 1}개 이미지 더보기</td>
+                                                </>
+                                            )
+                                        ) : (
+                                            <td colSpan={2}>파일없음</td>
+                                        )}
+                                        <td>?</td>
                                         <td>{item.views}회</td>
                                     </tr>
                                 ))
                             ) : (
                                 <tr>
-                                    <td colSpan={5} className="text-center py-6 text-gray-500">
+                                    <td colSpan={9} className="text-center py-6 text-gray-500">
                                         내용이 없습니다 🥲
                                     </td>
                                 </tr>

@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { Input } from "@/components/ui/input";
 import { userStore } from "@/store/userStore";
-
+import { FileList } from "@/components/common/file/FileList";
 
 
 export default function CineSquareDetail(){
@@ -29,9 +29,12 @@ export default function CineSquareDetail(){
         }
     }, [postId]);
 
+    // 게시글 삭제
     const handleDelete = async() => {
         try {
             const response = await deleteCineSquare(postId);
+            alert(response);
+            list();
         } catch (error) {
             console.error(error);
         }
@@ -45,6 +48,7 @@ export default function CineSquareDetail(){
         setComment(e.target.value);
     };
 
+    // 댓글 등록
     const handleSubmit = async () => {
         if (!comment.trim()) return;
         else if (!isLogin) {alert('로그인해주세요'); navigate(`/user/login`);return;}
@@ -58,6 +62,33 @@ export default function CineSquareDetail(){
             console.error("댓글 제출 실패", error);
         }
     };
+
+    // 댓글 삭제
+    // const handleDeleteComment = async(commentId:number) => {
+    //     const result = confirm("삭제하시겠습니까?");
+    //     if(result){
+    //         const response = await deleteComment(commentId);
+    //         alert(response);
+    //         await getData();     // 게시글 다시 불러오기 (commentCount 갱신)
+    //         await getDataComment(); // 댓글 리스트 갱신
+    //     }
+    // }
+
+    // 좋아요 처리
+    // const handleLike = async () => {
+    //     try {
+    //         const response = await updatePostLike(postId);
+    
+    //         setDetailValue((prev) => ({
+    //         ...prev,
+    //         liked: response.Liked, // ✅ liked 값 업데이트
+    //         likeCount: response.Liked 
+    //             ? prev.likeCount + 1 
+    //             : Math.max(prev.likeCount - 1, 0), // 좋아요 수 증감 처리
+    //     }));
+    // } catch (error) {
+    //     console.error("좋아요 처리 실패", error);
+    // }
     
     return(
         <div className="os_sub_contents">
@@ -107,15 +138,18 @@ export default function CineSquareDetail(){
             </div>
             <div>
                 <span>작성이미지 : </span>
-                이미지이미지
+                <FileList files={detailValue?.files ?? []} baseUrl="http://localhost:8000/" />
             </div>
             <div className="flex justify-between">
                 <div>댓글 : ___개</div>
                 <div>좋아요 : ___개</div>
+
+                {/* <div>댓글 {detailValue?.commentCount} 개</div> */}
+                {/* <div>좋아요 {detailValue?.likeCount}개</div> */}
             </div>
             
             {/* 댓글작성 */}
-            <section>
+            {/* <section>
                 <div>
                     <Input 
                         type="text"
@@ -128,6 +162,31 @@ export default function CineSquareDetail(){
                 </button>
                 </div>
             </section>
+
+            댓글 리스트
+            <section>
+                {commentList.length === 0 ? (
+                    <p>아직 댓글이 없습니다.</p>
+                ) : (
+                    commentList.map((c) => (
+                        <div key={c.commentId} className="border-b py-2">
+                            <div className="flex justify-between">
+                                <p>{c.content}</p>
+                                { c.commenterId == userId && 
+                                    <button onClick={() => handleDeleteComment(c.commentId)}>삭제</button>
+                                }
+                                
+                            </div>
+                            <small>{c.authorNickname} · {c.createdAt}</small>
+                        </div>
+                    ))
+                )}
+            </section> */}
+            {/* <button onClick={handleLike} className="text-2xl">
+                {detailValue.liked ? "♥" : "♡"}
+            </button>
+            <span>좋아요</span> */}
+
         </div>
     )
 }

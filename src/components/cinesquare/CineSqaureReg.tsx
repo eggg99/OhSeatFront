@@ -4,11 +4,12 @@ import { Input } from "../ui/input";
 import { useNavigate } from "react-router-dom";
 import Location from "@/components/common/Location";
 import { locationStore } from "@/store/userLocation";
-import { FileUpload } from "../common/file/FileUpload";
-
+import { FileUpload } from "@/components/common/file/FileUpload";
 
 export default function CineSquareReg(){
     const navigate = useNavigate();
+
+    // 게시글 정보
     const location = locationStore((state) => state.currentLocation);
     const [inputValue, setInputValue] = useState({
         categoryId : '',
@@ -16,6 +17,32 @@ export default function CineSquareReg(){
         content : ''
     });
 
+    // 업로드 파일 + 대표 이미지
+	const [uploadFiles, setUploadFiles] = useState<File[]>([]);
+	const [representativeIndex, setRepresentativeIndex] = useState<number | null>(null);
+
+
+    // 파일 상태 업데이트 함수
+    const handleFilesChange = (files: File[]) => {
+		setUploadFiles(files);
+		// 대표 이미지 초기화: 기존 인덱스가 벗어나면 null 처리
+		if (representativeIndex !== null && representativeIndex >= files.length) {
+			setRepresentativeIndex(null);
+		}
+
+         if (files.length > 0) {
+            setRepresentativeIndex(0);
+        } else {
+            setRepresentativeIndex(null);
+        }
+	};
+
+    // 대표이미지 선택
+    const handleRepresentativeChange = (index: number) => {
+		setRepresentativeIndex(index);
+	};
+
+    // 등록 내용
     const handleInput = (
         e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
     ) => {
@@ -26,58 +53,60 @@ export default function CineSquareReg(){
         }));
     };
 
+    // 목록으로 
     const list = () => {
         navigate(`/cinesquare/list?category=0`);
     }
 
 
-    // 파일 업로드
-    const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
-    const fileInputRef = useRef<HTMLInputElement | null>(null);
-
-    const handleButtonClick = () => {
-        fileInputRef.current?.click(); // input 클릭 트리거
-    };
-
-    // 파일 추가
-    const handleFilesChange = (files: File[]) => {
-        setUploadedFiles(files);
-    };
-
+    // 등록하기
     const handleSubmit = async (e?: SyntheticEvent): Promise<void> => {
         e?.preventDefault();
+        
+        const formData:FormData = new FormData();
 
-    if (!inputValue.categoryId) {
-        alert("카테고리를 선택해주세요");
-        return;
-    } else if (!inputValue.title) {
-        alert("제목을 입력해주세요");
-        return;
-    } else if (!inputValue.content) {
-        alert("내용을 입력해주세요");
-        return;
-    }
+        if (!inputValue.categoryId) {
+            alert("카테고리를 선택해주세요");
+            return;
+        } else if (!inputValue.title) {
+            alert("제목을 입력해주세요");
+            return;
+        } else if (!inputValue.content) {
+            alert("내용을 입력해주세요");
+            return;
+        }
 
-    const formData:FormData = new FormData();
+        const data = {
+            categoryId: inputValue.categoryId,
+            title: inputValue.title,
+            content: inputValue.content,
+            city: location.city,
+            district: location.district,
+        };
 
-    if (uploadedFiles) {
-        uploadedFiles.forEach ((file) => {
-            formData.append("files", file);
-        })
-    }
+        formData.append(
+            "data", 
+            new Blob([JSON.stringify(data)], { type: "application/json" })
+        );
 
-    const data = {
-        categoryId: inputValue.categoryId,
-        title: inputValue.title,
-        content: inputValue.content,
-        city: location.city,
-        district: location.district,
-    };
-    formData.append("data", new Blob([JSON.stringify(data)], { type: "application/json" }));
+        if (uploadFiles) {
+            uploadFiles.forEach ((file) => {
+                formData.append("files", file);
+            })
+        }
 
-    const response = await postCineSquare(formData);
-    alert(response);
-    navigate(`/cinesquare/list?category=1`);
+        // 대표 이미지 배열 생성 
+        const representatives = uploadFiles.map((_, idx) =>
+			idx === representativeIndex ? "Y" : "N"
+		);
+        formData.append(
+            "representatives",
+            new Blob([JSON.stringify(representatives)], { type: "application/json" })
+        );
+    
+        const response = await postCineSquare(formData);
+        alert(response);
+        navigate(`/cinesquare/list?category=1`);
 }
     
     return(
@@ -120,8 +149,11 @@ export default function CineSquareReg(){
                     cols={6} 
                     rows={5} />
             </div>
-            
-            <FileUpload onFilesChange={handleFilesChange} />
+
+            <FileUpload
+                onFilesChange={handleFilesChange}
+                onRepresentativeChange={handleRepresentativeChange}
+            />
 
             <div>
                 <button onClick={list}>취소</button>

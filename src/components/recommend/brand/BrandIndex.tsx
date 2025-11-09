@@ -18,7 +18,6 @@ export default function BrandIndex() {
     const navigate = useNavigate();
     
     const isLogin = userStore((state) => state.isLogin);
-    const [emblaRef1] = useEmblaCarousel({ loop: false });
     const [emblaRef2] = useEmblaCarousel({ loop: false });
     const [emblaRef3] = useEmblaCarousel({ loop: false });
     
@@ -30,6 +29,8 @@ export default function BrandIndex() {
     const [selectedCinema, setSelectedCinema] = useState<any | null>(ALL_CINEMA);
     const [screenList, setScreenList] = useState<any[]>([]);
     const [selectedScreen, setSelectedScreen] = useState<any | null>(ALL_SCREEN);
+
+    const [isInnerOn, setIsInnerOn] = useState(false);
 
     const [postList, setPostList] = useState<PostPage | null>(null);
     const [page, setPage] = useState<number>(0);
@@ -84,6 +85,11 @@ export default function BrandIndex() {
         }
     }, [brand, selectedAreaId, selectedCinema, selectedScreen, page, orderType, size]);
 
+    // 영화관 전체보기 버튼 클릭
+    const handleInnerToggle = () => {
+        setIsInnerOn((prev) => !prev);
+    };
+
     return (
         <div className="os_sub_contents">
             <div className="os_sub_navigation clear">
@@ -99,52 +105,48 @@ export default function BrandIndex() {
             <section className="os_category_wrap">
                 {/* 지역 선택 */}
                 <div className="os_area">
-                    <div className="embla" ref={emblaRef1}>
-                        <div className="embla__container">
-                            <ul className="os_area_list clear">
-                            {AREA_LIST.map(({ id, label }) => {
-                                const isChecked = selectedAreaId === id;
+                    <ul className="os_area_list clear">
+                    {AREA_LIST.map(({ id, label }) => {
+                        const isChecked = selectedAreaId === id;
+                        return (
+                            <li key={id} className={`${isChecked ? "on" : ""}`}>
+                                <a
+                                    href="#"
+                                    onClick={(e) => {
+                                    e.preventDefault(); 
+                                    handleAreaChange(id);
+                                    }}
+                                >
+                                    {label}
+                                </a>
+                            </li>
+                        );
+                    })}
+                    </ul>
+                </div>
+
+                {/* 영화관 선택 */}
+                <div className="os_branch">
+                    {/* 여기가 밑으로 열리면 open 클래스 주기 */}
+                    <div className={`inner ${isInnerOn ? "open" : ""}`}>
+                        <div className="list_wrap">
+                            <ul className="os_brunch_list clear">
+                            {cinemaList.map((cinema) => {
+                                const isChecked = selectedCinema?.cinemaId === cinema.cinemaId;
                                 return (
-                                    <li key={id} className={`embla__slide ${isChecked ? "on" : ""}`}>
+                                    <li key={cinema.cinemaId} className={`flex-none ${isChecked ? "on" : ""}`}>
                                         <a
                                             href="#"
-                                            onClick={(e) => {
-                                            e.preventDefault(); 
-                                            handleAreaChange(id);
-                                            }}
+                                            onClick={() => handleCinemaChange(cinema)}
                                         >
-                                        {label}
+                                            {cinema.cinemaName}
                                         </a>
                                     </li>
                                 );
                             })}
                             </ul>
                         </div>
-                    </div>
-                </div>
-                {/* 영화관 선택 */}
-                <div className="os_branch">
-                    <div className="inner">
-                        <div className="embla overflow-hidden" ref={emblaRef2}>
-                            <div className="embla__container list_wrap">
-                                <ul className="os_brunch_list clear flex flex-nowrap">
-                                {cinemaList.map((cinema) => {
-                                    const isChecked = selectedCinema?.cinemaId === cinema.cinemaId;
-                                    return (
-                                        <li key={cinema.cinemaId} className={`embla__slide flex-none ${isChecked ? "on" : ""}`}>
-                                            <a
-                                                href="#"
-                                                onClick={() => handleCinemaChange(cinema)}
-                                            >
-                                                {cinema.cinemaName}
-                                            </a>
-                                            
-                                        </li>
-                                    );
-                                })}
-                                </ul>
-                            </div>
-                        </div>
+                        <a href="#" className="os_brunch_button" onClick={handleInnerToggle}></a>
                     </div>
                 </div>
             </section>
