@@ -31,15 +31,17 @@ function PageMain(){
     const [recentPost, setRecentPost] = useState<any[]>([]);
     const [movies, setMovies] = useState<Movie[]>([]);
     const [emblaRef] = useEmblaCarousel(
-  { loop: true, align: 'start' },
-  [
-    Autoplay({
-      delay: 3000,          // 슬라이드 넘어가는 시간
-      stopOnInteraction: true, // 사용자가 슬라이드 건드리면 멈춤
-      stopOnMouseEnter: true   // 마우스 올라가면 멈춤
-    })
-  ]
-)
+        { loop: true, align: 'start' },
+        [
+            Autoplay({
+            delay: 3000,          // 슬라이드 넘어가는 시간
+            stopOnInteraction: true, // 사용자가 슬라이드 건드리면 멈춤
+            stopOnMouseEnter: true   // 마우스 올라가면 멈춤
+            })
+        ]
+    )
+
+    const [loading, setLoading] = useState(false);
 
 
     
@@ -91,9 +93,14 @@ function PageMain(){
 
     // 마운트 될 때 데이터 가져오기
     useEffect(() => {
-        getData();
-        getTop3Post();
-        getMovieChart();
+        const fetchData = async () => {
+            setLoading(true);
+            await getData();
+            await getTop3Post();
+            await getMovieChart();
+            setLoading(false);
+        };
+        fetchData();
     }, []);
 
     return(
@@ -152,27 +159,30 @@ function PageMain(){
                         <a href="#" className="theater1"><span>CGV</span></a>
                         <div className="mp_list_wrap embla__viewport" ref={emblaRef}>
                             <ul className="mp_list clear embla__container" style={{ display: 'flex', padding: 0, margin: 0 }}>
-                            {movies && movies.length > 0 ? (
+                            {loading ? (
+                                <li>로딩중...</li>
+                            ) : movies && movies.length > 0 ? (
                                 movies.map((item: any) => (
-                                    <li className={`embla__slide rank${item.rank}`} key={item.rank} style={{ minWidth: 200, flex: '0 0 auto', listStyle: 'none' }}>
+                                    <li
+                                        className={`embla__slide rank${item.rank}`}
+                                        key={item.rank}
+                                        style={{ minWidth: 200, flex: '0 0 auto', listStyle: 'none' }}
+                                    >
                                         <div className="inner">
                                             <i>{item.rank}</i>
                                             <p>{item.movieNm}</p>
                                             <span className="grade2">12</span>
-
                                             <ul className="rate_list">
                                                 <li><span>개봉일</span>{item.openDt}</li>
                                                 <li><span>누적율</span>{item.audiAcc}명</li>
                                             </ul>
                                         </div>
-                                        <img src={item.posterUrl}/>
+                                        <img src={item.posterUrl} />
                                     </li>
                                 ))
-                                ) : (
-                                    <li>
-                                        데이터가 없습니다.
-                                    </li>
-                                )}
+                            ) : (
+                                <li>데이터가 없습니다.</li>
+                            )}
                             </ul>
                         </div>                         
                     </li>
