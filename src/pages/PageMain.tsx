@@ -153,6 +153,7 @@ function PageMain(){
                     <h2>오늘의 무비픽</h2>
                     <p>Today’s Movie Pick</p>
                     <i>오늘의 여러 극장가 예매 순위들을<br/>바로 이곳에서 한눈에 확인가능!</i>
+                    <b>영화진흥위원회의 총 합산 순위로 알려드립니다</b>
                 </div>
 
                 <ul className="theater_rank_list">
@@ -175,7 +176,7 @@ function PageMain(){
                                             <span className="grade2">12</span>
                                             <ul className="rate_list">
                                                 <li><span>개봉일</span>{item.openDt}</li>
-                                                <li><span>누적율</span>{item.audiAcc}명</li>
+                                                <li><span>누적율</span>{item.audiAcc}</li>
                                             </ul>
                                         </div>
                                         <img src={item.posterUrl} />

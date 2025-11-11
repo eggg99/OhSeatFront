@@ -1,16 +1,11 @@
 $color_1: #747474;
 $color_2: #fff;
 $color_3: #AE0200;
-$color_4: #f1f1f1;
-$color_5: #121212;
+$color_4: #5c3a93;
+$color_5: #f1f1f1;
+$color_6: #121212;
 
 /*메인페이지 콘텐츠*/
-/*CGV*/
-/*CGV선택했을때*/
-/*메가박스*/
-/*메가박스선택했을때*/
-/*롯데시네마*/
-/*롯데시네마선택했을때*/
 .os_main_contents {
 	padding: 50px 0 0;
 	margin-top: 90px;
@@ -218,14 +213,11 @@ $color_5: #121212;
 	}
 }
 .os_movie_pick {
+	position: relative;
 	width: 1280px;
 	height: 440px;
 	margin: 150px auto 0;
 	overflow: hidden;
-	>.theater_rank_list {
-		position: relative;
-		margin-top: 50px;
-	}
 }
 .mp_title {
 	>span {
@@ -257,88 +249,30 @@ $color_5: #121212;
 		font-style: normal;
 		color: $color_1;
 	}
-}
-.theater_rank_list {
-	>li {
-		>a {
-			display: block;
-			width: 261px;
-			padding-left: 39px;
-			font-size: 18px;
-			line-height: 48px;
-		}
-		+ {
-			li {
-				>a {
-					border-top: 1px solid #d9d9d9;
-				}
-			}
-		}
-		>a.theater1 {
-			background: url(../img/theater_rank_list1_1.png) no-repeat left center;
-		}
-		>a.theater2 {
-			background: url(../img/theater_rank_list2_1.png) no-repeat left center;
-		}
-		>a.theater3 {
-			background: url(../img/theater_rank_list3_1.png) no-repeat left center;
-		}
-		>.mp_list_wrap {
-			position: absolute;
-			top: -274px;
-			right: 0;
-			left: 360px;
-			height: 440px;
-			// overflow-x: scroll;
-			overflow-y: hidden;
-			&::-webkit-scrollbar {
-				display: none;
-			}
-			>.mp_list {
-				// display: none;
-				// width: 2994px;
-				display: flex;
-				width:auto;
-			}
-		}
+	>b {
+		display: block;
+		padding-top: 40px;
+		margin-top: 156px;
+		font-size: 13px;
+		line-height: 150%;
+		font-weight: 400;
+		color: $color_4;
+		background: url(../img/kofic.png) no-repeat 0 0;
 	}
-	>li.on {
-		>a {
-			width: 250px;
-			padding-left: 50px;
-			font-size: 32px;
-			line-height: 68px;
-			font-weight: 700;
-			>span {
-				position: relative;
-				&::after {
-					content: '';
-					position: absolute;
-					right: -54px;
-					top: 50%;
-					width: 34px;
-					height: 34px;
-					margin-top: -17px;
-					background: url(../img/theater_rank_list_a_span.png) no-repeat center;
-					background-color: #121212;
-					border-radius: 100%;
-				}
-			}
-		}
-		>a.theater1 {
-			background: url(../img/theater_rank_list1_2.png) no-repeat left center;
-		}
-		>a.theater2 {
-			background: url(../img/theater_rank_list2_2.png) no-repeat left center;
-		}
-		>a.theater3 {
-			background: url(../img/theater_rank_list3_2.png) no-repeat left center;
-		}
-		>.mp_list_wrap {
-			>.mp_list {
-				display: block;
-			}
-		}
+}
+.mp_list_wrap {
+	position: absolute;
+	top: 0;
+	right: 0;
+	left: 360px;
+	height: 440px;
+	overflow-x: scroll;
+	overflow-y: hidden;
+	&::-webkit-scrollbar {
+		display: none;
+	}
+	>.mp_list {
+		width: 2994px;
 	}
 }
 .mp_list {
@@ -422,7 +356,7 @@ $color_5: #121212;
 				bottom: 30px;
 				>li {
 					position: relative;
-					padding-left: 47px;
+					padding-left: 77px;
 					color: $color_2;
 					font-size: 14px;
 					line-height: 150%;
@@ -487,7 +421,7 @@ $color_5: #121212;
 		font-size: 16px;
 		line-height: 150%;
 		font-style: normal;
-		color: $color_4;
+		color: $color_5;
 	}
 }
 .square_button_wrap {
@@ -555,7 +489,7 @@ $color_5: #121212;
 				font-size: 18px;
 				line-height: 150%;
 				font-weight: 600;
-				color: $color_5;
+				color: $color_6;
 				overflow: hidden;
 				text-overflow: ellipsis;
 				display: -webkit-box;
