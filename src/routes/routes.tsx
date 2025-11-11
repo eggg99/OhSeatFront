@@ -34,11 +34,16 @@ import CinesquareSearch from "@/components/cinesquare/CineSquareSearch";
 import PageEvent from "@/pages/PageEvent";
 import EventList from "@/components/event/EventList";
 
+import PageTest from "@/pages/PageTest";
+
 function AppRoutes(){
     return(
         <Routes >
             {/* 메인 */}
             <Route path="/" element={<PageMain />} />
+
+            {/* 테스트용 */}
+            <Route path="/test" element={<PageTest />} />
             
             {/* 유저관련 */}
             <Route path="/user" element={<PageUser />}>
