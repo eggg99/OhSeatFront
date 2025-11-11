@@ -32,9 +32,14 @@ import CinesquareSearch from "@/components/cinesquare/CineSquareSearch";
 
 // 이벤트 관련
 import PageEvent from "@/pages/PageEvent";
-import EventList from "@/components/event/EventList";
+import EventBrowse from "@/components/event/EventBrowse";
 
 import PageTest from "@/pages/PageTest";
+import EventDetail from "@/components/event/EventDetail";
+import EventReg from "@/components/event/EventReg";
+import EventWinnerBrowse from "@/components/event/EventWinnerBrowse";
+import EventWinnerDetail from "@/components/event/EventWinnerDetail";
+import EventWinnerReg from "@/components/event/EventWinnerReg";
 
 function AppRoutes(){
     return(
@@ -76,15 +81,14 @@ function AppRoutes(){
 
             {/* 이벤트 */}
             <Route path="/event" element={<PageEvent/>}>
-                <Route path="list" element={<EventList/>}></Route>  {/* 이벤트 둘러보기 */}
-                <Route path=":id" element={<EventList/>}></Route>   {/* 이벤트 상세페이지 */}
-                <Route path="reg" element={<EventList/>}></Route>   {/* 이벤트 작성페이지 */}
-                <Route path="reg" element={<EventList/>}></Route>   {/* 이벤트 당첨확인 리스트*/}
-                <Route path="reg" element={<EventList/>}></Route>   {/* 이벤트 당첨확인 상세페이지*/}
-                <Route path="reg" element={<EventList/>}></Route>   {/* 이벤트 당첨확인 작성페이지*/}
+                <Route path="browse" element={<EventBrowse/>}></Route>  {/* 이벤트 둘러보기 */}
+                <Route path=":id" element={<EventDetail/>}></Route>   {/* 이벤트 상세페이지 */}
+                <Route path="reg" element={<EventReg/>}></Route>   {/* 이벤트 작성페이지 */}
+                <Route path="winner/browse" element={<EventWinnerBrowse/>}></Route>   {/* 이벤트 당첨확인 리스트*/}
+                <Route path="winner/:id" element={<EventWinnerDetail/>}></Route>   {/* 이벤트 당첨확인 상세페이지*/}
+                <Route path="winnder/reg" element={<EventWinnerReg/>}></Route>   {/* 이벤트 당첨확인 작성페이지*/}
             </Route>
 
-            <Route path="/chatting" element={<PageUser />} />
             <Route path="*" element={<PageNotFound />} />
         </Routes>
         
