@@ -59,19 +59,21 @@ export default function PostDetail(){
     }
 
     useEffect(() => {
-        if (postId && !hasViewed.current) {
-            hasViewed.current = true; // ✅ 한 번만 실행되도록 막음
-            getData();
-            getDataComment();
-            handleViews();
-        }
+        const fetchData = async () => {
+            if (postId && !hasViewed.current) {
+                hasViewed.current = true; // 한 번만 실행되도록 막음
+                getData();
+                getDataComment();
+                handleViews();
+            }
+        };
+        fetchData();
     }, [postId]);
 
-
+    // 게시글 내용 불러오기
     const getData = async () => {
         try {
             const response = await getPostDetail(postId);
-            console.log(response)
             setDetailValue(response);
         } catch (error) {
             console.error(error);
@@ -87,6 +89,7 @@ export default function PostDetail(){
         }
     };
 
+    // 댓글 내용 change
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setComment(e.target.value);
     };

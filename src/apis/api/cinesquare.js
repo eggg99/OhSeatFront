@@ -19,7 +19,7 @@ export const getCineSqaureList = async(param) => {
  */
 export const getCineSqaureItem = async(postId) => {
     try{
-        const response = await axiosApi.get(`/cinesquare/${postId}`, { })
+        const response = await axiosApi.get(`/cinesquare/${postId}`, {})
         return response.data;
     } catch (error) {
         console.error("씨네광장 게시글 단건 조회 실패: ", error);
@@ -32,14 +32,13 @@ export const getCineSqaureItem = async(postId) => {
  * param : files : 파일 첨부
  */
 export const postCineSquare = async (formData) => {
-  try {
-    const response = await axiosApi.post("/cinesquare", formData);
-    return response.data;
-  } catch (error) {
-    console.error("게시글 등록 실패: ", error);
-  }
+    try {
+        const response = await axiosApi.post("/cinesquare", formData);
+        return response.data;
+    } catch (error) {
+        console.error("게시글 등록 실패: ", error);
+    }
 };
-
 
 /**
  * 씨네광장 게시글 수정
@@ -98,11 +97,26 @@ export const searchLocation = async (param) => {
     }
 }
 
-export const postComment = async(comment, cinesquareId, commenterId) => {
+/**
+ * 댓글 리스트
+ * param : cinesquareId     게시글 아이디
+ */
+export const getCommentList = async (cinesquareId) => {
     try{
-        const response = await axiosApi.post("/cinesquare/comment", { 
-            comment, cinesquareId, commenterId
-        })
+        const response = await axiosApi.get(`/cinesquare/${cinesquareId}/comments`, {});
+        return response.data;
+    } catch (error) {
+        console.error("댓글 리스트 조회 실패: ", error);
+    }
+}
+
+/**
+ * 댓글 작성
+ * param : cinesquareId     게시글 아이디
+ */
+export const postComment = async(cinesquareId, param) => {
+    try{
+        const response = await axiosApi.post(`/cinesquare/${cinesquareId}/comments`, {params : param})
         return response.data;
     } catch (error) {
         console.error("게시글 댓글 등록 실패: ", error);
@@ -110,15 +124,29 @@ export const postComment = async(comment, cinesquareId, commenterId) => {
 }
 
 /**
- * 댓글 가져오기
- * param : cinesquareId     게시글 아이디
+ * 게시글 상세 - 댓글 삭제
+ * param : commentId      댓글 아이디
  */
-export const getCommentList = async (cinesquareId) => {
+export const deleteComment = async(commentId) => {
     try{
-        const params = { cinesquareId }
-        const response = await axiosApi.get(`/cinesquare/comment`, { params });
+        const response = await axiosApi.delete(`/cinesquare/comments/${commentId}`)
         return response.data;
     } catch (error) {
-        console.error("댓글 리스트 조회 실패: ", error);
+        console.error("게시글 댓글 삭제 실패: ", error);
+    }      
+}
+
+/**
+ * 좋아요/좋아요취소
+ * param : commentId    게시글 아이디
+ */
+export const likeCineSquare = async(cinesquareId) => {
+    try{
+        const response = await axiosApi.post(`/cinesquare/${cinesquareId}/like`,{})
+        return response.data;
+    } catch (error) {
+        console.error("게시글 댓글 등록 실패: ", error);
     }
 }
+
+

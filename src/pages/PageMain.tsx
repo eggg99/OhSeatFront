@@ -7,6 +7,7 @@ import WeekString from '@/components/common/WeekString';
 import { getBoxoffice } from '@/apis/api/movie';
 import useEmblaCarousel from 'embla-carousel-react'
 import Autoplay from 'embla-carousel-autoplay'
+import { CRTF_MAP } from '@/constants/certifcate';
 
 interface Cinema {
     multiplexId: number;
@@ -23,8 +24,10 @@ interface Movie {
     movieNm : string;
     openDt : Date;
     posterUrl : string;
+    certification : string;
     rank : number;
 }
+
 
 function PageMain(){
     const [topCinemas, setTopCinemas] = useState<Cinema>();
@@ -72,11 +75,18 @@ function PageMain(){
 
     // 한주 영화순위 가져오기
     const getMovieChart = async () => {
+        const cached = localStorage.getItem("boxoffice");
         try {
-            const response = await getBoxoffice();
-            if(response){
-                setMovies(response);
+            if (cached) {
+                setMovies(JSON.parse(cached));
+            } else {
+                const response = await getBoxoffice();
+                if(response){
+                    setMovies(response);
+                    localStorage.setItem("boxoffice", JSON.stringify(response));
+                }
             }
+           
         } catch (error) {
             console.error(error);
         }
@@ -156,45 +166,41 @@ function PageMain(){
                     <b>영화진흥위원회의 총 합산 순위로 알려드립니다</b>
                 </div>
 
-                <ul className="theater_rank_list">
-                    <li className="on">
-                        <a href="#" className="theater1"><span>CGV</span></a>
-                        <div className="mp_list_wrap embla__viewport" ref={emblaRef}>
-                            <ul className="mp_list clear embla__container" style={{ display: 'flex', padding: 0, margin: 0 }}>
-                            {loading ? (
-                                <li>로딩중...</li>
-                            ) : movies && movies.length > 0 ? (
-                                movies.map((item: any) => (
-                                    <li
-                                        className={`embla__slide rank${item.rank}`}
-                                        key={item.rank}
-                                        style={{ minWidth: 200, flex: '0 0 auto', listStyle: 'none' }}
-                                    >
-                                        <div className="inner">
-                                            <i>{item.rank}</i>
-                                            <p>{item.movieNm}</p>
-                                            <span className="grade2">12</span>
-                                            <ul className="rate_list">
-                                                <li><span>개봉일</span>{item.openDt}</li>
-                                                <li><span>누적율</span>{item.audiAcc}</li>
-                                            </ul>
-                                        </div>
-                                        <img src={item.posterUrl} />
-                                    </li>
-                                ))
-                            ) : (
-                                <li>데이터가 없습니다.</li>
-                            )}
-                            </ul>
-                        </div>                         
-                    </li>
-                    <li>
-                        <a href="#" className="theater2"><span>메가박스</span></a>
-                    </li>
-                    <li >
-                        <a href="#" className="theater3"><span>롯데시네마</span></a>
-                    </li>
-                </ul>
+                <div className="mp_list_wrap embla__viewport" ref={emblaRef}>
+                    <ul className="mp_list clear embla__container" style={{ display: 'flex', padding: 0, margin: 0 }}>
+                    {loading ? (
+                        <li>로딩중...</li>
+                    ) : movies && movies.length > 0 ? (
+                        movies.map((item: any) => {
+                            const gradeItem =
+                                CRTF_MAP.find((c) => c.grade === item.certification) || CRTF_MAP[0];
+                            
+                            return (
+                                <li
+                                    className={`embla__slide rank${item.rank}`}
+                                    key={item.rank}
+                                    style={{ minWidth: 200, flex: '0 0 auto', listStyle: 'none' }}
+                                >
+                                    <div className="inner">
+                                        <i>{item.rank}</i>
+                                        <p>{item.movieNm}</p>
+                                        <span className={gradeItem.gradeClass}>
+                                             {gradeItem.name}
+                                        </span>
+                                        <ul className="rate_list">
+                                            <li><span>개봉일</span>{item.openDt}</li>
+                                            <li><span>누적율</span>{item.audiAcc}</li>
+                                        </ul>
+                                    </div>
+                                    <img src={item.posterUrl} />
+                                </li>
+                            );
+                        })
+                    ) : (
+                        <li>데이터가 없습니다.</li>
+                    )}
+                    </ul>
+                </div>                         
             </div>
             <div className="os_square_event_wrap">                    
                 <div className="os_cine_square">

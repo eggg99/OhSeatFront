@@ -1,15 +1,47 @@
-import { useState } from "react"
-import { Link } from "react-router-dom";
+import { getEventList } from "@/apis/api/event";
+import { useEffect, useState } from "react"
+import { Link, useNavigate } from "react-router-dom";
+
+interface EventData {
+    category : string;      // 카테고리
+    title : string;         // 제목
+    startDt : Date;         // 시작기간
+    endDt : Date;           // 종료기간
+    imgUrl : string;        // 이미지url
+}
+
+interface EventDataPage {
+    content : EventData[];
+    totalPages : number;
+    totalElements : number;
+    size : number;
+    first : boolean;
+    last : boolean;
+}
 
 export default function EventList () {
+    const navigate = useNavigate();
     const [category, setCategory] = useState('');
     const [searchType, setSearchType] = useState('');
     const [searchValue, setSearchValue] = useState('');
+
+    const [eventList, setEventList] = useState<EventDataPage | null>(null);
+    const [page, setPage] = useState<number>(0);
+    const [size, setSize] = useState<number>(10);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            await getList();
+        }
+        fetchData();
+    }, []);
 
     const handleSearch = () => {
         if (!searchValue.trim()) return; // 빈값 방지
         // 실제 검색 로직 (API 호출 등)을 여기에 추가
         console.log('검색 실행:', searchValue);
+
+        getList();
     };
 
     const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -17,6 +49,21 @@ export default function EventList () {
             handleSearch();
         }
     };
+
+    // 게시글 리스트 조회
+    const getList = async () => {
+        try {
+            const param = { 'searchType' : searchType , 'searchValue' : searchValue}
+            const response = await getEventList(param);
+            if(!response) {
+                console.log('게시글 조회 실패');
+            }
+            // console.log('게시글 조회 완료');
+            // setEventList(response);
+        } catch (error) {
+            console.error('게시글 조회 실패' , error);
+        }
+    }
     
     return (
         <div>

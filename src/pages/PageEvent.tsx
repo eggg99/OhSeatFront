@@ -6,13 +6,7 @@ export default function PageEvent () {
             <div>
                 <h2>이벤트</h2>
             </div>
-            {/* 브레드크럼 */}
-            <div className="flex">
-                <Link to="/">홈</Link>
-                <Link to="/event/browse">이벤트</Link>
-                <Link to="/event/browse">이벤트 둘러보기</Link>
-            </div>
-            {/* 브레드크럼 */}
+            {/* 브레드크럼 - 해야짐 */}
             <Outlet />
         </div>
     )
