@@ -85,9 +85,9 @@ export const getPostDetail = async(postId) => {
  * param : title        제목
  * param : content      내용
  */
-export const putPost = async(authorId,multiplexId,areaId,cinemaId,screenId,title,content) => {
+export const insertPost = async(authorId,multiplexId,areaId,cinemaId,screenId,title,content) => {
     try{
-        const response = await axiosApi.put("/rcmd/post/reg", { 
+        const response = await axiosApi.post("/rcmd/post/reg", { 
             authorId,
             multiplexId,
             areaId,
@@ -165,9 +165,9 @@ export const getCommentList = async(postId) => {
  * param : postId       게시글 아이디
  * param : commenterId  댓글 작성자 아이디
  */
-export const putComment = async(content, postId, commenterId) => {
+export const postComment = async(content, postId, commenterId) => {
     try{
-        const response = await axiosApi.put("/rcmd/comment", { 
+        const response = await axiosApi.post("/rcmd/comment", { 
             content,
             postId,
             commenterId,

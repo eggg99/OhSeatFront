@@ -73,7 +73,7 @@ function PageMain(){
         }
     }
 
-    // 한주 영화순위 가져오기
+    // 어제 영화순위 가져오기
     const getMovieChart = async () => {
         const cached = localStorage.getItem("boxoffice");
         try {

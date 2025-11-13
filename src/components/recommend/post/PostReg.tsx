@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Input } from "@/components/ui/input"
-import { getCinemaList, getScreenList, putPost } from "@/apis/api/recommend";
+import { getCinemaList, getScreenList, insertPost } from "@/apis/api/recommend";
 import { userStore } from "@/store/userStore";
 import { useNavigate } from "react-router-dom";
 import { MULTIPLEX_LIST } from "@/constants/multiplex";
@@ -98,7 +98,7 @@ export default function PostReg(){
         else if(!selectedCinema){alert('영화관을 선택해주세요'); return;}
         else if(!selectedScreen){alert('상영관을 선택해주세요'); return;}
         else if(!inputValue.content){alert('내용을 입력해주세요'); return;}
-        const response = await putPost(
+        const response = await insertPost(
             userId,
             selectedMultiplex,
             selectedArea,
