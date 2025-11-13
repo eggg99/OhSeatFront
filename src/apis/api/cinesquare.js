@@ -116,10 +116,23 @@ export const getCommentList = async (cinesquareId) => {
  */
 export const postComment = async(cinesquareId, param) => {
     try{
-        const response = await axiosApi.post(`/cinesquare/${cinesquareId}/comments`, {params : param})
+        const response = await axiosApi.post(`/cinesquare/${cinesquareId}/comments`, param)
         return response.data;
     } catch (error) {
         console.error("게시글 댓글 등록 실패: ", error);
+    }
+}
+
+/**
+ * 댓글 삭제
+ * param : cinesquareId     게시글 아이디
+ */
+export const delComment = async (cinesquareId) => {
+    try{
+        const response = await axiosApi.delete(`/cinesquare/comments/${cinesquareId}`, {});
+        return response.data;
+    } catch (error) {
+        console.error("댓글 리스트 조회 실패: ", error);
     }
 }
 

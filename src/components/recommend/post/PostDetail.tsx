@@ -1,4 +1,4 @@
-import { deletePost, getCommentList, getPostDetail, putComment, deleteComment, postIncrementViews, updatePostLike } from "@/apis/api/recommend"
+import { deletePost, getCommentList, getPostDetail, postComment, deleteComment, postIncrementViews, updatePostLike } from "@/apis/api/recommend"
 import { useEffect, useState, useRef } from "react"
 import { useOutletContext, useParams } from "react-router-dom";
 import { Input } from "@/components/ui/input"
@@ -99,7 +99,7 @@ export default function PostDetail(){
         else if (!isLogin) {alert('로그인해주세요'); navigate(`/user/login`);return;}
 
         try {
-            await putComment(comment, postId, userId);
+            await postComment(comment, postId, userId);
             setComment(""); // input 초기화
             await getData();     // 게시글 다시 불러오기 (commentCount 갱신)
             await getDataComment(); // 댓글 리스트 갱신
