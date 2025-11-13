@@ -26,7 +26,7 @@ const Header = () => {
                         </ul>
                     </li>
                     <li><Link to="/cinesquare/list">씨네광장</Link></li>
-                    <li>
+                    <li className='two_depth'>
                         <Link to="/event/browse">이벤트</Link>
                         <ul className="os_gnb2">
                             <li><Link to="/event/browse">이벤트 둘러보기</Link></li>
