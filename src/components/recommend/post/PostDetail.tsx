@@ -2,7 +2,6 @@ import "@/styles/css/sub.scss";
 import { deletePost, getCommentList, getPostDetail, postComment, deleteComment, postIncrementViews, updatePostLike } from "@/apis/api/recommend"
 import { useEffect, useState, useRef } from "react"
 import { useOutletContext, useParams } from "react-router-dom";
-import { Input } from "@/components/ui/input"
 import { userStore } from "@/store/userStore";
 import { Link, useNavigate } from "react-router-dom";
 import { MULTIPLEX_LIST } from "@/constants/multiplex";

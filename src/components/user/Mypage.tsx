@@ -1,4 +1,3 @@
-import { Input } from "@/components/ui/input"
 import { useEffect, useState } from "react"
 import { getUser, updateUser, deleteUser } from "@/apis/api/user"
 import { Link, useNavigate } from 'react-router-dom';
@@ -78,18 +77,18 @@ export default function Mypage(){
                     <Link to="/user/change-password" className="w-1/4 m-0 bg-black text-white text-center rounded-sm p-1 outline-2 outline-offset-4">비밀번호 수정</Link>
                 </div>
                 <div className='input-group'>
-                    <Input type="text" placeholder="이름" value={inputValue.name} disabled/>
+                    <input type="text" placeholder="이름" value={inputValue.name} disabled/>
                 </div>
                 <div className='input-group'>
-                    <Input type="email" placeholder="이메일" value={inputValue.email} disabled />
+                    <input type="email" placeholder="이메일" value={inputValue.email} disabled />
                 </div>
                 <div className='input-group'>
                     <div className="flex w-full items-center space-x-2">
-                        <Input type="text" placeholder="닉네임" name="nickname" value={inputValue.nickname} onChange={handleInput}/>
+                        <input type="text" placeholder="닉네임" name="nickname" value={inputValue.nickname} onChange={handleInput}/>
                     </div>
                 </div>
                 <div className='input-group'>
-                    <Input type="text" placeholder="핸드폰번호" name="phoneNumber" value={inputValue.phoneNumber} onChange={handleInput}/>
+                    <input type="text" placeholder="핸드폰번호" name="phoneNumber" value={inputValue.phoneNumber} onChange={handleInput}/>
                 </div>
                 <button className="btn btn-primary w-full text-sm" type="submit">수정하기</button>
             </form>

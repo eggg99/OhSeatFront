@@ -1,6 +1,5 @@
 import { putCineSquare,getCineSqaureItem  } from "@/apis/api/cinesquare";
 import { useEffect, useState, type ChangeEvent, type SyntheticEvent } from "react"
-import { Input } from "../ui/input";
 import { useNavigate, useParams } from "react-router-dom";
 import Location from "@/components/common/Location";
 import { FileUpload } from "@/components/common/file/FileUpload";
@@ -152,7 +151,7 @@ export default function CineSquareEdit(){
             <div className="flex gap-4">
                 <div><span>제목</span></div>
                 <div>
-                    <Input
+                    <input
                         type="text"
                         name="title"
                         value={inputValue.title}

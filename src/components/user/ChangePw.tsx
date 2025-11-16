@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { Input } from "@/components/ui/input"
 import { useNavigate } from 'react-router-dom';
 import { changePassword } from "@/apis/api/user";
 import { userStore } from "@/store/userStore";
@@ -79,7 +78,7 @@ export default function ChangePw(){
             <h1 className='title'>비밀번호 변경</h1>
 
             <div className='input-group'>
-                <Input type="password" 
+                <input type="password" 
                     placeholder="새로운 비밀번호" 
                     name="password" 
                     value={inputValue.password} 
@@ -89,7 +88,7 @@ export default function ChangePw(){
                 <div className="text-red-500">{errorMessages.password && <div className="error-msg">{errorMessages.password}</div>}</div>
             </div>
             <div className='input-group'>
-                <Input type="password" 
+                <input type="password" 
                     placeholder="새로운 비밀번호 확인" 
                     name="password2" 
                     value={inputValue.password2} 

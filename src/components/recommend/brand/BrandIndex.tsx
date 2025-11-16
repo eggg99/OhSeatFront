@@ -9,7 +9,7 @@ import { PostPage } from "@/types/Post";
 import { MULTIPLEX_LIST } from "@/constants/multiplex";
 import { AREA_LIST } from "@/constants/area";
 import { userStore } from "@/store/userStore";
-import { PaginationComponent } from "@/components/common/Pagination";
+import { Pagination } from "@/components/common/Pagination";
 
 const ALL_CINEMA = { cinemaId: 'all_c', cinemaName: '전체' };
 const ALL_SCREEN = { screenId: 'all_s', screenName: '전체' };
@@ -283,13 +283,11 @@ export default function BrandIndex() {
                         <div className="left"></div>
 
                         <div className="right">
-                            {/* <a href="#" className="post_button move">이동</a> */}
-                            {/* <a href="#" className="post_button del">삭제</a> */}
                             {isLogin &&<Link to={`/recommend/${brand}/reg`} className="post_button write">글쓰기</Link>}
                         </div>
                 </div>
                 {postList &&
-                    <PaginationComponent
+                    <Pagination
                         currentPage={postList.number}
                         totalPages={postList.totalPages}
                         onPageChange={handlePageChange}

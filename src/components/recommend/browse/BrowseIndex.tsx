@@ -2,11 +2,9 @@ import { getTrendingCinema, getPostList } from "@/apis/api/recommend";
 import { MULTIPLEX_LIST } from "@/constants/multiplex";
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@/components/ui/pagination";
 import { PostPage } from "@/types/Post";
-import { PaginationComponent } from "@/components/common/Pagination";
 import WeekString from '@/components/common/WeekString';
+import { Pagination } from "@/components/common/Pagination";
 
 interface Cinema {
     multiplexId: number;
@@ -259,7 +257,7 @@ export default function BrowseIndex() {
                     </tbody>
                 </table>
                 {postList &&
-                    <PaginationComponent
+                    <Pagination
                         currentPage={postList.number}
                         totalPages={postList.totalPages}
                         onPageChange={handlePageChange}

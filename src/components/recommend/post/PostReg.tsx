@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { Input } from "@/components/ui/input"
 import { getCinemaList, getScreenList, insertPost } from "@/apis/api/recommend";
 import { userStore } from "@/store/userStore";
 import { useNavigate } from "react-router-dom";
@@ -118,7 +117,7 @@ export default function PostReg(){
             <div className="hot_theater_weekly">
                 <div className="flex gap-3">
                     <span>제목</span>
-                    <Input 
+                    <input 
                         type="text"
                         name="title"
                         value={inputValue.title}

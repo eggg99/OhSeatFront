@@ -1,4 +1,3 @@
-import { Input } from "@/components/ui/input"
 import { ArrowBigLeft } from "lucide-react"
 import { Link } from "react-router-dom";
 import { use, useState } from "react"
@@ -86,20 +85,20 @@ export default function Join(){
             <h1 className='title'>회원가입</h1>
 
             <div className='input-group'>
-                <Input type="text" placeholder="이름" name="name" value={inputValue.name} onChange={handleInput} required maxLength={30}/>
+                <input type="text" placeholder="이름" name="name" value={inputValue.name} onChange={handleInput} required maxLength={30}/>
             </div>
             <div className='input-group'>
                 <div className="flex w-full items-center space-x-2">
-                    <Input type="email" placeholder="이메일" name="email" value={inputValue.email} onChange={handleInput} required maxLength={240}/>
+                    <input type="email" placeholder="이메일" name="email" value={inputValue.email} onChange={handleInput} required maxLength={240}/>
                 </div>
             </div>
             <div className='input-group'>
                 <div className="flex w-full items-center space-x-2">
-                    <Input type="text" placeholder="닉네임" name="nickname" value={inputValue.nickname} onChange={handleInput} required maxLength={80}/>
+                    <input type="text" placeholder="닉네임" name="nickname" value={inputValue.nickname} onChange={handleInput} required maxLength={80}/>
                 </div>
             </div>
             <div className='input-group'>
-                <Input type="password" 
+                <input type="password" 
                     placeholder="비밀번호" 
                     name="password" 
                     value={inputValue.password} 
@@ -109,12 +108,12 @@ export default function Join(){
                 <div className="text-red-500">{errorMessages.password && <div className="error-msg">{errorMessages.password}</div>}</div>
             </div>
             <div className='input-group'>
-                <Input type="password" placeholder="비밀번호 확인" name="password2" value={inputValue.password2} onChange={handleInput} required/>
+                <input type="password" placeholder="비밀번호 확인" name="password2" value={inputValue.password2} onChange={handleInput} required/>
                 <div className="text-red-500">{errorMessages.password2 && <div className="error-msg">{errorMessages.password2}</div>}</div>
                 
             </div>
             <div className='input-group'>
-                <Input type="text" placeholder="휴대폰번호(- 제외)" name="phoneNumber" value={inputValue.phoneNumber} onChange={handleInput} required maxLength={12}/>
+                <input type="text" placeholder="휴대폰번호(- 제외)" name="phoneNumber" value={inputValue.phoneNumber} onChange={handleInput} required maxLength={12}/>
             </div>
             
             <button className="btn btn-primary w-full text-sm" type="submit">회원가입</button>

@@ -1,6 +1,5 @@
 import { postCineSquare } from "@/apis/api/cinesquare";
 import { useRef, useState, type ChangeEvent, type SyntheticEvent } from "react"
-import { Input } from "../ui/input";
 import { useNavigate } from "react-router-dom";
 import Location from "@/components/common/Location";
 import { locationStore } from "@/store/userLocation";
@@ -130,7 +129,7 @@ export default function CineSquareReg(){
                     </select>
                 </div>
                 <div>
-                    <Input
+                    <input
                         type="text"
                         name="title"
                         value={inputValue.title}

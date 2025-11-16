@@ -1,4 +1,3 @@
-import { Input } from "@/components/ui/input"
 import { ArrowBigLeft } from "lucide-react"
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react"
@@ -62,13 +61,13 @@ export default function FindPw(){
             <h1 className='title'>비밀번호 찾기</h1>
 
             <div className='input-group'>
-                <Input type="text" placeholder="이름" name="name" value={inputValue.name} onChange={handleInput} required maxLength={30}/>
+                <input type="text" placeholder="이름" name="name" value={inputValue.name} onChange={handleInput} required maxLength={30}/>
             </div>
             <div className='input-group'>
-                <Input type="text" placeholder="휴대폰번호(- 제외)" name="phoneNumber" value={inputValue.phoneNumber} onChange={handleInput} required maxLength={12}/>
+                <input type="text" placeholder="휴대폰번호(- 제외)" name="phoneNumber" value={inputValue.phoneNumber} onChange={handleInput} required maxLength={12}/>
             </div>
             <div className='input-group'>
-                <Input type="email" placeholder="이메일" name="email" value={inputValue.email} onChange={handleInput} required/>
+                <input type="email" placeholder="이메일" name="email" value={inputValue.email} onChange={handleInput} required/>
             </div>
             <ReCAPTCHA
                 sitekey={import.meta.env.VITE_REACT_APP_RECAPTCHA_SITE_KEY || ""}

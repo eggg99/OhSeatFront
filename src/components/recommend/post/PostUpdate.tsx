@@ -1,5 +1,4 @@
 import { useOutletContext, useNavigate, useParams } from "react-router-dom";
-import { Input } from "@/components/ui/input";
 import { userStore } from "@/store/userStore";
 import { useEffect, useState } from "react";
 import { getPostDetail, getCinemaList, getScreenList, updatePost } from "@/apis/api/recommend";
@@ -144,7 +143,7 @@ export default function PostUpdate() {
         <div className="os_sub_contents">
             <div className="hot_theater_weekly">
                 <div>
-                    <Input
+                    <input
                         type="text"
                         name="title"
                         value={inputValue.title}

@@ -1,43 +1,54 @@
 import * as React from "react"
-import '@/index.css';
-import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationPrevious, PaginationNext } from "@/components/ui/pagination"
 
 type PaginationProps = {
-  currentPage: number; // 0 기반
-  totalPages: number;
-  onPageChange: (page: number) => void;
-};
+    currentPage : number, 
+    totalPages : number, 
+    onPageChange: (page: number) => void;
+}
 
-export const PaginationComponent = ({ currentPage, totalPages, onPageChange }: PaginationProps) => {
-  return (
-    <Pagination className="pagination_wrap">
-      <PaginationContent>
-        <PaginationItem>
-          <PaginationPrevious
-            href="#"
-            onClick={() => currentPage > 0 && onPageChange(currentPage - 1)}
-          />
-        </PaginationItem>
+export const Pagination = ( {currentPage, totalPages, onPageChange} : PaginationProps)  => {
+    return (
+        <div className="pagination_wrap">
+            <ul className="pagination_list">
+                {/* 이전버튼 */}
+                <li>
+                    <a 
+                        href="#" 
+                        className="before"
+                        onClick={() => currentPage > 0 && onPageChange(currentPage - 1)}
+                    >
+                        <i className="blind">이전</i>
+                    </a>
+                </li>
+                {/* 이전버튼 */}
 
-        {Array.from({ length: totalPages }, (_, i) => (
-          <PaginationItem key={i}>
-            <PaginationLink
-              href="#"
-              isActive={i === currentPage}
-              onClick={() => onPageChange(i+1)}
-            >
-              {i + 1}
-            </PaginationLink>
-          </PaginationItem>
-        ))}
+                {Array.from({ length : totalPages}, (_, i) => (
+                    <li 
+                        key={i}
+                        className={`${i === currentPage ? 'on' : ''}`}
+                    >
+                        <a 
+                            href="#"
+                            onClick={() => onPageChange(i+1)}
+                        >
+                            {i+1}
+                        </a>
+                    </li>
+                ))}
 
-        <PaginationItem>
-          <PaginationNext
-            href="#"
-            onClick={() => currentPage < totalPages - 1 && onPageChange(currentPage + 2)}
-          />
-        </PaginationItem>
-      </PaginationContent>
-    </Pagination>
-  );
-};
+
+                {/* 다음버튼 */}
+                <li>
+                    <a 
+                        href="#" 
+                        className="after"
+                        onClick={() => currentPage > 0 && onPageChange(currentPage + 1)}
+                    >
+                        <i className="blind">다음</i>
+                    </a>
+                </li>
+                {/* 다음버튼 */}
+            </ul>
+        </div>
+    );
+}
