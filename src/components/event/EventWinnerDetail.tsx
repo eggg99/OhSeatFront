@@ -1,6 +1,6 @@
 export default function EventWinnerDetail () {
     return (
-        <div>
+        <div className="os_sub_contents">
             <div className="flex gap-3">
                 <div>
                     이벤트 카테고리 (시사회, 예매권)

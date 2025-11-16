@@ -130,7 +130,7 @@ export default function BrandIndex() {
                     {/* 여기가 밑으로 열리면 open 클래스 주기 */}
                     <div className={`inner ${isInnerOn ? "open" : ""}`}>
                         <div className="list_wrap">
-                            <ul className="os_brunch_list clear">
+                            <ul className="os_brunch_list">
                             {cinemaList.map((cinema) => {
                                 const isChecked = selectedCinema?.cinemaId === cinema.cinemaId;
                                 return (

@@ -83,12 +83,11 @@ $font-family_1: 'Pretendard', Helvetica, "Apple SD Gothic Neo", sans-serif;
 	src: url('../fonts/GmarketSansBold.eot?#iefix') format('embedded-opentype'), url('../fonts/GmarketSansBold.woff2') format('woff2'), url('../fonts/GmarketSansBold.woff') format('woff'), url('../fonts/GmarketSansBold.ttf') format("truetype");
 	font-display: swap;
 }
-*, ::before, ::after {
-    box-sizing: initial !important;
-}
-
 * {
 	font-family: $font-family_1;
+}
+*, ::before, ::after {
+    box-sizing: initial !important;
 }
 body {
 	margin: 0;

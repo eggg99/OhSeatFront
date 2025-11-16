@@ -66,15 +66,33 @@ export default function EventList () {
     }
     
     return (
-        <div>
-            {/* 카테고리영역 */}
-            <div>
-                <ul className="flex gap-3">
-                    <li onClick={() =>setCategory('')}>전체</li>
-                    <li onClick={() =>setCategory('1')}>시사회</li>
-                    <li onClick={() =>setCategory('2')}>예매권</li>
+        <div className="os_sub_contents">
+            <div className="os_sub_navigation clear">
+                <h1>이벤트</h1>
+
+                <ul className="breadcrumbs_list clear">
+                    <li className="home"><Link to="/"><i className="blind">홈</i></Link></li>
+                    <li><Link to="/event/browse">이벤트</Link></li>
+                    <li><Link to={`/event/browse`}>이벤트 둘러보기</Link></li>
                 </ul>
             </div>
+
+            {/* 카테고리영역 */}
+            <section className="os_category_wrap">
+                <div className="os_area">
+                    <ul className="os_area_list clear">
+                        <li className={category === '' ? 'on' : ''}>
+                            <a href="#" onClick={() => setCategory('')}>전체</a>
+                        </li>
+                        <li className={category === '1' ? 'on' : ''}>
+                            <a href="#" onClick={() => setCategory('1')}>시사회</a>
+                        </li>
+                        <li className={category === '2' ? 'on' : ''}>
+                            <a href="#" onClick={() => setCategory('2')}>예매권</a>
+                        </li>
+                    </ul>
+                </div>
+            </section>
             {/* 카테고리영역 */}
             
             {/* 검색영역 */}
@@ -96,16 +114,13 @@ export default function EventList () {
             
             {/* 리스트영역 */}
             <div>
-                <div>
-                    <Link to="/event/1">
-                        <span>카테고리 : </span>
-                        <span>이미지 : </span>
-                        <span>게시글제목 : </span>
-                        <span>기간 : </span>
-                    </Link>
-                </div>
+                <Link to="/event/1">
+                    <span>카테고리 : </span>
+                    <span>이미지 : </span>
+                    <span>게시글제목 : </span>
+                    <span>기간 : </span>
+                </Link>
             </div>
-
         </div>
     )
 }

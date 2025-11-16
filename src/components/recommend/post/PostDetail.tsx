@@ -1,9 +1,11 @@
+import "@/styles/css/sub.scss";
 import { deletePost, getCommentList, getPostDetail, postComment, deleteComment, postIncrementViews, updatePostLike } from "@/apis/api/recommend"
 import { useEffect, useState, useRef } from "react"
 import { useOutletContext, useParams } from "react-router-dom";
 import { Input } from "@/components/ui/input"
 import { userStore } from "@/store/userStore";
 import { Link, useNavigate } from "react-router-dom";
+import { MULTIPLEX_LIST } from "@/constants/multiplex";
 
 interface PostDetail {
     postId: number;
@@ -12,10 +14,17 @@ interface PostDetail {
     authorId : string;
     authorNickname: string;
     views: number;
-    createdAt: string; // Date 타입
+    createdAt: string;
+    createdAtDate?: string; // 날짜
+    createdAtTime?: string; // 시간
     commentCount: number;
     likeCount:number;
     liked : boolean;
+    cinemaName : string;
+    cinemaAddr : string;
+    multiplexId : number;
+    prevId : number;
+    nextId : number;
 }
 
 interface Comment {
@@ -35,6 +44,8 @@ export default function PostDetail(){
 
     const [comment, setComment] = useState("");
     const [commentList, setcommentList] = useState<Comment[]>([]);
+
+    const [isMenuOn, setMenuOn] = useState(false);
     
     const [detailValue, setDetailValue] = useState<PostDetail>({
         postId: 0,
@@ -47,6 +58,11 @@ export default function PostDetail(){
         commentCount: 0,
         likeCount: 0,
         liked: false,
+        cinemaName: '',
+        cinemaAddr: '',
+        multiplexId : 0,
+        prevId : 0,
+        nextId : 0,
     });
     
     const hasViewed = useRef(false);
@@ -70,11 +86,30 @@ export default function PostDetail(){
         fetchData();
     }, [postId]);
 
+    // ✅ multiplexId를 label로 변환
+    const getMultiplexLabel = (multiplexId: number) =>
+        MULTIPLEX_LIST.find(m => m.id === multiplexId)?.label || "Unknown";
+
+    const formatDateTime = (dateTime: string) => {
+        const [date, time] = dateTime.split(" ");
+        return {
+            date,
+            time: time?.slice(0, 5) ?? "",
+        };
+    };
+
+
     // 게시글 내용 불러오기
     const getData = async () => {
         try {
             const response = await getPostDetail(postId);
-            setDetailValue(response);
+            const { date, time } = formatDateTime(response.createdAt);
+
+            setDetailValue({
+                ...response,
+                createdAtDate: date,
+                createdAtTime: time,
+            });
         } catch (error) {
             console.error(error);
         }
@@ -90,7 +125,7 @@ export default function PostDetail(){
     };
 
     // 댓글 내용 change
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         setComment(e.target.value);
     };
 
@@ -127,104 +162,154 @@ export default function PostDetail(){
         }
     }
 
-    const handleLike = async () => {
-    try {
-        const response = await updatePostLike(postId);
+    const handleLike = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const isChecked = e.target.checked; // 체크 여부 (true / false)
 
-        setDetailValue((prev) => ({
-            ...prev,
-            liked: response.Liked, // ✅ liked 값 업데이트
-            likeCount: response.Liked 
-                ? prev.likeCount + 1 
-                : Math.max(prev.likeCount - 1, 0), // 좋아요 수 증감 처리
-        }));
-    } catch (error) {
-        console.error("좋아요 처리 실패", error);
+        try {
+            const response = await updatePostLike(postId);
+
+            setDetailValue((prev) => ({
+                ...prev,
+                liked: isChecked,
+                likeCount: isChecked
+                    ? prev.likeCount + 1
+                    : Math.max(prev.likeCount - 1, 0),
+            }));
+        } catch (error) {
+            console.error("좋아요 처리 실패", error);
+        }
+    };
+
+    // 수정 / 삭제 메뉴 버튼 클릭
+    const handleInnerToggle = () => {
+        setMenuOn((prev) => !prev);
+    };
+
+    const moveToPost = (postId:number, flag:string) => {
+        if(!postId){
+            if(flag === 'bef') {
+                alert('이전글이 존재하지 않습니다.'); 
+                return false;
+            }
+            else if(flag === 'aft') {
+                alert('다음글이 존재하지 않습니다.'); 
+                return false;
+            }
+        }
+        navigate(`/recommend/${brand}/${postId}`);
     }
-};
 
     return (
         <div className="os_sub_contents">
-            <div className="hot_theater_weekly">
-                <div>
-                    <h2 className="text-2xl">{detailValue.title}</h2>
+            <div className="os_branch_info_wrap">
+                <div className="info_banner theater3">
+                    <h2>{getMultiplexLabel(detailValue?.multiplexId)} {detailValue?.cinemaName}점</h2>
+                    <p>{detailValue?.cinemaAddr}</p>
                 </div>
-                <div className="flex gap-3">
-                    <span>작성자</span>
-                    <span>{detailValue.authorNickname}</span>
-                </div>
-                <div className="flex justify-between">
-                    <div className="flex gap-3">
-                        <span>작성일자</span>
-                        <span>{detailValue.createdAt}</span>
-                    </div>
-                    <div className="flex">
-                        <div className="flex gap-3">
-                            <span>댓글</span>
-                            <span>{detailValue.commentCount}개</span>
-                        </div>
-                        <div className="flex gap-3 ml-3">
-                            <span>조회수</span>
-                            <span>{detailValue.views}회</span>
-                        </div>
-                        {detailValue.authorId == userId &&
-                            <div className="ml-3">
-                                <button><Link to={`/recommend/${brand}/edit/${postId}`}>수정</Link></button>
-                                <button onClick={handleDelete}>삭제</button>
-                            </div>
-                        }
-                    </div>
-                </div>
-                <div>
-                    {detailValue.content}
-                </div>
+            </div>
 
-                <div className="flex">
-                    <div className="flex gap-3">
-                        <button onClick={handleLike} className="text-2xl">
-                            {detailValue.liked ? "♥" : "♡"}
-                        </button>
-                        <span>좋아요</span>
-                        <span>{detailValue.likeCount}개</span>
-                    </div>
-                    <div className="flex gap-3 ml-3">
-                        <span>댓글</span>
-                        <span>{detailValue.commentCount}개</span>
+            <div className="theater_total_board_wrap">
+                <div className="post_button_wrap clear">
+                    <div className="right">
+                        <a href="#" onClick={() => moveToPost(detailValue?.prevId, 'bef')} className="post_button before">이전글</a>
+                        <a href="#" onClick={() => moveToPost(detailValue?.nextId, 'aft')} className="post_button after">다음글</a>
+                        <Link to={`/recommend/${brand}`} className="post_button">목록</Link>
                     </div>
                 </div>
 
-                <div className="mt-4">
-                    <h3 className="font-bold">댓글</h3>
-                    {commentList.length === 0 ? (
-                        <p>아직 댓글이 없습니다.</p>
-                    ) : (
-                        commentList.map((c) => (
-                            <div key={c.commentId} className="border-b py-2">
-                                <div className="flex justify-between">
-                                    <p>{c.content}</p>
-                                    { c.commenterId == userId && 
-                                        <button onClick={() => handleDeleteComment(c.commentId)}>삭제</button>
-                                    }
-                                    
-                                </div>
-                                <small>{c.authorNickname} · {c.createdAt}</small>
+                <div className="theater_detail_board_wrap">
+                    <div className="detail_header">
+                        <h3>{detailValue?.title}</h3>
+
+                        <div className="post_user_wrap">
+                            <p>{detailValue?.authorNickname}</p>
+                            <span>
+                                {detailValue.createdAtDate} <i>{detailValue.createdAtTime}</i>
+                            </span>
+                        </div>
+
+                        <div className="post_control_wrap clear">
+                            <a href="#" className="post_comment_button">댓글 <span>{detailValue.commentCount}</span></a>
+                            <a href="#" className="post_comment_button">조회수 <span>{detailValue.views}</span></a>
+
+                            {/* 더보기 버튼에 클래스네임으로 on이 붙으면 아래 게시글 삭제, 수정이 보입니다 */}
+                            <a href="#" className={`post_setting_button ${isMenuOn ? "on" : ""}`} onClick={handleInnerToggle}>
+                                <span className="blind">더보기</span>
+                            </a>
+
+                            <div className="post_setting_wrap">
+                                {detailValue.authorId == userId &&
+                                    <ul className="post_setting_list">
+                                        <li><a onClick={handleDelete}>게시글 삭제</a></li>
+                                        <li><Link to={`/recommend/${brand}/edit/${postId}`}>게시글 수정</Link></li>
+                                    </ul>
+                                }
                             </div>
-                        ))
-                    )}
+                        </div>
+                    </div>
+
+                    <div className="detail_contents">
+                        <pre>{detailValue?.content}</pre>
+                    </div>
+
+                    <div className="detail_footer">
+                        <div className="post_reaction_wrap clear">
+                            <div className="post_like_button">
+                                <input
+                                    type="checkbox"
+                                    id="like"
+                                    hidden
+                                    checked={detailValue.liked}
+                                    onChange={handleLike}
+                                />
+                                <label htmlFor="like" className="like-btn">
+                                    좋아요 <span>{detailValue.likeCount}</span>
+                                </label>
+                            </div>
+                            <a href="#" className="post_comment_button">댓글 <span>{detailValue.commentCount}</span></a>
+                        </div>
+
+                        <div className="post_comment_wrap">
+                            <ul className="post_comment_list">
+                                {commentList.length === 0 ? (
+                                    <p></p>
+                                ) : (
+                                    commentList.map((c) => (
+                                        <li key={c?.commentId}>
+                                            <h4>{c?.authorNickname}</h4>
+                                            <p>{c?.content}</p>
+                                            <span>{c?.createdAt}</span>
+                                            { c.commenterId == userId && 
+                                                <button onClick={() => handleDeleteComment(c.commentId)}>삭제</button>
+                                            }
+                                        </li>
+                                    ))
+                                )}
+                            </ul>
+
+                            <div className="comment_write_area">
+                                <textarea 
+                                    id="user-comment" 
+                                    placeholder="댓글을 남겨보세요" 
+                                    value={comment}
+                                    onChange={handleChange}></textarea>
+                                <div className="register_wrap clear">
+                                    <a className="post_button comment" onClick={handleSubmit} href="#">등록</a>
+                                </div>      
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div>
-                    <Input 
-                        type="text"
-                        value={comment}
-                        onChange={handleChange}
-                        placeholder="댓글을 작성해주세요"
-                    />
-                    <button onClick={handleSubmit}>
-                        작성
-                    </button>
-                </div>
-                <div className="text-right">
-                    <Link to={`/recommend/${brand}`}>목록</Link>
+
+                <div className="post_button_wrap clear">
+                    <div className="left">
+                        <Link to={`/recommend/${brand}/reg`} className="post_button write">글쓰기</Link>
+                    </div>
+
+                    <div className="right">
+                        <Link to={`/recommend/${brand}`} className="post_button">목록</Link>
+                        <a href="#" className="post_button top">TOP</a>                            
+                    </div>
                 </div>
             </div>
         </div>

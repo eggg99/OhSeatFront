@@ -18,6 +18,8 @@ $color_8: #B17C7B;
 /*전체글 게시판 목록*/
 /*테이블형 게시판 목록 아래 버튼*/
 /*페이지네이션*/
+/*영화관 좌석 추천 게시글 상세*/
+/*게시글 글쓰기*/
 .os_sub_contents {
 	padding: 50px 0;
 	margin-top: 90px;
@@ -510,6 +512,11 @@ $color_8: #B17C7B;
 	>.right {
 		float: right;
 	}
+	+ {
+		.theater_detail_board_wrap {
+			margin-top: 15px;
+		}
+	}
 }
 .post_button {
 	display: inline-block;
@@ -534,6 +541,28 @@ $color_8: #B17C7B;
 	color: $color_6;
 	background: url(../img/post_button_write.png) no-repeat left 10px center;
 	background-color: #e6fddd;
+}
+.post_button.comment {
+	color: $color_4;
+	background-color: #f1f1f1;
+}
+.post_button.top {
+	padding: 0 10px 0 31px;
+	background-image: url(../img/post_button_top.png);
+	background-repeat: no-repeat;
+	background-position: left 10px center;
+}
+.post_button.before {
+	padding: 0 10px 0 31px;
+	background-image: url(../img/post_button_before.png);
+	background-repeat: no-repeat;
+	background-position: left 10px center;
+}
+.post_button.after {
+	padding: 0 10px 0 31px;
+	background-image: url(../img/post_button_after.png);
+	background-repeat: no-repeat;
+	background-position: left 10px center;
 }
 .pagination_wrap {
 	margin-top: 15px;
@@ -609,7 +638,7 @@ $color_8: #B17C7B;
 .os_category_wrap {
 	position: relative;
 	padding-bottom: 78px;
-	margin-top: 60px;
+	margin: 60px 0 40px;
 }
 .os_area {
 	width: 1280px;
@@ -676,7 +705,7 @@ $color_8: #B17C7B;
 		>.list_wrap {
 			>.os_brunch_list {
 				display: grid;
-				grid-template-columns: repeat(8, 1fr);
+				grid-template-columns: repeat(9, 1fr);
 				gap: 8px;
 				padding: 13px 0;
 				>li {
@@ -688,12 +717,15 @@ $color_8: #B17C7B;
 					text-align: center;
 					+ {
 						li {
+							padding-left: 0;
 							margin-left: 0;
 						}
 					}
 					>a {
 						line-height: 30px;
 						text-align: center;
+						padding-right: 0;
+						font-size: 14px;
 					}
 				}
 			}
@@ -743,7 +775,7 @@ $color_8: #B17C7B;
 }
 .os_branch_info_wrap {
 	width: 1280px;
-	margin: 40px auto;
+	margin: 0 auto;
 }
 .info_banner {
 	padding: 40px 0 40px 50px;
@@ -777,7 +809,7 @@ $color_8: #B17C7B;
 	background-size: 100%;
 }
 .branch_screen {
-	margin-top: 20px;
+	margin: 20px 0 40px;
 }
 .branch_screen_list {
 	>li {
@@ -802,5 +834,226 @@ $color_8: #B17C7B;
 			background-color: #121212;
 			border: 1px solid #121212;
 		}
+	}
+}
+.theater_detail_board_wrap {
+	padding: 30px;
+	border: 1px solid #ddd;
+	border-radius: 6px;
+}
+.detail_header {
+	position: relative;
+	padding-bottom: 20px;
+	margin-bottom: 30px;
+	border-bottom: 1px solid #ebebeb;
+	>h3 {
+		font-size: 26px;
+		line-height: 125%;
+		font-weight: 600;
+	}
+	>.post_user_wrap {
+		margin-top: 20px;
+		>p {
+			padding-left: 24px;
+			font-size: 16px;
+			line-height: 125%;
+			font-weight: 600;
+			background: url(../img/os_nickname2.png) no-repeat left center;
+		}
+		>span {
+			display: inline-block;
+			margin-top: 5px;
+			font-size: 14px;
+			line-height: 150%;
+			color: $color_4;
+			vertical-align: top;
+			>i {
+				display: inline-block;
+				font-style: normal;
+				vertical-align: top;
+			}
+		}
+	}
+	>.post_control_wrap {
+		position: absolute;
+		right: 0;
+		bottom: 20px;
+		>a {
+			float: left;
+			font-size: 16px;
+			line-height: 24px;
+			+ {
+				a {
+					margin-left: 15px;
+				}
+			}
+		}
+	}
+}
+.post_setting_wrap {
+	display: none;
+	position: absolute;
+	top: 24px;
+	right: 0;
+	padding: 2px 0;
+	background-color: #fff;
+	border: 1px solid #ddd;
+	border-radius: 6px;
+	box-shadow: 0 1px 12px 0 rgba(0, 0, 0, .06);
+}
+.post_setting_list {
+	>li {
+		+ {
+			li {
+				border-top: 1px solid #eaeaea;
+			}
+		}
+		>a {
+			display: block;
+			padding: 0 15px;
+			font-size: 16px;
+			line-height: 40px;
+			&:hover {
+				background-color: #f1f1f1;
+			}
+		}
+	}
+}
+.post_comment_button {
+	padding-left: 24px;
+	background: url(../img/post_comment_button.png) no-repeat left center;
+}
+.post_setting_button {
+	width: 24px;
+	height: 24px;
+	background: url(../img/post_setting_button.png) no-repeat center;
+}
+.post_setting_button.on {
+	+ {
+		.post_setting_wrap {
+			display: block;
+		}
+	}
+}
+.detail_contents {
+	min-height: 200px;
+	>pre {
+		font-size: 16px;
+		line-height: 150%;
+	}
+}
+.detail_footer {
+	margin-top: 26px;
+}
+.post_reaction_wrap {
+	margin: 30px 0 25px;
+	>* {
+		float: left;
+		+ {
+			* {
+				margin-left: 15px;
+			}
+		}
+	}
+}
+.post_like_button {
+	>label {
+		cursor: pointer;
+		padding-left: 24px;
+		color: $color_5;
+		background: url(../img/post_like_button_1.png) no-repeat left center;
+	}
+	>input {
+		&:checked {
+			+ {
+				label {
+					font-weight: 600;
+					background: url(../img/post_like_button_2.png) no-repeat left center;
+				}
+			}
+		}
+	}
+}
+.post_comment_wrap {
+	padding: 25px;
+	background-color: #f1f1f1;
+	border-radius: 6px;
+}
+.post_comment_list {
+	>li {
+		+ {
+			li {
+				padding-top: 15px;
+				margin-top: 15px;
+				border-top: 1px solid #ddd;
+			}
+		}
+		>h4 {
+			padding-left: 24px;
+			font-size: 16px;
+			line-height: 125%;
+			font-weight: 600;
+			background: url(../img/os_nickname2.png) no-repeat left center;
+		}
+		>p {
+			margin-top: 5px;
+			font-size: 16px;
+			line-height: 150%;
+		}
+		>span {
+			display: inline-block;
+			margin-top: 5px;
+			font-size: 14px;
+			line-height: 150%;
+			color: $color_4;
+			vertical-align: top;
+			>i {
+				display: inline-block;
+				font-style: normal;
+				vertical-align: top;
+			}
+		}
+	}
+}
+.comment_write_area {
+	padding: 15px;
+	margin-top: 25px;
+	background-color: #fff;
+	border: 1px solid #ddd;
+	border-radius: 6px;
+	>textarea {
+		display: block;
+		width: 100%;
+		min-height: 80px;
+		max-height: 500px;
+		padding: 0;
+		border: 0;
+		font-size: 16px;
+		line-height: 150%;
+		-webkit-appearance: none;
+		resize: none;
+		box-sizing: border-box;
+		background: transparent;
+		outline: 0;
+		overflow-wrap: break-word;
+	}
+}
+.register_wrap {
+	>* {
+		float: right;
+	}
+}
+.post_write_title_wrap {
+	padding-bottom: 20px;
+	margin-bottom: 30px;
+	border-bottom: 1px solid #121212;
+	>h2 {
+		float: left;
+		font-size: 30px;
+		line-height: 36px;
+		font-weight: 700;
+	}
+	>.post_button {
+		float: right;
 	}
 }

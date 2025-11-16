@@ -5,7 +5,7 @@ export default function EventWinnerReg () {
 
 
     return (
-        <div>
+        <div className="os_sub_contents">
             <div className="flex gap-3">
                 <div>
                     <select>
