@@ -8,6 +8,7 @@ import { getBoxoffice } from '@/apis/api/movie';
 import useEmblaCarousel from 'embla-carousel-react'
 import Autoplay from 'embla-carousel-autoplay'
 import { CRTF_MAP } from '@/constants/certifcate';
+import LoadingSpinner from '@/components/common/LoadingSpinner';
 
 interface Cinema {
     multiplexId: number;
