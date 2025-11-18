@@ -2,7 +2,8 @@ $color_1: #ae0200;
 $color_2: #747474;
 $color_3: #3D3D3D;
 $color_4: #fff;
-$color_5: #d9d9d9;
+$color_5: #666666;
+$color_6: #d9d9d9;
 $font-family_1: 'GmarketSans', sans-serif;
 
 /*헤더*/
@@ -155,6 +156,14 @@ $font-family_1: 'GmarketSans', sans-serif;
 			padding: 0 15px 0 36px;
 			color: $color_4;
 		}
+		>.os_join_button {
+			line-height: 31px;
+			color: $color_5;
+			background: url(../img/os_join_button.png) no-repeat left 15px center;
+			background-color: #fff;
+			border: 1px solid #ddd;
+			border-radius: 22px;
+		}
 		>.os_login_button {
 			background: url(../img/os_login_button.png) no-repeat left 15px center;
 			background-color: #AE0200;
@@ -237,7 +246,7 @@ $font-family_1: 'GmarketSans', sans-serif;
 			font-size: 32px;
 			line-height: 63px;
 			font-weight: 700;
-			color: $color_5;
+			color: $color_6;
 		}
 		>.address_list {
 			float: left;
@@ -245,7 +254,7 @@ $font-family_1: 'GmarketSans', sans-serif;
 			>li {
 				font-size: 14px;
 				line-height: 150%;
-				color: $color_5;
+				color: $color_6;
 			}
 		}
 	}

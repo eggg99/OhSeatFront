@@ -20,6 +20,8 @@ $color_8: #B17C7B;
 /*페이지네이션*/
 /*영화관 좌석 추천 게시글 상세*/
 /*게시글 글쓰기*/
+/*게시판 카테고리*/
+/*게시글 검색*/
 .os_sub_contents {
 	padding: 50px 0;
 	margin-top: 90px;
@@ -534,13 +536,13 @@ $color_8: #B17C7B;
 }
 .post_button.del {
 	color: $color_5;
-	background-color: #fddddd;
+	background-color: #f6e4e4;
 }
 .post_button.write {
 	padding: 0 10px 0 31px;
 	color: $color_6;
 	background: url(../img/post_button_write.png) no-repeat left 10px center;
-	background-color: #e6fddd;
+	background-color: #eaf4e6;
 }
 .post_button.comment {
 	color: $color_4;
@@ -639,6 +641,7 @@ $color_8: #B17C7B;
 	position: relative;
 	padding-bottom: 78px;
 	margin: 60px 0 40px;
+	z-index: 1;
 }
 .os_area {
 	width: 1280px;
@@ -703,6 +706,9 @@ $color_8: #B17C7B;
 	}
 	>.inner.open {
 		>.list_wrap {
+			max-height: 220px;
+			overflow-x: hidden;
+			overflow-y: scroll;
 			>.os_brunch_list {
 				display: grid;
 				grid-template-columns: repeat(9, 1fr);
@@ -724,6 +730,7 @@ $color_8: #B17C7B;
 					>a {
 						line-height: 30px;
 						text-align: center;
+						padding-left: 0;
 						padding-right: 0;
 						font-size: 14px;
 					}
@@ -919,6 +926,10 @@ $color_8: #B17C7B;
 		}
 	}
 }
+.post_hits_button {
+	padding-left: 24px;
+	background: url(../img/post_hits_button.png) no-repeat left center;
+}
 .post_comment_button {
 	padding-left: 24px;
 	background: url(../img/post_comment_button.png) no-repeat left center;
@@ -981,11 +992,15 @@ $color_8: #B17C7B;
 }
 .post_comment_list {
 	>li {
+		position: relative;
 		+ {
 			li {
 				padding-top: 15px;
 				margin-top: 15px;
 				border-top: 1px solid #ddd;
+				>.comment_control_wrap {
+					top: 15px;
+				}
 			}
 		}
 		>h4 {
@@ -1000,6 +1015,46 @@ $color_8: #B17C7B;
 			font-size: 16px;
 			line-height: 150%;
 		}
+		>.comment_edit_wrap {
+			position: relative;
+			padding: 10px 10px 40px;
+			margin-top: 10px;
+			background-color: #fff;
+			border: 1px solid #ddd;
+			border-radius: 6px;
+			>textarea {
+				font-size: 16px;
+				line-height: 150%;
+				resize: none;
+				border: none;
+			}
+			>.comment_edit_button_wrap {
+				position: absolute;
+				right: 10px;
+				bottom: 10px;
+				>button {
+					float: left;
+					width: max-content;
+					padding: 0 10px;
+					font-size: 16px;
+					line-height: 30px;
+					color: $color_4;
+					border-radius: 6px;
+					+ {
+						button {
+							margin-left: 5px;
+						}
+					}
+				}
+				>button.cancel {
+					background-color: #f9f9f9;
+				}
+				>button.complete {
+					color: $color_5;
+					background-color: #f6e4e4;
+				}
+			}
+		}
 		>span {
 			display: inline-block;
 			margin-top: 5px;
@@ -1011,6 +1066,25 @@ $color_8: #B17C7B;
 				display: inline-block;
 				font-style: normal;
 				vertical-align: top;
+			}
+		}
+		>.comment_control_wrap {
+			position: absolute;
+			top: 0;
+			right: 0;
+		}
+	}
+}
+.comment_control_wrap {
+	>button {
+		float: left;
+		width: max-content;
+		padding: 0 5px;
+		font-size: 14px;
+		color: $color_4;
+		+ {
+			button {
+				margin-left: 5px;
 			}
 		}
 	}
@@ -1055,5 +1129,89 @@ $color_8: #B17C7B;
 	}
 	>.post_button {
 		float: right;
+	}
+}
+.post_write_area_wrap {
+	padding: 30px;
+	border: 1px solid #ddd;
+	border-radius: 6px;
+}
+.os_board_category_wrap {
+	width: 1280px;
+	margin: 60px auto 40px;
+}
+.os_board_list {
+	>li {
+		float: left;
+		+ {
+			li {
+				margin-left: 8px;
+			}
+		}
+		>a {
+			display: block;
+			padding: 0 20px;
+			font-size: 16px;
+			line-height: 40px;
+			color: $color_7;
+			border: 1px solid #ddd;
+			border-radius: 30px;
+		}
+	}
+	>li.on {
+		>a {
+			color: $color_1;
+			background-color: #AE0200;
+			border: 1px solid #AE0200;
+		}
+	}
+}
+.os_search_wrap {
+	width: 1280px;
+	padding: 16px 0;
+	margin: 0 auto;
+	background-color: #f1f1f1;
+	border: 1px solid #d5d5d5;
+	border-radius: 6px;
+}
+.os_search_list {
+	text-align: center;
+	>li {
+		display: inline-block;
+		vertical-align: top;
+		+ {
+			li {
+				margin-left: 4px;
+			}
+		}
+		>select {
+			width: 100px;
+			height: 46px;
+			padding: 0 0 0 16px;
+			font-size: 16px;
+			line-height: 44px;
+			background: url(../img/select_option.png) no-repeat right 16px center;
+			background-color: #fff;
+			border: 1px solid #ddd;
+			border-radius: 6px;
+		}
+		>input {
+			width: 350px;
+			height: 46px;
+			padding: 0 16px;
+			font-size: 16px;
+			line-height: 44px;
+			border: 1px solid #ddd;
+			border-radius: 6px;
+		}
+		>button {
+			height: 46px;
+			padding: 0 16px;
+			font-size: 16px;
+			line-height: 46px;
+			color: $color_1;
+			background-color: #121212;
+			border-radius: 6px;
+		}
 	}
 }

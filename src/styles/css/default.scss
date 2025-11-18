@@ -86,7 +86,6 @@ $font-family_1: 'Pretendard', Helvetica, "Apple SD Gothic Neo", sans-serif;
 * {
 	font-family: $font-family_1;
 }
-
 body {
 	margin: 0;
 	margin: 0;
@@ -193,11 +192,11 @@ textarea {
 	vertical-align: top;
 	letter-spacing: -0.2px;
 	width: 100%;
+	padding: 0;
 	box-sizing: border-box;
 	font-size: 17px;
 	border: 1px solid #ddd;
 	border-radius: 3px;
-	padding: 10px;
 	vertical-align: top;
 	&:read-only {
 		background-color: #f2f2f2;
@@ -212,13 +211,17 @@ select {
 	box-sizing: border-box;
 	padding: 0 5px;
 	border: 1px solid #ddd;
-	background: url(../img/selectbox.png) no-repeat right 10px center;
+	background: url(../img/select_option.png) no-repeat right 12px center;
+	background-color: #fff;
 	appearance: none;
 	-webkit-appearance: none;
 	-moz-appearance: none;
 	-o-appearance: none;
 	line-height: inherit;
 	vertical-align: top;
+	&:focus {
+		outline: none;
+	}
 }
 button {
 	margin: 0;
@@ -236,6 +239,11 @@ pre {
 	vertical-align: top;
 	letter-spacing: -0.2px;
 	white-space: pre-wrap;
+}
+input[type="text"] {
+	&:focus {
+		outline: none;
+	}
 }
 .blind {
 	position: absolute;
