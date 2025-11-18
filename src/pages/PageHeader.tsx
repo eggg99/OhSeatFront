@@ -45,7 +45,7 @@ const Header = () => {
                             </>
                         ) : (
                             <>
-                            <li><Link to="/user/join"   className="os_login_button">회원가입</Link></li>
+                            <li><Link to="/user/join"   className="os_join_button">회원가입</Link></li>
                             <li><Link to="/user/login"  className="os_login_button">로그인</Link></li>
                             </>
                         )}

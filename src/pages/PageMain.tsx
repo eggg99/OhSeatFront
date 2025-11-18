@@ -117,7 +117,6 @@ function PageMain(){
     return(
         <main className="os_main_contents">
             <div className="os_main_visual">
-                <h1><Link to="/test">테스트!!!</Link></h1>
                 <div className="mv_title">
                     <h1>지금 오싵에서 주목하는 영화관 좌석은?</h1>
                     <p>모두들 모여서 이야기하고 있는 좌석은 무슨 좌석일지 확인하기</p>

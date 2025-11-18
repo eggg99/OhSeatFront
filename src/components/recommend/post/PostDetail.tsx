@@ -228,8 +228,8 @@ export default function PostDetail(){
                         </div>
 
                         <div className="post_control_wrap clear">
+                            <a href="#" className="post_hits_button">조회수 <span>{detailValue.views}</span></a>
                             <a href="#" className="post_comment_button">댓글 <span>{detailValue.commentCount}</span></a>
-                            <a href="#" className="post_comment_button">조회수 <span>{detailValue.views}</span></a>
 
                             {/* 더보기 버튼에 클래스네임으로 on이 붙으면 아래 게시글 삭제, 수정이 보입니다 */}
                             <a href="#" className={`post_setting_button ${isMenuOn ? "on" : ""}`} onClick={handleInnerToggle}>
@@ -265,6 +265,7 @@ export default function PostDetail(){
                                     좋아요 <span>{detailValue.likeCount}</span>
                                 </label>
                             </div>
+                            <a href="#" className="post_hits_button">조회수 <span>{detailValue.views}</span></a>
                             <a href="#" className="post_comment_button">댓글 <span>{detailValue.commentCount}</span></a>
                         </div>
 
@@ -277,24 +278,43 @@ export default function PostDetail(){
                                         <li key={c?.commentId}>
                                             <h4>{c?.authorNickname}</h4>
                                             <p>{c?.content}</p>
-                                            <span>{c?.createdAt}</span>
-                                            { c.commenterId == userId && 
-                                                <button onClick={() => handleDeleteComment(c.commentId)}>삭제</button>
-                                            }
+                                            <span>{c?.createdAt} <i>수정됨</i></span>
+                                            <div className="comment_control_wrap clear">
+                                                {/*TODO : 수정 부분 붙여야함*/}
+                                                <button>수정</button>
+                                                {c.commenterId == userId &&
+                                                    <button onClick={() => handleDeleteComment(c.commentId)}>삭제</button>
+                                                }
+                                            </div>
                                         </li>
                                     ))
                                 )}
+                                <li>
+                                    <h4>댓글 작성자 아이디</h4>
+                                    <div className="comment_edit_wrap">
+                                        <textarea>수정 버튼을 누르면 보여질 화면도 디자인하였습니다.</textarea>
+                                        <div className="comment_edit_button_wrap clear">
+                                            <button className="cancel">취소</button>
+                                            <button className="complete">등록</button>
+                                        </div>
+                                    </div>
+                                    <span>2025.11.12 <i>15:24</i></span>
+                                    <div className="comment_control_wrap clear">
+                                        <button>수정</button>
+                                        <button>삭제</button>
+                                    </div>
+                                </li>
                             </ul>
 
                             <div className="comment_write_area">
-                                <textarea 
-                                    id="user-comment" 
-                                    placeholder="댓글을 남겨보세요" 
+                                <textarea
+                                    id="user-comment"
+                                    placeholder="댓글을 남겨보세요"
                                     value={comment}
                                     onChange={handleChange}></textarea>
                                 <div className="register_wrap clear">
                                     <a className="post_button comment" onClick={handleSubmit} href="#">등록</a>
-                                </div>      
+                                </div>
                             </div>
                         </div>
                     </div>
