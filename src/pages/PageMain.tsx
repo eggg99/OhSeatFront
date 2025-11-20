@@ -47,9 +47,6 @@ function PageMain(){
 
     const [loading, setLoading] = useState(false);
 
-
-    
-
     // 언급량 top1 조회
     const getData = async () => {
         try {
@@ -79,15 +76,37 @@ function PageMain(){
         const cached = localStorage.getItem("boxoffice");
         try {
             if (cached) {
-                setMovies(JSON.parse(cached));
+                const parsed = JSON.parse(cached);
+
+                // 저장된 날과 오늘을 비교
+                const savedDate = new Date(parsed.timestamp);
+                const today = new Date();
+
+                const isSameDay =
+                    savedDate.getFullYear() === today.getFullYear() &&
+                    savedDate.getMonth() === today.getMonth() &&
+                    savedDate.getDate() === today.getDate();
+
+                if (isSameDay) {
+                    // 같은 날이면 캐시 사용
+                    setMovies(parsed.data);
+                    return;
+                }
+
             } else {
+                // 캐시 없거나 날짜 다르면 API 호출
                 const response = await getBoxoffice();
-                if(response){
+                if (response) {
                     setMovies(response);
-                    localStorage.setItem("boxoffice", JSON.stringify(response));
+                    localStorage.setItem(
+                        "boxoffice",
+                        JSON.stringify({
+                            data: response,
+                            timestamp: new Date().toISOString(),
+                        })
+                    );
                 }
             }
-           
         } catch (error) {
             console.error(error);
         }
@@ -174,7 +193,7 @@ function PageMain(){
                         movies.map((item: any) => {
                             const gradeItem =
                                 CRTF_MAP.find((c) => c.grade === item.certification) || CRTF_MAP[0];
-                            
+
                             return (
                                 <li
                                     className={`embla__slide rank${item.rank}`}
@@ -200,7 +219,7 @@ function PageMain(){
                         <li>데이터가 없습니다.</li>
                     )}
                     </ul>
-                </div>                         
+                </div>
             </div>
             <div className="os_square_event_wrap">                    
                 <div className="os_cine_square">

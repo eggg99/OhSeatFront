@@ -4,6 +4,8 @@ import { Route, Routes } from "react-router-dom";
 import PageMain from "@/pages/PageMain";
 import PageNotFound from "@/pages/PageNotFound";
 
+import PageTest from "@/pages/PageTest";
+
 // 유저 관련
 import PageUser from '@/pages/PageUser';
 import Login from '@/components/user/Login';
@@ -33,13 +35,11 @@ import CinesquareSearch from "@/components/cinesquare/CineSquareSearch";
 // 이벤트 관련
 import PageEvent from "@/pages/PageEvent";
 import EventBrowse from "@/components/event/EventBrowse";
-
-import PageTest from "@/pages/PageTest";
 import EventDetail from "@/components/event/EventDetail";
 import EventReg from "@/components/event/EventReg";
-import EventWinnerBrowse from "@/components/event/EventWinnerBrowse";
-import EventWinnerDetail from "@/components/event/EventWinnerDetail";
-import EventWinnerReg from "@/components/event/EventWinnerReg";
+import EventAnnouncementBrowse from "@/components/event/EventAnnouncementBrowse";
+import EventAnnouncementDetail from "@/components/event/EventAnnouncementDetail";
+import EventAnnouncementReg from "@/components/event/EventAnnouncementReg";
 
 function AppRoutes(){
     return(
@@ -84,9 +84,9 @@ function AppRoutes(){
                 <Route path="browse" element={<EventBrowse/>}></Route>  {/* 이벤트 둘러보기 */}
                 <Route path=":id" element={<EventDetail/>}></Route>   {/* 이벤트 상세페이지 */}
                 <Route path="reg" element={<EventReg/>}></Route>   {/* 이벤트 작성페이지 */}
-                <Route path="winner/browse" element={<EventWinnerBrowse/>}></Route>   {/* 이벤트 당첨확인 리스트*/}
-                <Route path="winner/:id" element={<EventWinnerDetail/>}></Route>   {/* 이벤트 당첨확인 상세페이지*/}
-                <Route path="winnder/reg" element={<EventWinnerReg/>}></Route>   {/* 이벤트 당첨확인 작성페이지*/}
+                <Route path="announcement/browse" element={<EventAnnouncementBrowse/>}></Route>   {/* 이벤트 당첨확인 리스트*/}
+                <Route path="announcement/:id" element={<EventAnnouncementDetail/>}></Route>   {/* 이벤트 당첨확인 상세페이지*/}
+                <Route path="announcement/reg" element={<EventAnnouncementReg/>}></Route>   {/* 이벤트 당첨확인 작성페이지*/}
             </Route>
 
             <Route path="*" element={<PageNotFound />} />

@@ -1,22 +1,20 @@
-import { getEventList } from "@/apis/api/event";
+import { getEventWinnerList } from "@/apis/api/event";
 import { useEffect, useState } from "react"
 import { Link, useNavigate } from "react-router-dom";
 import { Pagination } from "@/components/common/Pagination";
 import { userStore } from "@/store/userStore";
 import { useSearchParams } from 'react-router-dom';
 
-interface EventData {
+interface AnnouncementData {
     id : number;            // 시퀀스
     category : string;      // 카테고리
     title : string;         // 제목
-    startDt : Date;         // 시작기간
-    endDt : Date;           // 종료기간
-    isEnd : Boolean;        // 종료여부
-    imgUrl : string;        // 이미지url
+    createAt : Date;        // 작성일
+    content : string;       // 내용
 }
 
-interface EventDataPage {
-    content : EventData[];
+interface AnnouncementPage {
+    content : AnnouncementData[];
     totalPages : number;
     totalElements : number;
     number: number;
@@ -25,7 +23,7 @@ interface EventDataPage {
     last : boolean;
 }
 
-export default function EventList () {
+export default function EventAnnouncementBrowse () {
     const navigate = useNavigate();
 
     const isLogin = userStore((state) => state.isLogin);
@@ -34,7 +32,7 @@ export default function EventList () {
     const [searchValue, setSearchValue] = useState('');
     const [searchParams, setSearchParams] = useSearchParams();
 
-    const [eventList, setEventList] = useState<EventDataPage | null>(null);
+    const [announcementList, setAnnouncementList] = useState<AnnouncementPage | null>(null);
     const [page, setPage] = useState<number>(0);
     const [size, setSize] = useState<number>(10);
     const [orderType, setOrderType] = useState<string>('');
@@ -65,7 +63,6 @@ export default function EventList () {
         setSearchParams(searchParams);
     };
 
-
     const handleSearch = async () => {
         if (!searchValue.trim()) return; // 빈값 방지
         // 실제 검색 로직 (API 호출 등)을 여기에 추가
@@ -84,7 +81,7 @@ export default function EventList () {
     const getList = async () => {
         try {
             const param = { 'searchType' : searchType , 'searchValue' : searchValue}
-            const response = await getEventList(param);
+            const response = await getEventWinnerList(param);
             if(!response) {
                 console.log('게시글 조회 실패');
             }
@@ -107,12 +104,12 @@ export default function EventList () {
     return (
         <div className="os_sub_contents">
             <div className="os_sub_navigation clear">
-                <h1>이벤트</h1>
+                <h1>이벤트 당첨발표</h1>
 
                 <ul className="breadcrumbs_list clear">
                     <li className="home"><Link to="/"><i className="blind">홈</i></Link></li>
                     <li><Link to="/event/browse">이벤트</Link></li>
-                    <li><Link to={`/event/browse`}>이벤트 둘러보기</Link></li>
+                    <li><Link to={`/event/announcement/browse`}>이벤트 당첨발표</Link></li>
                 </ul>
             </div>
 
@@ -130,6 +127,7 @@ export default function EventList () {
                     </li>
                 </ul>
             </section>
+
 
             {/* 검색영역 */}
             <div className="os_search_wrap">
@@ -153,11 +151,12 @@ export default function EventList () {
                     </li>
                 </ul>
             </div>
-
+            {/* 검색영역 */}
+            
             {/* 리스트영역 */}
-            <div className="theater_total_board_wrap">
+            <section className="theater_total_board_wrap">
                 <div className="board_control_wrap clear">
-                    <p>{eventList?.totalElements ?? 0}개의 글</p>
+                    <p>{announcementList?.totalElements ?? 0}개의 글</p>
 
                     <div className="post_filter_wrap clear">
                         <select>
@@ -172,57 +171,54 @@ export default function EventList () {
                     </div>
                 </div>
 
-                <div className="basic_board3_wrap">
-                    <table className="basic_board3">
-                        <colgroup>
-                            <col style={{width: '25%'}}/>
-                            <col style={{width: '25%'}}/>
-                            <col style={{width: '25%'}}/>
-                            <col style={{width: '25%'}}/>
-                        </colgroup>
-                        <tbody>
-                            {eventList && eventList.content.length > 0 ? (
-                                eventList.content.map((item, index) => (
-                                    <tr>
-                                        <td
-                                            key={item?.id}
-                                            onClick={() => navigate(`/event/${item?.id}`)}
-                                        >
-                                            <a href="#" className="event_post_wrap">
-                                                <div className="event_category">
-                                                    <i>{item?.category}</i>
-                                                    {item.isEnd && <i className="end">종료</i>}
-                                                </div>
-                                                <img src={item?.imgUrl} alt={item?.title} />
-                                                <p>{item?.title}</p>
-                                                <span>
-                                                    {item.startDt.toLocaleDateString()} ~ {item.endDt.toLocaleDateString()}
-                                                </span>
-                                            </a>
-                                        </td>
-                                    </tr>
-                                ))
-                            ) : (
-                                    <tr><td>이벤트가 없습니다 🥲</td></tr>
-                            )}
-                        </tbody>
-                    </table>
-                </div>
+                {/* 게시글 테이블 */}
+                <table className="basic_board1">
+                    <colgroup>
+                        <col style={{ width: '50%' }}/>
+                        <col style={{ width: '50%' }}/>
+                    </colgroup>
+                    <thead>
+                        <tr>
+                            <th>제목</th>
+                            <th>작성일자</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {announcementList && announcementList.content.length > 0 ? (
+                        announcementList.content.map((item: any) => (
+                            <tr
+                                key={item.id}
+                                onClick={() => navigate(`/event/announcement/${item?.id}`)}
+                            >
+                                <td className="txtc">{item?.title}</td>
+                                <td className="txtc">{item.createdAt}</td>
+                            </tr>
+                        ))
+                    ) : (
+                        <tr>
+                            <td colSpan={2} className="txtc">
+                                당첨 내용이 없습니다 🥲
+                            </td>
+                        </tr>
+                    )}
+                    </tbody>
+                </table>
 
                 <div className="post_button_wrap clear">
+                    <div className="left"></div>
+
                     <div className="right">
-                        {isLogin &&<Link to={`/event/reg`} className="post_button write">글쓰기</Link>}
+                        {isLogin &&<Link to={`/event/announcement/reg`} className="post_button write">글쓰기</Link>}
                     </div>
                 </div>
-
-                {eventList &&
+                {announcementList &&
                     <Pagination
-                        currentPage={eventList.number}
-                        totalPages={eventList.totalPages}
+                        currentPage={announcementList.number}
+                        totalPages={announcementList.totalPages}
                         onPageChange={handlePageChange}
                     />
                 }
-            </div>
+            </section>
         </div>
     )
 }

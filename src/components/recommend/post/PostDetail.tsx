@@ -198,6 +198,18 @@ export default function PostDetail(){
         navigate(`/recommend/${brand}/${postId}`);
     }
 
+    // 댓글 수정
+    const [editingCommentId, setEditingCommentId] = useState<number | null>(null);
+    const [editContent, setEditContent] = useState("");
+
+    // 댓글 수정 함수
+    const handleEditComplete = (id:number) => {
+        // TODO : 댓글 아이디를 넣어서 수정 api 만들어야함
+        alert('준비중입니다!');
+    }
+
+
+
     return (
         <div className="os_sub_contents">
             <div className="os_branch_info_wrap">
@@ -239,7 +251,7 @@ export default function PostDetail(){
                             <div className="post_setting_wrap">
                                 {detailValue.authorId == userId &&
                                     <ul className="post_setting_list">
-                                        <li><a onClick={handleDelete}>게시글 삭제</a></li>
+                                        <li><a onClick={handleDelete} style={{ cursor: "pointer" }}>게시글 삭제</a></li>
                                         <li><Link to={`/recommend/${brand}/edit/${postId}`}>게시글 수정</Link></li>
                                     </ul>
                                 }
@@ -274,37 +286,77 @@ export default function PostDetail(){
                                 {commentList.length === 0 ? (
                                     <p></p>
                                 ) : (
-                                    commentList.map((c) => (
-                                        <li key={c?.commentId}>
-                                            <h4>{c?.authorNickname}</h4>
-                                            <p>{c?.content}</p>
-                                            <span>{c?.createdAt} <i>수정됨</i></span>
-                                            <div className="comment_control_wrap clear">
-                                                {/*TODO : 수정 부분 붙여야함*/}
-                                                <button>수정</button>
-                                                {c.commenterId == userId &&
-                                                    <button onClick={() => handleDeleteComment(c.commentId)}>삭제</button>
-                                                }
-                                            </div>
-                                        </li>
-                                    ))
+                                    commentList.map((c) => {
+                                        const isEditing = editingCommentId === c.commentId;
+
+                                        return (
+                                            <li key={c.commentId}>
+                                                {isEditing ? (
+                                                    <>
+                                                        <h4>{c.authorNickname}</h4>
+                                                        <div className="comment_edit_wrap">
+                                                        <textarea
+                                                            value={editContent}
+                                                            onChange={(e) => setEditContent(e.target.value)}
+                                                        ></textarea>
+
+                                                            <div className="comment_edit_button_wrap clear">
+                                                                <button
+                                                                    className="cancel"
+                                                                    onClick={() => setEditingCommentId(null)}
+                                                                >
+                                                                    취소
+                                                                </button>
+                                                                <button
+                                                                    className="complete"
+                                                                    onClick={() => handleEditComplete(c.commentId)}
+                                                                >
+                                                                    등록
+                                                                </button>
+                                                            </div>
+                                                        </div>
+
+                                                        <span>{c.createdAt} <i>수정됨</i></span>
+
+                                                        <div className="comment_control_wrap clear">
+                                                            <button disabled>수정</button>
+                                                            {c.commenterId == userId && (
+                                                                <button onClick={() => handleDeleteComment(c.commentId)}>
+                                                                    삭제
+                                                                </button>
+                                                            )}
+                                                        </div>
+                                                    </>
+                                                ) : (
+                                                    <>
+                                                        <h4>{c.authorNickname}</h4>
+                                                        <p>{c.content}</p>
+
+                                                        <span>{c.createdAt} <i>수정됨</i></span>
+
+                                                        <div className="comment_control_wrap clear">
+                                                            <button
+                                                                onClick={() => {
+                                                                    setEditingCommentId(c.commentId);
+                                                                    setEditContent(c.content);
+                                                                }}
+                                                            >
+                                                                수정
+                                                            </button>
+                                                            {c.commenterId == userId && (
+                                                                <button onClick={() => handleDeleteComment(c.commentId)}>
+                                                                    삭제
+                                                                </button>
+                                                            )}
+                                                        </div>
+                                                    </>
+                                                )}
+                                            </li>
+                                        );
+                                    })
                                 )}
-                                <li>
-                                    <h4>댓글 작성자 아이디</h4>
-                                    <div className="comment_edit_wrap">
-                                        <textarea>수정 버튼을 누르면 보여질 화면도 디자인하였습니다.</textarea>
-                                        <div className="comment_edit_button_wrap clear">
-                                            <button className="cancel">취소</button>
-                                            <button className="complete">등록</button>
-                                        </div>
-                                    </div>
-                                    <span>2025.11.12 <i>15:24</i></span>
-                                    <div className="comment_control_wrap clear">
-                                        <button>수정</button>
-                                        <button>삭제</button>
-                                    </div>
-                                </li>
                             </ul>
+
 
                             <div className="comment_write_area">
                                 <textarea

@@ -105,102 +105,105 @@ export default function CineSqaureList () {
   }
 
     return(
-        <section>
-            <div className="os_sub_contents">
+        <div className="os_sub_contents">
+            <div className="os_sub_navigation clear">
+                <h1>씨네광장</h1>
+            </div>
+            <section className="os_board_category_wrap">
                 {/* 위치 */}
-                <div>
-                    <button onClick={search} className="btn btn-primary">위치검색</button>
-                    <Location></Location>
-                </div>
-                    <div className="w-20">
-                        {/* 카테고리 */}
-                        <select>
-                            <option onClick={() =>handleCategory(0)}>전체</option>
-                            <option onClick={() =>handleCategory(1)}>공지사항</option>
-                            <option onClick={() =>handleCategory(2)}>자유수다</option>
-                            <option onClick={() =>handleCategory(3)}>구인구직</option>
-                        </select>
-                        
-                        {/* 정렬 UI */}
-                        <select>
-                            <option onClick={() =>handleOrderChange('latest')}>최신순</option>
-                            <option onClick={() =>handleOrderChange('views')}>조회순</option>
-                            <option onClick={() =>handleOrderChange('comments')}>댓글순</option>
-                        </select>
-                    </div>
+                <button onClick={search} className="btn btn-primary">위치검색</button>
+                <Location></Location>
+                {/* 카테고리 */}
+                <select>
+                    <option onClick={() =>handleCategory(0)}>전체</option>
+                    <option onClick={() =>handleCategory(1)}>공지사항</option>
+                    <option onClick={() =>handleCategory(2)}>자유수다</option>
+                    <option onClick={() =>handleCategory(3)}>구인구직</option>
+                </select>
 
-                    {/* 게시글 테이블 */}
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>번호</th>
-                                <th>카테고리</th>
-                                <th>작성자</th>
-                                <th>작성일자</th>
-                                <th>작성위치</th>
-                                <th>제목</th>
-                                <th>이미지</th>
-                                <th>이미지추가개수</th>
-                                <th>좋아요</th>
-                                <th>조회수</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {cineSquareList && cineSquareList.length > 0 ? (
-                                cineSquareList.map((item: any, index: number) => (
-                                    <tr key={`${item.postId}-${index}`}
-                                        onClick={() => navigate(`/cinesquare/${item.postId}`)} 
-                                        className="cursor-pointer hover:bg-gray-100 h-24">
-                                        <td>{item.postId}</td>
-                                        <td>{item.categoryName}</td>
-                                        <td>{item.authorNickname}</td>
-                                        <td>{item.createdAt}</td>
-                                        <td>{item?.city} {item?.district}</td>
-                                        <td><Link to={`/cinesquare/${item.postId}`}>{item.title}</Link></td>
+                {/* 정렬 UI */}
+                <select>
+                    <option onClick={() =>handleOrderChange('latest')}>최신순</option>
+                    <option onClick={() =>handleOrderChange('views')}>조회순</option>
+                    <option onClick={() =>handleOrderChange('comments')}>댓글순</option>
+                </select>
+            </section>
 
-                                        {item?.representativeFile ? (
-                                            // 파일이 1개일때
-                                            item.totalFiles === 1 ? (
-                                                <>
-                                                    <td colSpan={2}>
-                                                        <FilePreview file = {item?.representativeFile ?? []} />
-                                                    </td>
-                                                </>
-                                            ) : (
-                                                <>
-                                                    <td>
-                                                        <FilePreview file = {item?.representativeFile ?? []} />
-                                                    </td>
-                                                    <td>{item.totalFiles - 1}개 이미지 더보기</td>
-                                                </>
-                                            )
+                {/* 게시글 테이블 */}
+            <section>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>번호</th>
+                            <th>카테고리</th>
+                            <th>작성자</th>
+                            <th>작성일자</th>
+                            <th>작성위치</th>
+                            <th>제목</th>
+                            <th>이미지</th>
+                            <th>이미지추가개수</th>
+                            <th>좋아요</th>
+                            <th>조회수</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {cineSquareList && cineSquareList.length > 0 ? (
+                            cineSquareList.map((item: any, index: number) => (
+                                <tr key={`${item.postId}-${index}`}
+                                    onClick={() => navigate(`/cinesquare/${item.postId}`)}
+                                    className="cursor-pointer hover:bg-gray-100 h-24">
+                                    <td>{item.postId}</td>
+                                    <td>{item.categoryName}</td>
+                                    <td>{item.authorNickname}</td>
+                                    <td>{item.createdAt}</td>
+                                    <td>{item?.city} {item?.district}</td>
+                                    <td><Link to={`/cinesquare/${item.postId}`}>{item.title}</Link></td>
+
+                                    {item?.representativeFile ? (
+                                        // 파일이 1개일때
+                                        item.totalFiles === 1 ? (
+                                            <>
+                                                <td colSpan={2}>
+                                                    <FilePreview file = {item?.representativeFile ?? []} />
+                                                </td>
+                                            </>
                                         ) : (
-                                            <td colSpan={2}>파일없음</td>
-                                        )}
-                                        <td>?</td>
-                                        <td>{item.views}회</td>
-                                    </tr>
-                                ))
-                            ) : (
-                                <tr>
-                                    <td colSpan={9} className="text-center py-6 text-gray-500">
-                                        내용이 없습니다 🥲
-                                    </td>
+                                            <>
+                                                <td>
+                                                    <FilePreview file = {item?.representativeFile ?? []} />
+                                                </td>
+                                                <td>{item.totalFiles - 1}개 이미지 더보기</td>
+                                            </>
+                                        )
+                                    ) : (
+                                        <td colSpan={2}>파일없음</td>
+                                    )}
+                                    <td>?</td>
+                                    <td>{item.views}회</td>
                                 </tr>
-                            )}
-                        </tbody>
-                    </table>
+                            ))
+                        ) : (
+                            <tr>
+                                <td colSpan={9} className="text-center py-6 text-gray-500">
+                                    내용이 없습니다 🥲
+                                </td>
+                            </tr>
+                        )}
+                    </tbody>
+                </table>
+            </section>
 
-                    {/* 로딩 데이터 */}
-                    <div
-                        ref={loaderRef}
-                        className="h-10 mt-8 flex justify-center items-center text-gray-400"
-                    >
-                        {isLoading ? "불러오는 중..." : hasMore ? "" : "마지막 글이에요!"}
-                    </div>
-
-                    <button><Link to={`/cinesquare/reg`}>등록</Link></button>
+            <section>
+                {/* 로딩 데이터 */}
+                <div
+                    ref={loaderRef}
+                    className="h-10 mt-8 flex justify-center items-center text-gray-400"
+                >
+                    {isLoading ? "불러오는 중..." : hasMore ? "" : "마지막 글이에요!"}
                 </div>
             </section>
+
+            <button><Link to={`/cinesquare/reg`}>등록</Link></button>
+        </div>
     )
 }

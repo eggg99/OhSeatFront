@@ -1,4 +1,4 @@
-export default function EventWinnerDetail () {
+export default function EventAnnouncementDetail () {
     return (
         <div className="os_sub_contents">
             <div className="flex gap-3">

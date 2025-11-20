@@ -141,78 +141,90 @@ export default function PostUpdate() {
 
     return (
         <div className="os_sub_contents">
-            <div className="hot_theater_weekly">
-                <div>
-                    <input
-                        type="text"
-                        name="title"
-                        value={inputValue.title}
-                        onChange={handleInput}
-                        placeholder="제목을 입력하세요"
-                        required
-                    />
+            <div className="theater_total_board_wrap">
+                <div className="post_write_title_wrap clear">
+                    <h2>영화관 좌석 추천 수정하기</h2>
+
+                    <a href="#" className="post_button write" onClick={() => handleUpdate()}>수정</a>
                 </div>
-                <div className="flex flex-col">
-                    <div>
-                        <select value={selectedMultiplex} onChange={(e) => handleMultiplexChange(e.target.value)}>
-                            <option value="" disabled hidden>
-                                멀티플렉스를 선택하세요
-                            </option>
-                            {multiplexes.map((m) => (
-                                <option key={m.value} value={m.value}>
-                                    {m.label}
-                                </option>
-                            ))}
-                        </select>
 
-                        <select value={selectedArea} onChange={(e) => handleAreaChange(e.target.value)} disabled={!selectedMultiplex}>
-                            <option value="" disabled hidden>
-                                지역을 선택하세요
-                            </option>
-                            {areas.map((a) => (
-                                <option key={a.value} value={a.value}>
-                                    {a.label}
-                                </option>
-                            ))}
-                        </select>
-
-                        <select value={selectedCinema} onChange={(e) => handleCinemaChange(e.target.value)} disabled={!selectedArea}>
-                            <option value="" disabled hidden>
-                                영화관을 선택하세요
-                            </option>
-                            {cinemas.map((c) => (
-                                <option key={c.value} value={c.value}>
-                                    {c.label}
-                                </option>
-                            ))}
-                        </select>
-
-                        <select value={selectedScreen} onChange={(e) => handleScreenChange(e.target.value)} disabled={!selectedCinema}>
-                            <option value="" disabled hidden>
-                                상영관을 선택하세요
-                            </option>
-                            {screens.map((s) => (
-                                <option key={s.value} value={s.value}>
-                                    {s.label}
-                                </option>
-                            ))}
-                        </select>
+                <div className="post_write_area_wrap">
+                    <table className="basic_board2">
+                        <colgroup>
+                            <col style={{width: '25%'}}/>
+                            <col style={{width: '25%'}}/>
+                            <col style={{width: '25%'}}/>
+                            <col style={{width: '25%'}}/>
+                        </colgroup>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <select value={selectedMultiplex}
+                                            onChange={(e) => handleMultiplexChange(e.target.value)}>
+                                        <option value="" disabled hidden>멀티플렉스를 선택하세요</option>
+                                        {multiplexes.map(m => <option key={m.value} value={m.value}>{m.label}</option>)}
+                                    </select>
+                                </td>
+                                <td>
+                                    <select value={selectedArea} onChange={(e) => handleAreaChange(e.target.value)}
+                                            disabled={!selectedMultiplex}>
+                                        <option value="" disabled hidden>지역을 선택하세요</option>
+                                        {areas.map(a => <option key={a.value} value={a.value}>{a.label}</option>)}
+                                    </select>
+                                </td>
+                                <td>
+                                    <select value={selectedCinema} onChange={(e) => handleCinemaChange(e.target.value)}
+                                            disabled={!selectedArea}>
+                                        <option value="" disabled hidden>영화관을 선택하세요</option>
+                                        {cinemas.map(c => <option key={c.value} value={c.value}>{c.label}</option>)}
+                                    </select>
+                                </td>
+                                <td>
+                                    <select value={selectedScreen} onChange={(e) => handleScreenChange(e.target.value)}
+                                            disabled={!selectedCinema}>
+                                        <option value="" disabled hidden>상영관을 선택하세요</option>
+                                        {screens.map(s => <option key={s.value} value={s.value}>{s.label}</option>)}
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colSpan={4}>
+                                    <input
+                                        type="text"
+                                        name="title"
+                                        value={inputValue.title}
+                                        onChange={handleInput}
+                                        placeholder="제목을 입력해 주세요."
+                                        className="post_title_input"
+                                        required
+                                    />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colSpan={4}>
+                                    <div className="post_textarea_wrap">
+                                        <textarea
+                                            name="content"
+                                            placeholder="내용을 입력하세요"
+                                            value={inputValue.content}
+                                            onChange={handleInput}
+                                            required
+                                        />
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div className="post_button_wrap clear">
+                    <div className="left">
+                        {/*TODO : 어디로 보낼지 생각해보기*/}
+                        <a href="#" className="post_button">목록</a>
                     </div>
-                </div>
-                <div>
-                    <textarea
-                        name="content"
-                        placeholder="내용을 입력하세요"
-                        value={inputValue.content}
-                        onChange={handleInput}
-                        cols={6}
-                        rows={5}
-                        className="w-full"
-                        required
-                    />
-                </div>
-                <div>
-                    <button onClick={handleUpdate}>수정하기</button>
+
+                    <div className="right">
+                        <a href="#" className="post_button write" onClick={() => handleUpdate()}>수정</a>
+                    </div>
                 </div>
             </div>
         </div>

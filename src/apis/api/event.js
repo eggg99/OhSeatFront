@@ -73,9 +73,9 @@ export const getEventWinnerItem = async (eventWinnerId) => {
  * param : data             게시글 내용
  * param : files            파일 첨부
  */
-export const postEventWinner = async (formData) => {
+export const postEventWinner = async (param) => {
     try{
-        const response = await axiosApi.post('/event/winner', formData)
+        const response = await axiosApi.post('/event/winner', param)
         return response.data;
     } catch (error) {
         console.error("이벤트 당첨확인 게시글 등록 실패: ", error);
