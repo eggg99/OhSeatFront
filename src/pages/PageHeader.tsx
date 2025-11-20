@@ -30,7 +30,7 @@ const Header = () => {
                         <Link to="/event/browse">이벤트</Link>
                         <ul className="os_gnb2">
                             <li><Link to="/event/browse">이벤트 둘러보기</Link></li>
-                            <li><Link to="/event/winner/browse">이벤트 당첨발표</Link></li>
+                            <li><Link to="/event/announcement/browse">이벤트 당첨발표</Link></li>
                         </ul>
                     </li>
                 </ul>

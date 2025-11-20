@@ -1,5 +1,5 @@
 import { useRef, useState, type ChangeEvent, type SyntheticEvent } from "react"
-import { postEventWinner } from "@/apis/api/event";
+import { postEventAnnouncement } from "@/apis/api/event";
 import { userStore } from "@/store/userStore";
 import { useNavigate } from "react-router-dom";
 import { FileUpload } from "../common/file/FileUpload";
@@ -42,7 +42,7 @@ export default function EventAnnouncementReg () {
             content : inputValue.content,
         }
 
-        const response = postEventWinner(data);
+        const response = postEventAnnouncement(data);
         alert(response);
         // TODO : 백엔드에서 상세아이디값 받으면 detail 화면으로 넘어가게 만들기
         list();

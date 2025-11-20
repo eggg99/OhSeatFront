@@ -1,4 +1,4 @@
-import { getEventWinnerList } from "@/apis/api/event";
+import { getEventAnnouncementList } from "@/apis/api/event";
 import { useEffect, useState } from "react"
 import { Link, useNavigate } from "react-router-dom";
 import { Pagination } from "@/components/common/Pagination";
@@ -81,7 +81,7 @@ export default function EventAnnouncementBrowse () {
     const getList = async () => {
         try {
             const param = { 'searchType' : searchType , 'searchValue' : searchValue}
-            const response = await getEventWinnerList(param);
+            const response = await getEventAnnouncementList(param);
             if(!response) {
                 console.log('게시글 조회 실패');
             }

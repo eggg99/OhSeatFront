@@ -46,9 +46,9 @@ export const postEvent = async (formData) => {
  * param : searchType       검색 카테고리
  * param : searchValue      검색 내용
  */
-export const getEventWinnerList = async (param) => {
+export const getEventAnnouncementList = async (param) => {
     try{
-        const response = await axiosApi.get(`/event/winner/list`, { params: param })
+        const response = await axiosApi.get(`/event/announcement/list`, { params: param })
         return response.data;
     } catch (error) {
         console.error("이벤트 당첨확인 게시글 전체 조회 실패: ", error);
@@ -57,11 +57,11 @@ export const getEventWinnerList = async (param) => {
 
 /**
  * 이벤트 당첨확인 단건 조회
- * param : eventWinnerId    이벤트 시퀀스
+ * param : eventAnnouncementId    이벤트 시퀀스
  */
-export const getEventWinnerItem = async (eventWinnerId) => {
+export const getEventAnnouncementItem = async (announcementId) => {
     try{
-        const response = await axiosApi.get(`/event/winner/${eventWinnerId}`, {})
+        const response = await axiosApi.get(`/event/announcement/${announcementId}`, {})
         return response.data;
     } catch (error) {
         console.error("이벤트 당첨확인 게시글 상세 조회 실패: ", error);
@@ -73,9 +73,9 @@ export const getEventWinnerItem = async (eventWinnerId) => {
  * param : data             게시글 내용
  * param : files            파일 첨부
  */
-export const postEventWinner = async (param) => {
+export const postEventAnnouncement = async (param) => {
     try{
-        const response = await axiosApi.post('/event/winner', param)
+        const response = await axiosApi.post('/event/announcement', param)
         return response.data;
     } catch (error) {
         console.error("이벤트 당첨확인 게시글 등록 실패: ", error);
