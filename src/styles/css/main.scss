@@ -550,65 +550,67 @@ $color_6: #121212;
 		color: $color_1;
 	}
 }
-.os_event_list {
-	position: absolute;
-	top: -100px;
-	left: 340px;
-	>li {
-		float: left;
-		+ {
-			li {
-				margin-left: 20px;
+.os_event {
+	>.os_event_list {
+		position: absolute;
+		top: -100px;
+		left: 340px;
+		>li {
+			float: left;
+			+ {
+				li {
+					margin-left: 20px;
+				}
 			}
-		}
-		>a {
-			display: block;
-			position: relative;
-			padding: 51px 0 0 60px;
-			>img {
-				position: absolute;
-				top: 0;
-				left: 0;
-				width: 260px;
-				height: 260px;
-				border-radius: 30px;
-			}
-			>.inner {
-				width: 168px;
-				height: 217px;
-				padding: 30px 0 0 230px;
-				background-color: #fff;
-				border: 1px solid #DFDFDF;
-				border-radius: 30px;
-				>i {
-					display: block;
-					width: max-content;
-					padding: 0 10px;
-					font-style: normal;
-					font-size: 14px;
-					line-height: 22px;
-					color: $color_2;
-					background-color: #AE0200;
+			>a {
+				display: block;
+				position: relative;
+				padding: 51px 0 0 60px;
+				>img {
+					position: absolute;
+					top: 0;
+					left: 0;
+					width: 260px;
+					height: 260px;
 					border-radius: 30px;
 				}
-				>p {
-					width: 140px;
-					margin-top: 10px;
-					font-size: 20px;
-					line-height: 125%;
-					font-weight: 700;
-					overflow: hidden;
-					text-overflow: ellipsis;
-					display: -webkit-box;
-					-webkit-line-clamp: 3;
-					-webkit-box-orient: vertical;
-				}
-				>span {
-					display: block;
-					margin-top: 36px;
-					font-size: 15px;
-					line-height: 150%;
-					color: $color_1;
+				>.inner {
+					width: 168px;
+					height: 217px;
+					padding: 30px 0 0 230px;
+					background-color: #fff;
+					border: 1px solid #DFDFDF;
+					border-radius: 30px;
+					>i {
+						display: block;
+						width: max-content;
+						padding: 0 10px;
+						font-style: normal;
+						font-size: 14px;
+						line-height: 22px;
+						color: $color_2;
+						background-color: #AE0200;
+						border-radius: 30px;
+					}
+					>p {
+						width: 140px;
+						margin-top: 10px;
+						font-size: 20px;
+						line-height: 125%;
+						font-weight: 700;
+						overflow: hidden;
+						text-overflow: ellipsis;
+						display: -webkit-box;
+						-webkit-line-clamp: 3;
+						-webkit-box-orient: vertical;
+					}
+					>span {
+						display: block;
+						margin-top: 36px;
+						font-size: 15px;
+						line-height: 150%;
+						color: $color_1;
+					}
 				}
 			}
 		}

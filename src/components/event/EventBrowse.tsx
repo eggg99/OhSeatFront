@@ -101,20 +101,18 @@ export default function EventList () {
     // 정렬 변경
     const handleOrderChange = (newOrder: string) => setOrderType(newOrder);
 
-    // 사이즈 변경
-    const handleSizeChange = (newSize: number) => setSize(newSize);
 
     return (
         <div className="os_sub_contents">
-            <div className="os_sub_navigation clear">
-                <h1>이벤트</h1>
+            <section className="os_sub_navigation clear">
+                <h1>이벤트 둘러보기</h1>
 
                 <ul className="breadcrumbs_list clear">
                     <li className="home"><Link to="/"><i className="blind">홈</i></Link></li>
                     <li><Link to="/event/browse">이벤트</Link></li>
                     <li><Link to={`/event/browse`}>이벤트 둘러보기</Link></li>
                 </ul>
-            </div>
+            </section>
 
             {/* 카테고리영역 */}
             <section className="os_board_category_wrap">
@@ -132,7 +130,7 @@ export default function EventList () {
             </section>
 
             {/* 검색영역 */}
-            <div className="os_search_wrap">
+            <section className="os_search_wrap">
                 <ul className="os_search_list">
                     <li>
                         <select>
@@ -146,16 +144,16 @@ export default function EventList () {
                             type="text" value={searchValue}
                             onChange={(e) => setSearchValue(e.target.value)}
                             onKeyDown={handleKeyDown}
-                            placeholder="검색어를 입력하세요"/>
+                            placeholder="이벤트를 찾아보세요"/>
                     </li>
                     <li>
                         <button onClick={handleSearch}>검색</button>
                     </li>
                 </ul>
-            </div>
+            </section>
 
             {/* 리스트영역 */}
-            <div className="theater_total_board_wrap">
+            <section className="theater_total_board_wrap">
                 <div className="board_control_wrap clear">
                     <p>{eventList?.totalElements ?? 0}개의 글</p>
 
@@ -163,31 +161,17 @@ export default function EventList () {
                         <select>
                             <option onClick={() =>handleOrderChange('latest')}>최신순</option>
                             <option onClick={() =>handleOrderChange('views')}>조회순</option>
-                        </select>
-
-                        <select>
-                            <option onClick={() =>handleSizeChange(10)}>10개씩</option>
-                            <option onClick={() =>handleSizeChange(20)}>20개씩</option>
+                            <option onClick={() =>handleOrderChange('recommend')}>추천순</option>
                         </select>
                     </div>
                 </div>
 
                 <div className="basic_board3_wrap">
-                    <table className="basic_board3">
-                        <colgroup>
-                            <col style={{width: '25%'}}/>
-                            <col style={{width: '25%'}}/>
-                            <col style={{width: '25%'}}/>
-                            <col style={{width: '25%'}}/>
-                        </colgroup>
-                        <tbody>
+                    <ul className="os_event_list">
                             {eventList && eventList.content.length > 0 ? (
                                 eventList.content.map((item, index) => (
-                                    <tr>
-                                        <td
-                                            key={item?.id}
-                                            onClick={() => navigate(`/event/${item?.id}`)}
-                                        >
+                                    <li key={item?.id}
+                                            onClick={() => navigate(`/event/${item?.id}`)}>
                                             <a href="#" className="event_post_wrap">
                                                 <div className="event_category">
                                                     <i>{item?.category}</i>
@@ -199,14 +183,12 @@ export default function EventList () {
                                                     {item.startDt.toLocaleDateString()} ~ {item.endDt.toLocaleDateString()}
                                                 </span>
                                             </a>
-                                        </td>
-                                    </tr>
+                                    </li>
                                 ))
                             ) : (
-                                    <tr><td>이벤트가 없습니다 🥲</td></tr>
+                                <li><a href="#" className="event_post_wrap">이벤트가 없습니다 🥲</a></li>
                             )}
-                        </tbody>
-                    </table>
+                    </ul>
                 </div>
 
                 <div className="post_button_wrap clear">
@@ -222,7 +204,7 @@ export default function EventList () {
                         onPageChange={handlePageChange}
                     />
                 }
-            </div>
+            </section>
         </div>
     )
 }

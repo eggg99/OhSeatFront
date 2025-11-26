@@ -7,6 +7,7 @@ $color_6: #599c3e;
 $color_7: #575757;
 $color_8: #B17C7B;
 
+@charset "UTF-8";
 /*서브페이지 콘텐츠*/
 /*최근 언급 많이 되는 영화관은?*/
 /*CGV*/
@@ -22,6 +23,9 @@ $color_8: #B17C7B;
 /*게시글 글쓰기*/
 /*게시판 카테고리*/
 /*게시글 검색*/
+/*이벤트 메뉴 게시글 상세 관련 추가*/
+/*씨네광장(자유수다) 관련*/
+/*이벤트 게시글 목록*/
 .os_sub_contents {
 	padding: 50px 0;
 	margin-top: 90px;
@@ -247,6 +251,7 @@ $color_8: #B17C7B;
 	padding-right: 10px;
 	box-sizing: border-box;
 	>.inner {
+		height: 429px;
 		padding: 39px;
 		border: 1px solid #ddd;
 		border-radius: 30px;
@@ -951,13 +956,17 @@ $color_8: #B17C7B;
 	>pre {
 		font-size: 16px;
 		line-height: 150%;
+		>img {
+			display: block;
+			margin: 0 auto;
+		}
 	}
 }
 .detail_footer {
 	margin-top: 26px;
 }
 .post_reaction_wrap {
-	margin: 30px 0 25px;
+	margin: 30px 0 0;
 	>* {
 		float: left;
 		+ {
@@ -987,6 +996,7 @@ $color_8: #B17C7B;
 }
 .post_comment_wrap {
 	padding: 25px;
+	margin-top: 25px;
 	background-color: #f1f1f1;
 	border-radius: 6px;
 }
@@ -1074,6 +1084,11 @@ $color_8: #B17C7B;
 			right: 0;
 		}
 	}
+	+ {
+		.comment_write_area {
+			margin-top: 25px;
+		}
+	}
 }
 .comment_control_wrap {
 	>button {
@@ -1091,7 +1106,6 @@ $color_8: #B17C7B;
 }
 .comment_write_area {
 	padding: 15px;
-	margin-top: 25px;
 	background-color: #fff;
 	border: 1px solid #ddd;
 	border-radius: 6px;
@@ -1213,5 +1227,96 @@ $color_8: #B17C7B;
 			background-color: #121212;
 			border-radius: 6px;
 		}
+	}
+}
+.category_go_button {
+	display: block;
+	width: max-content;
+	padding-right: 20px;
+	margin-bottom: 10px;
+	font-size: 16px;
+	line-height: 16px;
+	color: $color_5;
+	background: url(../img/ategory_go_button.png) no-repeat right center;
+}
+.event_overview_wrap {
+	margin-top: 20px;
+}
+.event_overview_list {
+	width: max-content;
+	padding: 12px 16px;
+	background-color: #f1f1f1;
+	border-radius: 30px;
+	>li {
+		float: left;
+		font-size: 18px;
+		line-height: 125%;
+		+ {
+			li {
+				margin-left: 16px;
+			}
+		}
+	}
+	>li.date {
+		>p {
+			padding-left: 21px;
+			background: url(../img/event_post_wrap_span2.png) no-repeat left center;
+		}
+	}
+	>li.state {
+		>i {
+			display: inline-block;
+			vertical-align: top;
+			padding: 0 10px;
+			font-style: normal;
+			font-size: 14px;
+			border-radius: 30px;
+		}
+		>i.on_going {
+			color: $color_1;
+			background-color: #ae0200;
+		}
+		>i.closed {
+			color: $color_1;
+			background-color: #747474;
+		}
+	}
+	>li.draw {
+		>span {
+			padding-left: 21px;
+			background: url(../img/draw.png) no-repeat left center;
+			>i {
+				font-style: normal;
+				font-weight: 700;
+			}
+		}
+	}
+}
+.os_freetalk_wrap {
+	width: 920px;
+	margin: 0 auto;
+}
+.os_timeline_wrap {
+	float: left;
+	width: 740px;
+	height: 600px;
+	background-color: #599c3e;
+}
+.os_ad_wrap {
+	float: right;
+	width: 160px;
+	height: 450px;
+	background-color: #575757;
+}
+.os_event_list {
+	display: grid;
+	grid-template-columns: repeat(4, 1fr);
+	>li {
+		display: flex;
+		-webkit-box-pack: center;
+		justify-content: center;
+		-webkit-box-align: center;
+		align-items: center;
+		padding: 24px 0 24px 24px;
 	}
 }

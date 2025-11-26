@@ -35,7 +35,7 @@ export default function EventReg () {
         const formData:FormData = new FormData();
 
         if(!isLogin) {alert('로그인을 해주세요'); return;}
-        else if(!inputValue.categoryId){alert('카테고리를 입력해주세요'); return;}
+        else if(!inputValue.categoryId){alert('이벤트 종류를 선택해주세요'); return;}
         else if(!inputValue.title){alert('제목을 입력해주세요'); return;}
         else if(!inputValue.startDt){alert('이벤트 시작기간을 입력해주세요'); return;}
         else if(!inputValue.endDt){alert('이벤트 종료기간을 입력해주세요'); return;}
@@ -107,7 +107,7 @@ export default function EventReg () {
         <div className="os_sub_contents">
             <div className="theater_total_board_wrap">
                 <div className="post_write_title_wrap clear">
-                    <h2>이벤트 글쓰기</h2>
+                    <h2>이벤트 둘러보기 글쓰기</h2>
 
                     <a href="#" className="post_button write" onClick={() => handleSubmit()}>등록</a>
                 </div>
@@ -124,12 +124,50 @@ export default function EventReg () {
                         <tr>
                             <td>
                                 <select name="categoryId" onChange={handleInput} value={inputValue.categoryId}>
-                                    <option value=''>카테고리를 선택하세요</option>
+                                    <option value=''>이벤트 종류 선택</option>
                                     <option value='1'>시사회</option>
                                     <option value='2'>예매권</option>
                                 </select>
                             </td>
-                            <td colSpan={3}>
+                            <td colSpan={2}>
+                                <div className="calendar_wrap">
+                                    <ul className="calendar_list">
+                                        <li className="start">
+                                            <span>시작일자</span>
+                                            <input 
+                                                type="text"
+                                                name="startDt"
+                                                value={inputValue.startDt}
+                                                onChange={handleInput}
+                                                placeholder="시작기간"
+                                                className="calendar_input"
+                                                required
+                                            />
+                                        </li>
+                                        <li className="arrow"></li>
+                                        <li className="end">
+                                            <span>종료일자</span>
+                                            <input 
+                                                type="text"
+                                                name="endDt"
+                                                value={inputValue.endDt}
+                                                onChange={handleInput}
+                                                placeholder="종료기간"
+                                                className="calendar_input"
+                                                required
+                                            />
+                                        </li>
+                                    </ul>
+                                </div>
+                            </td>
+                            <td>
+                                <div className="event_draw_wrap">
+                                    <input type="text" className="post_input_text" placeholder="이벤트 당첨 인원을 입력해주세요"/>
+                                </div>                                        
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colSpan={4}>
                                 <input
                                     type="text"
                                     name="title"
@@ -142,35 +180,58 @@ export default function EventReg () {
                             </td>
                         </tr>
                         <tr>
-                            <td>
-                                <input
-                                    type="date"
-                                    name="startDt"
-                                    value={inputValue.startDt}
-                                    onChange={handleInput}
-                                    placeholder="시작기간"
-                                    className="post_title_input"
-                                    required
-                                />
-                            </td>
-                            <td>
-                                <input
-                                    type="date"
-                                    name="endDt"
-                                    value={inputValue.endDt}
-                                    onChange={handleInput}
-                                    placeholder="종료기간"
-                                    className="post_title_input"
-                                    required
-                                />
-                            </td>
-                        </tr>
-                        <tr>
                             <td colSpan={4}>
-                                <FileUpload
+                                <div className="os_file_wrap">
+                                    <ul className="os_file_list2">
+                                        <li>
+                                            <p><i>1</i>포스터 이미지 <span>(727*1036)</span></p>
+
+                                            <div className="file_name_wrap clear">
+                                                <p>등록 버튼을 눌러 이미지 파일을 첨부해주세요</p>
+                                                <div className="file_button_wrap clear">                                                            
+                                                    <button className="os_file_upload">등록</button>
+                                                </div>                                                        
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <p><i>2</i>이벤트 정사각형 썸네일 <span>(350*350)</span></p>
+
+                                            <div className="file_name_wrap clear">
+                                                <span>이미지 파일 명1.jpg</span>
+                                                <i>200KB</i>
+                                                <div className="file_button_wrap clear">
+                                                    <button className="os_file_delete">삭제</button>
+                                                </div>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <p><i>3</i>이벤트 배너 배경 <span>(630*500)</span></p>
+
+                                            <div className="file_name_wrap clear">
+                                                <span>이미지 파일 명1.jpg</span>
+                                                <i>200KB</i>
+                                                <div className="file_button_wrap clear">
+                                                    <button className="os_file_delete">삭제</button>
+                                                </div>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <p><i>4</i>이벤트 게시글 내용 <span>(800*제한없음)</span></p>
+
+                                            <div className="file_name_wrap clear">
+                                                <span>이미지 파일 명1.jpg</span>
+                                                <i>200KB</i>
+                                                <div className="file_button_wrap clear">
+                                                    <button className="os_file_delete">삭제</button>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                                {/* <FileUpload
                                     onFilesChange={handleFilesChange}
                                     onRepresentativeChange={handleRepresentativeChange}
-                                />
+                                /> */}
                             </td>
                         </tr>
                         </tbody>

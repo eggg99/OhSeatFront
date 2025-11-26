@@ -32,7 +32,7 @@ export default function EventAnnouncementReg () {
         e?.preventDefault();
 
         if(!isLogin) {alert('로그인을 해주세요'); return;}
-        else if(!inputValue.categoryId){alert('카테고리를 입력해주세요'); return;}
+        else if(!inputValue.categoryId){alert('이벤트 종류를 선택해주세요'); return;}
         else if(!inputValue.title){alert('제목을 입력해주세요'); return;}
         else if(!inputValue.content){alert('당첨내용을 입력해주세요'); return;}
 
@@ -74,7 +74,7 @@ export default function EventAnnouncementReg () {
                             <tr>
                                 <td>
                                     <select name="categoryId" onChange={handleInput} value={inputValue.categoryId}>
-                                        <option value=''>카테고리를 선택하세요</option>
+                                        <option value=''>이벤트 종류 선택</option>
                                         <option value='1'>시사회</option>
                                         <option value='2'>예매권</option>
                                     </select>

@@ -144,7 +144,7 @@ export default function EventAnnouncementBrowse () {
                             type="text" value={searchValue}
                             onChange={(e) => setSearchValue(e.target.value)}
                             onKeyDown={handleKeyDown}
-                            placeholder="검색어를 입력하세요"/>
+                            placeholder="이벤트를 찾아보세요"/>
                     </li>
                     <li>
                         <button onClick={handleSearch}>검색</button>
@@ -160,13 +160,13 @@ export default function EventAnnouncementBrowse () {
 
                     <div className="post_filter_wrap clear">
                         <select>
-                            <option onClick={() =>handleOrderChange('latest')}>최신순</option>
-                            <option onClick={() =>handleOrderChange('views')}>조회순</option>
-                        </select>
-
-                        <select>
                             <option onClick={() =>handleSizeChange(10)}>10개씩</option>
                             <option onClick={() =>handleSizeChange(20)}>20개씩</option>
+                        </select>
+                        <select>
+                            <option onClick={() =>handleOrderChange('latest')}>최신순</option>
+                            <option onClick={() =>handleOrderChange('views')}>조회순</option>
+                            <option onClick={() =>handleOrderChange('recommend')}>추천순</option>
                         </select>
                     </div>
                 </div>
@@ -174,16 +174,43 @@ export default function EventAnnouncementBrowse () {
                 {/* 게시글 테이블 */}
                 <table className="basic_board1">
                     <colgroup>
-                        <col style={{ width: '50%' }}/>
-                        <col style={{ width: '50%' }}/>
+                        <col style={{ width: '8%' }}/>
+                        <col style={{ width: '8%' }}/>
+                        <col style={{ width: '55%' }}/>
+                        <col style={{ width: '8%' }}/>
+                        <col style={{ width: '8%' }}/>
+                        <col style={{ width: '8%' }}/>
                     </colgroup>
                     <thead>
                         <tr>
-                            <th>제목</th>
-                            <th>작성일자</th>
+                            <th colSpan={3}>제목</th>
+                            <th>작성자</th>
+                            <th>작성일</th>
+                            <th>조회수</th>
                         </tr>
                     </thead>
                     <tbody>
+                        <tr>
+                            <th><span className="notice">필독</span></th>
+                            <th colSpan={2} className="txtl"><a href="#">필독 게시글 제목 <span>[4]</span></a></th>
+                            <th>작성자 아이디</th>
+                            <th>2025.09.17</th>
+                            <th>0,000</th>
+                        </tr>
+                        <tr>
+                            <th><span className="notice">공지</span></th>
+                            <th colSpan={2} className="txtl"><a href="#">공지 게시글 제목</a></th>
+                            <th>작성자 아이디</th>
+                            <th>2025.09.17</th>
+                            <th>0,000</th>
+                        </tr>
+                        <tr>
+                            <th><span className="notice">공지</span></th>
+                            <th colSpan={2} className="txtl"><a href="#">공지 게시글 제목</a></th>
+                            <th>작성자 아이디</th>
+                            <th>2025.09.17</th>
+                            <th>0,000</th>
+                        </tr>
                     {announcementList && announcementList.content.length > 0 ? (
                         announcementList.content.map((item: any) => (
                             <tr
@@ -191,12 +218,16 @@ export default function EventAnnouncementBrowse () {
                                 onClick={() => navigate(`/event/announcement/${item?.id}`)}
                             >
                                 <td className="txtc">{item?.title}</td>
+                                <td className="txtc">{item?.title}</td>
+                                <td className="txtc">{item?.title}</td>
+                                <td className="txtc">{item?.title}</td>
+                                <td className="txtc">{item?.title}</td>
                                 <td className="txtc">{item.createdAt}</td>
                             </tr>
                         ))
                     ) : (
                         <tr>
-                            <td colSpan={2} className="txtc">
+                            <td colSpan={5} className="txtc">
                                 당첨 내용이 없습니다 🥲
                             </td>
                         </tr>

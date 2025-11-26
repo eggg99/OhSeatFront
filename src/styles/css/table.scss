@@ -2,8 +2,11 @@ $color_1: #B81313;
 $color_2: #fff;
 $color_3: #c3c3c3;
 $color_4: #121212;
-$color_5: #a7a7a7;
+$color_5: #747474;
+$color_6: #599c3e;
+$color_7: #a7a7a7;
 
+@charset "UTF-8";
 /*기본 테이블1*/
 /*기본 테이블2 - 게시글 작성 테이블*/
 /*기본 테이블3 - 이벤트 게시판 목록*/
@@ -182,6 +185,171 @@ $color_5: #a7a7a7;
 		}
 	}
 }
+.os_file_list2 {
+	>li {
+		position: relative;
+		padding-left: 300px;
+		+ {
+			li {
+				margin-top: 8px;
+			}
+		}
+		>p {
+			position: absolute;
+			top: 50%;
+			left: 10px;
+			margin-top: -15px;
+			line-height: 30px;
+			margin-right: 20px;
+			font-weight: 700;
+			>i {
+				display: inline-block;
+				width: 14px;
+				padding: 0 4px;
+				margin: 4px 8px 4px 0;
+				font-style: normal;
+				font-size: 14px;
+				line-height: 22px;
+				color: $color_2;
+				font-weight: 400;
+				text-align: center;
+				background-color: #121212;
+				border-radius: 3px;
+			}
+			>span {
+				margin-left: 2px;
+				font-size: 14px;
+				font-weight: 400;
+				color: $color_5;
+			}
+		}
+		>.file_name_wrap {
+			padding: 10px 10px 10px 20px;
+			font-size: 14px;
+			line-height: 30px;
+			background-color: #fff;
+			border: 1px solid #ddd;
+			border-radius: 6px;
+		}
+	}
+}
+.file_name_wrap {
+	>span {
+		float: left;
+	}
+	>i {
+		float: left;
+		margin-left: 10px;
+		font-style: normal;
+		color: $color_3;
+	}
+	>p {
+		float: left;
+		color: $color_6;
+	}
+	>.file_button_wrap {
+		float: right;
+	}
+}
+.file_button_wrap {
+	>button {
+		float: left;
+		max-width: fit-content;
+		padding: 0 8px;
+		font-size: 14px;
+		line-height: 28px;
+		color: $color_4;
+		background-color: #fff;
+		border: 1px solid #ddd;
+		border-radius: 6px;
+		+ {
+			button {
+				margin-left: 5px;
+			}
+		}
+	}
+}
+button.os_file_upload {
+	color: $color_2;
+	background-color: #599c3e;
+	border: 1px solid #599c3e;
+}
+.calendar_wrap {
+	padding: 10px;
+	background-color: #f1f1f1;
+	border-radius: 6px;
+}
+.calendar_list {
+	display: grid;
+	grid-template-columns: 45% 10% 45%;
+	width: 100%;
+	list-style: none;
+	>li {
+		position: relative;
+		text-align: center;
+	}
+	>li.start {
+		padding-left: 90px;
+		>span {
+			position: absolute;
+			top: 0;
+			left: 5px;
+			padding-left: 21px;
+			font-size: 14px;
+			line-height: 26px;
+			background: url(../img/event_post_wrap_span2.png) no-repeat left center;
+		}
+	}
+	>li.end {
+		padding-left: 90px;
+		>span {
+			position: absolute;
+			top: 0;
+			left: 5px;
+			padding-left: 21px;
+			font-size: 14px;
+			line-height: 26px;
+			background: url(../img/event_post_wrap_span2.png) no-repeat left center;
+		}
+	}
+	>li.arrow {
+		background: url(../img/calendar_list_arrow.png) no-repeat center;
+	}
+}
+.calendar_input {
+	position: relative;
+	padding: 0;
+	box-sizing: border-box;
+	font-size: 14px;
+	line-height: 26px;
+	color: $color_4;
+	text-align: center;
+	border: none;
+	border-radius: 30px;
+}
+.event_draw_wrap {
+	position: relative;
+	height: 44px;
+	padding-right: 30px;
+	border: 1px solid #ddd;
+	border-radius: 6px;
+	&::after {
+		content: '명';
+		position: absolute;
+		top: 0;
+		right: 16px;
+		line-height: 44px;
+		font-weight: 600;
+	}
+}
+.post_input_text {
+	padding: 0 16px;
+	font-size: 16px;
+	line-height: 44px;
+	text-align: right;
+	background-color: transparent;
+	border: none;
+}
 .basic_board3_wrap {
 	padding-right: 24px;
 	border-top: 1px solid #121212;
@@ -198,6 +366,7 @@ $color_5: #a7a7a7;
 	}
 }
 .event_post_wrap {
+	display: block;
 	position: relative;
 	>.event_category {
 		position: absolute;
@@ -240,7 +409,7 @@ $color_5: #a7a7a7;
 		margin-top: 10px;
 		font-size: 16px;
 		line-height: 150%;
-		color: $color_5;
+		color: $color_7;
 		background: url(../img/event_post_wrap_span.png) no-repeat left center;
 	}
 }
