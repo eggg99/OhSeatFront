@@ -20,7 +20,6 @@ interface EventDataPage {
     totalPages : number;
     totalElements : number;
     number: number;
-    size : number;
     first : boolean;
     last : boolean;
 }
@@ -36,7 +35,6 @@ export default function EventList () {
 
     const [eventList, setEventList] = useState<EventDataPage | null>(null);
     const [page, setPage] = useState<number>(0);
-    const [size, setSize] = useState<number>(10);
     const [orderType, setOrderType] = useState<string>('');
 
     useEffect(() => {
@@ -110,7 +108,7 @@ export default function EventList () {
                 <ul className="breadcrumbs_list clear">
                     <li className="home"><Link to="/"><i className="blind">홈</i></Link></li>
                     <li><Link to="/event/browse">이벤트</Link></li>
-                    <li><Link to={`/event/browse`}>이벤트 둘러보기</Link></li>
+                    <li><Link to="/event/browse">이벤트 둘러보기</Link></li>
                 </ul>
             </section>
 

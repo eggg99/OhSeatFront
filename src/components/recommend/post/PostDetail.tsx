@@ -243,10 +243,11 @@ export default function PostDetail(){
                             <a href="#" className="post_hits_button">조회수 <span>{detailValue.views}</span></a>
                             <a href="#" className="post_comment_button">댓글 <span>{detailValue.commentCount}</span></a>
 
-                            {/* 더보기 버튼에 클래스네임으로 on이 붙으면 아래 게시글 삭제, 수정이 보입니다 */}
-                            <a href="#" className={`post_setting_button ${isMenuOn ? "on" : ""}`} onClick={handleInnerToggle}>
-                                <span className="blind">더보기</span>
-                            </a>
+                            {isLogin && (
+                                <a href="#" className={`post_setting_button ${isMenuOn ? "on" : ""}`} onClick={handleInnerToggle}>
+                                    <span className="blind">더보기</span>
+                                </a>
+                            )}
 
                             <div className="post_setting_wrap">
                                 {detailValue.authorId == userId &&

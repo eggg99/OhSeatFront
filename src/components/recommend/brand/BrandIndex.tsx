@@ -40,7 +40,7 @@ export default function BrandIndex() {
     // 지역 선택
     const handleAreaChange = async (areaId: string) => {
         setSelectedAreaId(areaId);                                                  // 선택한 지역 설정
-        const response = await getCinemaList(multiplexId, areaId);                  // 영화관 리스트 조회 api
+        const response = await getCinemaList(multiplexId, areaId);           // 영화관 리스트 조회 api
         setCinemaList(response?.length ? [ALL_CINEMA, ...response] : [ALL_CINEMA]); // 영화관 리스트 설정
         setSelectedCinema(ALL_CINEMA);                                              // 영화관 '전체'로 설정
     };
@@ -48,7 +48,7 @@ export default function BrandIndex() {
     // 영화관 선택
     const handleCinemaChange = async (cinema: any) => {
         setSelectedCinema(cinema);                                                  // 선택한 영화관 설정
-        const response = await getScreenList(multiplexId, cinema.cinemaId);         // 상영관 리스트 조회 api
+        const response = await getScreenList(multiplexId, cinema.cinemaId);  // 상영관 리스트 조회 api
         setScreenList(response?.length ? [ALL_SCREEN, ...response] : [ALL_SCREEN])  // 상영관 리스트 설정
         setSelectedScreen(ALL_SCREEN);                                              // 상영관 '전체'로 설정
     };
