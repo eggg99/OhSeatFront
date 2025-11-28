@@ -63,26 +63,30 @@ export default function PostDetail(){
         prevId : 0,
         nextId : 0,
     });
-    
+
     const hasViewed = useRef(false);
 
-    const handleViews = async () => {
-        // 로그인한 유저만 조회수 증가 가능
-        if(userId){
-            await postIncrementViews(postId);
-        }
-    }
-
+    // 조회수 증가: postId 바뀌었을 때 1번만
     useEffect(() => {
-        const fetchData = async () => {
-            if (postId && !hasViewed.current) {
-                hasViewed.current = true; // 한 번만 실행되도록 막음
-                getData();
-                getDataComment();
-                handleViews();
+        if (!postId) return;
+
+        const exec = async () => {
+            if (!hasViewed.current && userId) {
+                hasViewed.current = true;
+                await postIncrementViews(postId);
             }
         };
-        fetchData();
+
+        exec();
+    }, [postId, userId]);
+
+    useEffect(() => {
+        if (!postId) return;
+        const exec = async () => {
+            await getData();
+            await getDataComment();
+        };
+        exec();
     }, [postId]);
 
     // ✅ multiplexId를 label로 변환
@@ -185,6 +189,7 @@ export default function PostDetail(){
     };
 
     const moveToPost = (postId:number, flag:string) => {
+        console.log('여기옴?')
         if(!postId){
             if(flag === 'bef') {
                 alert('이전글이 존재하지 않습니다.'); 
@@ -222,8 +227,18 @@ export default function PostDetail(){
             <div className="theater_total_board_wrap">
                 <div className="post_button_wrap clear">
                     <div className="right">
-                        <a href="#" onClick={() => moveToPost(detailValue?.prevId, 'bef')} className="post_button before">이전글</a>
-                        <a href="#" onClick={() => moveToPost(detailValue?.nextId, 'aft')} className="post_button after">다음글</a>
+                        <a
+                            href="#"
+                            onClick={(e) => {
+                                e.preventDefault();
+                                moveToPost(detailValue?.prevId, 'bef');
+                                }} className="post_button before">이전글</a>
+                        <a
+                            href="#"
+                            onClick={(e) => {
+                                e.preventDefault();
+                                moveToPost(detailValue?.nextId, 'aft');
+                            }} className="post_button after">다음글</a>
                         <Link to={`/recommend/${brand}`} className="post_button">목록</Link>
                     </div>
                 </div>
@@ -283,13 +298,10 @@ export default function PostDetail(){
                         </div>
 
                         <div className="post_comment_wrap">
-                            <ul className="post_comment_list">
-                                {commentList.length === 0 ? (
-                                    <p></p>
-                                ) : (
-                                    commentList.map((c) => {
+                            {commentList.length > 0 && (
+                                <ul className="post_comment_list">
+                                    {commentList.length > 0 && commentList.map((c) => {
                                         const isEditing = editingCommentId === c.commentId;
-
                                         return (
                                             <li key={c.commentId}>
                                                 {isEditing ? (
@@ -300,29 +312,25 @@ export default function PostDetail(){
                                                             value={editContent}
                                                             onChange={(e) => setEditContent(e.target.value)}
                                                         ></textarea>
-
                                                             <div className="comment_edit_button_wrap clear">
                                                                 <button
                                                                     className="cancel"
                                                                     onClick={() => setEditingCommentId(null)}
-                                                                >
-                                                                    취소
+                                                                >취소
                                                                 </button>
                                                                 <button
                                                                     className="complete"
                                                                     onClick={() => handleEditComplete(c.commentId)}
-                                                                >
-                                                                    등록
+                                                                >등록
                                                                 </button>
                                                             </div>
                                                         </div>
-
                                                         <span>{c.createdAt} <i>수정됨</i></span>
-
                                                         <div className="comment_control_wrap clear">
                                                             <button disabled>수정</button>
                                                             {c.commenterId == userId && (
-                                                                <button onClick={() => handleDeleteComment(c.commentId)}>
+                                                                <button
+                                                                    onClick={() => handleDeleteComment(c.commentId)}>
                                                                     삭제
                                                                 </button>
                                                             )}
@@ -332,32 +340,28 @@ export default function PostDetail(){
                                                     <>
                                                         <h4>{c.authorNickname}</h4>
                                                         <p>{c.content}</p>
-
                                                         <span>{c.createdAt} <i>수정됨</i></span>
-
                                                         <div className="comment_control_wrap clear">
                                                             <button
                                                                 onClick={() => {
                                                                     setEditingCommentId(c.commentId);
                                                                     setEditContent(c.content);
                                                                 }}
-                                                            >
-                                                                수정
+                                                            >수정
                                                             </button>
                                                             {c.commenterId == userId && (
-                                                                <button onClick={() => handleDeleteComment(c.commentId)}>
-                                                                    삭제
-                                                                </button>
+                                                                <button
+                                                                    onClick={() => handleDeleteComment(c.commentId)}
+                                                                >삭제</button>
                                                             )}
                                                         </div>
                                                     </>
                                                 )}
                                             </li>
                                         );
-                                    })
-                                )}
-                            </ul>
-
+                                    })}
+                                </ul>
+                            )}
 
                             <div className="comment_write_area">
                                 <textarea

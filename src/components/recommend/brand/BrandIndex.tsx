@@ -49,6 +49,7 @@ export default function BrandIndex() {
     const handleCinemaChange = async (cinema: any) => {
         setSelectedCinema(cinema);                                                  // 선택한 영화관 설정
         const response = await getScreenList(multiplexId, cinema.cinemaId);  // 상영관 리스트 조회 api
+        console.log(response);
         setScreenList(response?.length ? [ALL_SCREEN, ...response] : [ALL_SCREEN])  // 상영관 리스트 설정
         setSelectedScreen(ALL_SCREEN);                                              // 상영관 '전체'로 설정
     };
@@ -165,7 +166,7 @@ export default function BrandIndex() {
                     <div className="embla" ref={emblaRef3}>
                         <div className="embla__container">
                             <ul className="branch_screen_list clear flex flex-nowrap">
-                            {screenList.map((screen) => {
+                            {(selectedCinema.cinemaId !== 'all_c') && screenList.map((screen) => {
                                 const isChecked = selectedScreen?.screenId === screen.screenId;
                                 return(
                                     <li key={screen.screenId} className={`embla__slide flex-none ${isChecked ? "on" : ""}`}>
@@ -228,32 +229,6 @@ export default function BrandIndex() {
                         </tr>
                     </thead>
                     <tbody>
-                        {/* 공지, 필독 넣기 */}
-                        <tr>
-                            <th><span className="notice">필독</span></th>
-                            <th colSpan={2} className="txtl"><a href="#">필독 게시글 제목 <span>[4]</span></a></th>
-                            <th>작성자 아이디</th>
-                            <th>2025.09.17</th>
-                            <th>0,000</th>
-                            <th>0</th>
-                        </tr>
-                        <tr>
-                            <th><span className="notice">공지</span></th>
-                            <th colSpan={2} className="txtl"><a href="#">공지 게시글 제목</a></th>
-                            <th>작성자 아이디</th>
-                            <th>2025.09.17</th>
-                            <th>0,000</th>
-                            <th>0</th>
-                        </tr>
-                        <tr>
-                            <th><span className="notice">공지</span></th>
-                            <th colSpan={2} className="txtl"><a href="#">공지 게시글 제목</a></th>
-                            <th>작성자 아이디</th>
-                            <th>2025.09.17</th>
-                            <th>0,000</th>
-                            <th>0</th>
-                        </tr>
-                    
                         {postList && postList.content.length > 0 ? (
                             postList.content.map((item: any) => (
                                 <tr

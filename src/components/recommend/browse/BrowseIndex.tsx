@@ -207,31 +207,6 @@ export default function BrowseIndex() {
                         </tr>
                     </thead>
                     <tbody>
-                        {/* 공지, 필독 넣기 */}
-                        <tr>
-                            <th><span className="notice">필독</span></th>
-                            <th colSpan={2} className="txtl"><a href="#">필독 게시글 제목 <span>[4]</span></a></th>
-                            <th>작성자 아이디</th>
-                            <th>2025.09.17</th>
-                            <th>0,000</th>
-                            <th>0</th>
-                        </tr>
-                        <tr>
-                            <th><span className="notice">공지</span></th>
-                            <th colSpan={2} className="txtl"><a href="#">공지 게시글 제목</a></th>
-                            <th>작성자 아이디</th>
-                            <th>2025.09.17</th>
-                            <th>0,000</th>
-                            <th>0</th>
-                        </tr>
-                        <tr>
-                            <th><span className="notice">공지</span></th>
-                            <th colSpan={2} className="txtl"><a href="#">공지 게시글 제목</a></th>
-                            <th>작성자 아이디</th>
-                            <th>2025.09.17</th>
-                            <th>0,000</th>
-                            <th>0</th>
-                        </tr>
                         {postList && postList.content.length > 0 ? (
                             postList.content.map((item: any) => (
                             <tr

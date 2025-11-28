@@ -30,7 +30,7 @@ interface Movie {
 }
 
 
-function PageMain(){
+export default function PageMain(){
     const [topCinemas, setTopCinemas] = useState<Cinema>();
     const [recentPost, setRecentPost] = useState<any[]>([]);
     const [movies, setMovies] = useState<Movie[]>([]);
@@ -92,20 +92,19 @@ function PageMain(){
                     setMovies(parsed.data);
                     return;
                 }
+            }
 
-            } else {
-                // 캐시 없거나 날짜 다르면 API 호출
-                const response = await getBoxoffice();
-                if (response) {
-                    setMovies(response);
-                    localStorage.setItem(
-                        "boxoffice",
-                        JSON.stringify({
-                            data: response,
-                            timestamp: new Date().toISOString(),
-                        })
-                    );
-                }
+            // 캐시 없거나 날짜 다르면 API 호출
+            const response = await getBoxoffice();
+            if (response) {
+                setMovies(response);
+                localStorage.setItem(
+                    "boxoffice",
+                    JSON.stringify({
+                        data: response,
+                        timestamp: new Date().toISOString(),
+                    })
+                );
             }
         } catch (error) {
             console.error(error);
@@ -310,5 +309,3 @@ function PageMain(){
         </main>
     )
 }
-
-export default PageMain;
