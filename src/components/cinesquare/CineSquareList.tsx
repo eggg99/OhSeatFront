@@ -106,33 +106,86 @@ export default function CineSqaureList () {
 
     return(
         <div className="os_sub_contents">
-            <div className="os_sub_navigation clear">
-                <h1>씨네광장</h1>
-            </div>
-            <section className="os_board_category_wrap">
-                {/* 위치 */}
-                <button onClick={search} className="btn btn-primary">위치검색</button>
-                <Location></Location>
-                {/* 카테고리 */}
-                <select>
-                    <option onClick={() =>handleCategory(0)}>전체</option>
-                    <option onClick={() =>handleCategory(1)}>공지사항</option>
-                    <option onClick={() =>handleCategory(2)}>자유수다</option>
-                    <option onClick={() =>handleCategory(3)}>구인구직</option>
-                </select>
+            <div className="os_freetalk_wrap clear">
+                <div className="os_timeline_wrap">
+                    <div className="location_wrap">
+                        <Location></Location>
+                    </div>
+                    <div className="os_freetalk_tabmenu">
+                        <ul className="os_freetalk_list clear">
+                            <li className={categoryId === 0 ? 'on' : ''}>
+                                <a href="#" onClick={() => handleCategory(0)}>전체</a>
+                            </li>
+                            <li className={categoryId === 1 ? 'on' : ''}>
+                                <a href="#" onClick={() => handleCategory(1)}>공지사항</a>
+                            </li>
+                            <li className={categoryId === 2 ? 'on' : ''}>
+                                <a href="#" onClick={() => handleCategory(2)}>자유수다</a>
+                            </li>
+                            <li className={categoryId === 3 ? 'on' : ''}>
+                                <a href="#" onClick={() => handleCategory(3)}>구인구직</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div className="os_freetalk_hot">
+                        <h3>씨네광장 인기글</h3>
 
-                {/* 정렬 UI */}
-                <select>
-                    <option onClick={() =>handleOrderChange('latest')}>최신순</option>
-                    <option onClick={() =>handleOrderChange('views')}>조회순</option>
-                    <option onClick={() =>handleOrderChange('comments')}>댓글순</option>
-                </select>
-            </section>
+                        {/*인기글만 모아보는 화면 생성 필요*/}
+                        <a href="#" className="freetalk_hot_button">더보기</a>
+
+                        <ul className="os_freetalk_hot_list">
+                            <li>인기글이 없습니다</li>
+                        </ul>
+                    </div>
+
+                    {cineSquareList && cineSquareList.length > 0 ? (
+                        cineSquareList.map((item: any, index: number) => (
+                            <div className="os_freetalk_section">
+                                <p className="category">{item.categoryName}</p>
+                                <h3 className="title">{item.title}</h3>
+
+                                <ul className="post_info_list clear">
+                                    <li><i>{item.authorNickname}</i></li>
+                                    <li><span>{item.createdAt}</span></li>
+                                    <li><p>{item?.city} {item?.district}</p></li>
+                                </ul>
+                            </div>
+                        ))
+                        ) : (
+                            <div className="os_freetalk_section">
+                                <p>게시글이 없습니다</p>
+                            </div>
+                    )}
+                </div>
+            </div>
+
+
+                    {/*기존꺼*/}
+
+                <section className="os_board_category_wrap">
+                    {/* 위치 */}
+                    <button onClick={search} className="btn btn-primary">위치검색</button>
+                    <Location></Location>
+                    {/* 카테고리 */}
+                    <select>
+                        <option onClick={() => handleCategory(0)}>전체</option>
+                        <option onClick={() => handleCategory(1)}>공지사항</option>
+                        <option onClick={() => handleCategory(2)}>자유수다</option>
+                        <option onClick={() => handleCategory(3)}>구인구직</option>
+                    </select>
+
+                    {/* 정렬 UI */}
+                    <select>
+                        <option onClick={() => handleOrderChange('latest')}>최신순</option>
+                        <option onClick={() => handleOrderChange('views')}>조회순</option>
+                        <option onClick={() => handleOrderChange('comments')}>댓글순</option>
+                    </select>
+                </section>
 
                 {/* 게시글 테이블 */}
-            <section>
-                <table>
-                    <thead>
+                <section>
+                    <table>
+                        <thead>
                         <tr>
                             <th>번호</th>
                             <th>카테고리</th>
@@ -145,8 +198,8 @@ export default function CineSqaureList () {
                             <th>좋아요</th>
                             <th>조회수</th>
                         </tr>
-                    </thead>
-                    <tbody>
+                        </thead>
+                        <tbody>
                         {cineSquareList && cineSquareList.length > 0 ? (
                             cineSquareList.map((item: any, index: number) => (
                                 <tr key={`${item.postId}-${index}`}
@@ -164,13 +217,13 @@ export default function CineSqaureList () {
                                         item.totalFiles === 1 ? (
                                             <>
                                                 <td colSpan={2}>
-                                                    <FilePreview file = {item?.representativeFile ?? []} />
+                                                    <FilePreview file={item?.representativeFile ?? []}/>
                                                 </td>
                                             </>
                                         ) : (
                                             <>
                                                 <td>
-                                                    <FilePreview file = {item?.representativeFile ?? []} />
+                                                    <FilePreview file={item?.representativeFile ?? []}/>
                                                 </td>
                                                 <td>{item.totalFiles - 1}개 이미지 더보기</td>
                                             </>
@@ -189,21 +242,21 @@ export default function CineSqaureList () {
                                 </td>
                             </tr>
                         )}
-                    </tbody>
-                </table>
-            </section>
+                        </tbody>
+                    </table>
+                </section>
 
-            <section>
-                {/* 로딩 데이터 */}
-                <div
-                    ref={loaderRef}
-                    className="h-10 mt-8 flex justify-center items-center text-gray-400"
-                >
-                    {isLoading ? "불러오는 중..." : hasMore ? "" : "마지막 글이에요!"}
-                </div>
-            </section>
+                <section>
+                    {/* 로딩 데이터 */}
+                    <div
+                        ref={loaderRef}
+                        className="h-10 mt-8 flex justify-center items-center text-gray-400"
+                    >
+                        {isLoading ? "불러오는 중..." : hasMore ? "" : "마지막 글이에요!"}
+                    </div>
+                </section>
 
-            <button><Link to={`/cinesquare/reg`}>등록</Link></button>
-        </div>
-    )
-}
+                <button><Link to={`/cinesquare/reg`}>등록</Link></button>
+            </div>
+            )
+            }

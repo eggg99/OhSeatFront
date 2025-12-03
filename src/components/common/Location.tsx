@@ -34,10 +34,10 @@ export default function Location() {
 }, [currentLocation.city]);
 
   return (
-    <button onClick={handleGetPosition}>
+    <a onClick={handleGetPosition}>
       {currentLocation.city && currentLocation.district
         ? `${currentLocation.city} ${currentLocation.district}`
         : "불러오는 중..."}
-    </button>
+    </a>
   );
 }
