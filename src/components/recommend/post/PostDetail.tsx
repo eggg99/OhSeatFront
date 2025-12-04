@@ -267,7 +267,7 @@ export default function PostDetail(){
                             <div className="post_setting_wrap">
                                 {detailValue.authorId == userId &&
                                     <ul className="post_setting_list">
-                                        <li><a onClick={handleDelete} style={{ cursor: "pointer" }}>게시글 삭제</a></li>
+                                        <li><a onClick={handleDelete} className="cursor-pointer">게시글 삭제</a></li>
                                         <li><Link to={`/recommend/${brand}/edit/${postId}`}>게시글 수정</Link></li>
                                     </ul>
                                 }

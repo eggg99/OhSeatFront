@@ -1,4 +1,4 @@
-import { deleteCineSquare, getCineSqaureItem, getCommentList, postComment, deleteComment, likeCineSquare} from "@/apis/api/cinesquare";
+import { deleteCineSquare, getCineSqaureItem, getCommentList, postComment, deleteComment, likeCineSquare, patchComment} from "@/apis/api/cinesquare";
 import { CineSquareData } from "@/types/CineSquare";
 import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
@@ -24,6 +24,7 @@ export default function CineSquareDetail(){
 
     const [detailValue, setDetailValue] = useState<CineSquareData>();
     const hasViewed = useRef(false);
+    const [isMenuOn, setMenuOn] = useState(false);
 
     // 목록으로
     const list = () => {
@@ -52,7 +53,16 @@ export default function CineSquareDetail(){
     const getData = async () => {
         try {
             const response = await getCineSqaureItem(postId);
-            setDetailValue(response);
+
+            const dateObj = new Date(response.createdAt);
+            const date = dateObj.toISOString().slice(0, 10).replace(/-/g, "."); // YYYY.MM.DD
+            const time = dateObj.toTimeString().slice(0, 5); // HH:mm
+
+            setDetailValue({
+                ...response,
+                createdAtDate: date,
+                createdAtTime: time
+            });
         } catch (error) {
             console.error(error);
         }
@@ -69,7 +79,7 @@ export default function CineSquareDetail(){
     }
 
     // 댓글 내용 change
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         setComment(e.target.value);
     };
 
@@ -84,7 +94,7 @@ export default function CineSquareDetail(){
             await postComment(postId, param);
             setComment(""); // input 초기화
             await getData();     // 게시글 다시 불러오기 (commentCount 갱신)
-            
+            await getDataComment();     // 댓글 리스트 갱신
         } catch (error) {
             console.error("댓글 제출 실패", error);
         }
@@ -117,119 +127,204 @@ export default function CineSquareDetail(){
     }
 
     // 좋아요 처리
-    // const handleLike = async () => {
-    //     try {
-    //         const response = await likeCineSquare(postId);
-    
-    //         setDetailValue((prev) => ({
-    //             ...prev,
-    //             liked: response.Liked, // ✅ liked 값 업데이트
-    //             likeCount: response.Liked 
-    //                 ? prev.likeCount + 1 
-    //                 : Math.max(prev.likeCount - 1, 0), // 좋아요 수 증감 처리
-    //         }));
-    //     } catch (error) {
-    //         console.error("좋아요 처리 실패", error);
-    //     }
-    // };
+    const handleLike = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const isChecked = e.target.checked; // 체크 여부 (true / false)
+
+        try {
+            await likeCineSquare(postId);
+
+            setDetailValue((prev) => {
+                if (!prev) return prev;
+
+                return {
+                    ...prev,
+                    liked: isChecked,
+                    likeCount: isChecked
+                        ? (prev.likeCount ?? 0) + 1
+                        : Math.max((prev.likeCount ?? 0) - 1, 0),
+                };
+            });
+        } catch (error) {
+            console.error("좋아요 처리 실패", error);
+        }
+    };
+
+    // 수정 / 삭제 메뉴 버튼 클릭
+    const handleInnerToggle = () => {
+        setMenuOn((prev) => !prev);
+    };
+
+    // 댓글 수정
+    const [editingCommentId, setEditingCommentId] = useState<number | null>(null);
+    const [editContent, setEditContent] = useState("");
+
+    // 댓글 수정 함수
+    const handleEditComplete = async (commentId:number) => {
+        console.log('1');
+        if (!editContent.trim()) return;
+        else if (!isLogin) {alert('로그인해주세요'); navigate(`/user/login`);return;}
+
+        try {
+            const param = {'content' : editContent };
+            await patchComment(commentId, param);
+            setEditingCommentId(null);
+            await getDataComment();     // 댓글 리스트 갱신
+        } catch (error) {
+            console.error(error);
+        }
+    }
 
     return(
         <div className="os_sub_contents">
-            <div className="flex">
-                <div><button onClick={list}>목록으로</button></div>
-                <div><h2 className="text-2xl">씨네광장 소식</h2></div>
-            </div>
+            <div className="os_freetalk_wrap clear">
+                <div className="os_freetalk_subtitle">
+                    <button onClick={list} className="go_before_button">목록으로 돌아가기</button>
 
-            <div className="flex gap-3">
-                <span>제목 : </span>
-                <h2 className="text-2xl">{detailValue?.title}</h2>
-            </div>
-
-            <div className="flex gap-3">
-                <span>카테고리 : </span>
-                <span>{detailValue?.categoryName}</span>
-            </div>
-
-            <div className="flex gap-3">
-                <span>작성자 : </span>
-                <span>{detailValue?.authorNickname}</span>
-            </div>
-            <div className="flex justify-between">
-                <div className="flex gap-3">
-                    <span>작성일자 : </span>
-                    <span>{detailValue?.createdAt}</span>
+                    <h3>씨네광장 소식</h3>
                 </div>
-                <div className="flex">
-                    <div className="flex gap-3 ml-3">
-                        <span>조회수 : </span>
-                        <span>{detailValue?.views}회</span>
-                    </div>
-                    <div className="ml-3">
-                        <button><Link to={`/cinesquare/edit/${postId}`}>수정</Link></button>
-                        <button onClick={handleDelete}>삭제</button>
-                    </div>
-                </div>
-            </div>
-            <div className="flex gap-3">
-                <span>작성위치 : </span>
-                <span>{detailValue?.city} {detailValue?.district}</span>
-            </div>
 
-            <div>
-                <span>작성내용 : </span>
-                {detailValue?.content}
-            </div>
-            <div>
-                <span>작성이미지 : </span>
-                <FileList files={detailValue?.files ?? []} baseUrl="http://localhost:8000/" />
-            </div>
-            <div className="flex justify-between">
-                <div>댓글 : ___개</div>
-                <div>좋아요 : ___개</div>
+                <div className="theater_detail_board_wrap2">
+                    <div className="detail_header">
+                        <a href="#" className="category_go_button">{detailValue?.categoryName}</a>
 
-                {/* <div>댓글 {detailValue?.commentCount} 개</div> */}
-                {/* <div>좋아요 {detailValue?.likeCount}개</div> */}
-            </div>
-            
-            {/* 댓글작성 */}
-            <section>
-                <div>
-                    <input
-                        type="text"
-                        value={comment}
-                        onChange={handleChange}
-                        placeholder="댓글을 작성해주세요"
-                    />
-                    <button onClick={handleSubmit}>
-                    작성
-                </button>
-                </div>
-            </section>
+                        <h3>{detailValue?.title}</h3>
 
-            댓글 리스트
-            <section>
-                {commentList.length === 0 ? (
-                    <p>아직 댓글이 없습니다.</p>
-                ) : (
-                    commentList.map((c) => (
-                        <div key={c.commentId} className="border-b py-2">
-                            <div className="flex justify-between">
-                                <p>{c.content}</p>
-                                { c.commenterId == userId && 
-                                    <button onClick={() => handleDeleteComment(c.commentId)}>삭제</button>
-                                }
-                                
-                            </div>
-                            <small>{c.authorNickname} · {c.createdAt}</small>
+                        <div className="post_user_wrap">
+                            <p>{detailValue?.authorNickname}</p>
+                            <span>{detailValue?.createdAtDate} <i>{detailValue?.createdAtTime}</i></span>
+
+                            <span>{detailValue?.city} {detailValue?.district}</span>
                         </div>
-                    ))
-                )}
-            </section>
-            {/* <button onClick={handleLike} className="text-2xl">
-                {detailValue.liked ? "♥" : "♡"}
-            </button>
-            <span>좋아요</span> */}
 
+                        <div className="post_control_wrap clear">
+                            <a href="#" className="post_hits_button">조회수
+                                <span>{detailValue?.views ?? 0}</span>
+                            </a>
+
+                            <a href="#" className="post_comment_button">댓글
+                                <span>{detailValue?.commentCount ?? 0}</span>
+                            </a>
+
+                            {isLogin && (
+                                <a href="#" className={`post_setting_button ${isMenuOn ? "on" : ""}`} onClick={handleInnerToggle}>
+                                    <span className="blind">더보기</span>
+                                </a>
+                            )}
+
+                            <div className="post_setting_wrap">
+                                {detailValue?.authorId == userId &&
+                                    <ul className="post_setting_list">
+                                        <li><a onClick={handleDelete} className="cursor-pointer">게시글 삭제</a></li>
+                                        <li><Link to={`/cinesquare/edit/${postId}`}>게시글 수정</Link></li>
+                                    </ul>
+                                }
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="detail_contents">
+                        <pre>{detailValue?.content}</pre>
+                        <FileList files={detailValue?.files ?? []} baseUrl="http://localhost:8000/"/>
+                    </div>
+
+                    <div className="detail_footer">
+                        <div className="post_reaction_wrap clear">
+                            <div className="post_like_button">
+                                <input
+                                    type="checkbox"
+                                    id="like"
+                                    hidden
+                                    checked={detailValue?.liked}
+                                    onChange={handleLike}
+                                />
+                                <label htmlFor="like" className="like-btn">
+                                    좋아요 <span>{detailValue?.likeCount}</span>
+                                </label>
+                            </div>
+                            <a href="#" className="post_hits_button">조회수 <span>{detailValue?.views}</span></a>
+                            <a href="#" className="post_comment_button">댓글 <span>{detailValue?.commentCount}</span></a>
+                        </div>
+
+                        <div className="post_comment_wrap" id="comment">
+                            {commentList.length > 0 && (
+                                <ul className="post_comment_list">
+                                    {commentList.length > 0 && commentList.map((c) => {
+                                        const isEditing = editingCommentId === c.commentId;
+                                        return (
+                                            <li key={c.commentId}>
+                                                {isEditing ? (
+                                                    <>
+                                                        <h4>{c.authorNickname}</h4>
+                                                        <div className="comment_edit_wrap">
+                                                        <textarea
+                                                            value={editContent}
+                                                            onChange={(e) => setEditContent(e.target.value)}
+                                                        ></textarea>
+                                                            <div className="comment_edit_button_wrap clear">
+                                                                <button
+                                                                    className="cancel"
+                                                                    onClick={() => setEditingCommentId(null)}
+                                                                >취소
+                                                                </button>
+                                                                <button
+                                                                    className="complete"
+                                                                    onClick={() => handleEditComplete(c.commentId)}
+                                                                >등록
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                        <span>{c.createdAt} <i>수정됨</i></span>
+                                                        <div className="comment_control_wrap clear">
+                                                            <button disabled>수정</button>
+                                                            {c.commenterId == userId && (
+                                                                <button
+                                                                    onClick={() => handleDeleteComment(c.commentId)}>
+                                                                    삭제
+                                                                </button>
+                                                            )}
+                                                        </div>
+                                                    </>
+                                                ) : (
+                                                    <>
+                                                        <h4>{c.authorNickname}</h4>
+                                                        <p className='pre-line'>{c.content}</p>
+                                                        <span>{c.createdAt} <i>수정됨</i></span>
+                                                        <div className="comment_control_wrap clear">
+                                                            <button
+                                                                onClick={() => {
+                                                                    setEditingCommentId(c.commentId);
+                                                                    setEditContent(c.content);
+                                                                }}
+                                                            >수정
+                                                            </button>
+                                                            {c.commenterId == userId && (
+                                                                <button
+                                                                    onClick={() => handleDeleteComment(c.commentId)}
+                                                                >삭제</button>
+                                                            )}
+                                                        </div>
+                                                    </>
+                                                )}
+                                            </li>
+                                        );
+                                    })}
+                                </ul>
+                            )}
+
+                            <div className="comment_write_area">
+                                <textarea
+                                    id="user-comment"
+                                    placeholder="댓글을 남겨보세요"
+                                    value={comment}
+                                    onChange={handleChange}></textarea>
+                                <div className="register_wrap clear">
+                                    <a className="post_button comment" onClick={handleSubmit} href="#">등록</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     )
 }

@@ -130,64 +130,78 @@ export default function CineSquareEdit(){
 
     return(
         <div className="os_sub_contents">
-            <div className="flex gap-8">
-                <div><button onClick={list}>목록으로</button></div>
-                <div><button onClick={() => handleSubmit()}>등록</button></div>
-            </div>
+            <div className="os_freetalk_wrap clear">
 
-            <div className="flex justify-between">
-                <Location />
-            </div>
+                <div className="os_freetalk_subtitle">
+                    <button onClick={list} className="go_before_button">목록으로 돌아가기</button>
 
-            <div className="flex gap-3">
-                <span>카테고리</span>
-                <select name="categoryId" onChange={handleInput} value={inputValue.categoryId}>
-                    <option value="">카테고리를 선택하세요</option>
-                    <option value="1">공지사항</option>
-                    <option value="2">자유수다</option>
-                    <option value="3">구인구직</option>
-                </select>
-            </div>
-            <div className="flex gap-4">
-                <div><span>제목</span></div>
-                <div>
-                    <input
-                        type="text"
-                        name="title"
-                        value={inputValue.title}
-                        onChange={handleInput}
-                        placeholder="제목을 입력하세요" 
-                        required
-                    />
+                    <h3>씨네광장 수정하기</h3>
+                    <div className="freetalk_button_wrap">
+                        <a onClick={() => handleSubmit()} className="post_button write cursor-pointer">수정</a>
+                    </div>
                 </div>
-            </div>
 
-            <div className="flex mt-3 mx-3">
-                <textarea 
-                    name="content"
-                    placeholder="내용을 입력하세요" 
-                    value={inputValue.content} 
-                    onChange={handleInput} 
-                    cols={6} 
-                    rows={5} 
-                    className="w-full"
-                    required
-                />
-            </div>
-
-            <FileUpload
-                onFilesChange={handleFilesChange}
-                onRepresentativeChange={handleRepresentativeChange}
-                initialFiles={existingFiles}
-                onDeleteExisting={(fileId) => {
-                    setExistingFiles(prev => prev.filter(f => f.fileId !== fileId));
-                    delete_files_ids.push(fileId);
-                }}
-            />
-
-            <div>
-                <button onClick={list}>취소</button>
-                <button onClick={() => handleSubmit()}>수정</button>
+                <div className="theater_detail_board_wrap2">
+                    <div className="post_write_area_wrap">
+                        <table className="basic_board2">
+                            <colgroup>
+                                <col style={{width: '25%'}}/>
+                                <col style={{width: '25%'}}/>
+                                <col style={{width: '25%'}}/>
+                                <col style={{width: '25%'}}/>
+                            </colgroup>
+                            <tbody>
+                            <tr>
+                                <td colSpan={4}><span className="my_place_span"><Location/></span></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <select name="categoryId" onChange={handleInput} value={inputValue.categoryId}>
+                                        <option value="">게시글 종류 선택</option>
+                                        <option value="1">공지사항</option>
+                                        <option value="2">자유수다</option>
+                                        <option value="3">구인구직</option>
+                                    </select>
+                                </td>
+                                <td colSpan={3}>
+                                    <input
+                                        type="text"
+                                        name="title"
+                                        value={inputValue.title}
+                                        onChange={handleInput}
+                                        className="post_title_input"
+                                        placeholder="제목을 입력하세요"
+                                        required
+                                    />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colSpan={4}>
+                                    <div className="post_textarea_wrap">
+                                         <textarea
+                                             name="content"
+                                             placeholder="내용을 입력하세요"
+                                             value={inputValue.content}
+                                             onChange={handleInput}
+                                         />
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <FileUpload
+                                    onFilesChange={handleFilesChange}
+                                    onRepresentativeChange={handleRepresentativeChange}
+                                    initialFiles={existingFiles}
+                                    onDeleteExisting={(fileId) => {
+                                        setExistingFiles(prev => prev.filter(f => f.fileId !== fileId));
+                                        delete_files_ids.push(fileId);
+                                    }}
+                                />
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
         </div>
     )

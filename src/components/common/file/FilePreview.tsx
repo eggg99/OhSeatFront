@@ -23,13 +23,6 @@ export const FilePreview: React.FC<FilePreviewProps> = ({ file, baseUrl = "http:
         <img
             src={`${baseUrl}${file.fileUrl}`}
             alt={file.fileName}
-            style={{
-                width: "60px",
-                height: "60px",
-                objectFit: "cover",
-                borderRadius: "6px",
-                marginRight: "10px",
-            }}
         />
     );
 };

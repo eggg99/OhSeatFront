@@ -11,6 +11,11 @@ export interface CineSquareData {
   authorId: number;
   authorNickname : string;
   files : [];
+  likeCount:number;
+  liked : boolean;
+  commentCount: number;
+  createdAtDate?: string;
+  createdAtTime?: string;
 }
 
 export interface CineSquarePage {

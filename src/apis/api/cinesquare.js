@@ -14,6 +14,19 @@ export const getCineSqaureList = async(param) => {
 }
 
 /**
+ * 씨네광장 카테고리별 인기글 조회
+ * param : categoryId   카테고리시퀀스
+ */
+export const getCineSquareHotList = async() => {
+    try{
+        const response = await axiosApi.get('/cinesquare/ranking/week', {})
+        return response.data;
+    } catch (error) {
+        console.error("씨네광장 카테고리별 게시글 전체 조회 실패: ", error);
+    }
+}
+
+/**
  * 씨네광장 게시글 단건 조회
  * param : postId   게시글 시퀀스
  */
@@ -124,12 +137,25 @@ export const postComment = async(cinesquareId, param) => {
 }
 
 /**
- * 댓글 삭제
- * param : cinesquareId     게시글 아이디
+ * 댓글 수정
+ * param : commentId     댓글 아이디
  */
-export const delComment = async (cinesquareId) => {
+export const patchComment = async(commentId, param) => {
     try{
-        const response = await axiosApi.delete(`/cinesquare/comments/${cinesquareId}`, {});
+        const response = await axiosApi.patch(`/cinesquare/comments/${commentId}`, param)
+        return response.data;
+    } catch (error) {
+        console.error("게시글 댓글 등록 실패: ", error);
+    }
+}
+
+/**
+ * 댓글 삭제
+ * param : commentId     댓글 아이디
+ */
+export const delComment = async (commentId) => {
+    try{
+        const response = await axiosApi.delete(`/cinesquare/comments/${commentId}`, {});
         return response.data;
     } catch (error) {
         console.error("댓글 리스트 조회 실패: ", error);
@@ -162,4 +188,13 @@ export const likeCineSquare = async(cinesquareId) => {
     }
 }
 
+/* 파일 첨부 */
+export const fileUpload = async (formData) => {
+    try{
+        const response = await axiosApi.post(`/files/upload`,formData)
+        return response.data;
+    } catch (error) {
+        console.error("게시글 댓글 등록 실패: ", error);
+    }
+}
 

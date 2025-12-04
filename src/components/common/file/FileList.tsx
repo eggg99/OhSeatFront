@@ -15,10 +15,6 @@ interface UploadedFileListProps {
 }
 
 export const FileList: React.FC<UploadedFileListProps> = ({ files, baseUrl = "http://localhost:8000/" }) => {
-	if (!files || files.length === 0) {
-		return <div>파일이 없습니다 🥲</div>;
-	}
-
 	return (
 		<div style={{ display: "flex", flexDirection: "column", gap: "8px", marginTop: "12px" }}>
 			{files.map((file) => (

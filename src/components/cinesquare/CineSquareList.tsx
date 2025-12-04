@@ -1,32 +1,34 @@
-import { useEffect, useState, useRef } from "react";
-import { getCineSqaureList } from "@/apis/api/cinesquare";
-import { Link, useNavigate } from "react-router-dom";
+import {useEffect, useState, useRef} from "react";
+import {getCineSqaureList, getCineSquareHotList} from "@/apis/api/cinesquare";
+import {Link, useNavigate} from "react-router-dom";
 import Location from "@/components/common/Location";
 import {FilePreview} from '@/components/common/file/FilePreview';
+import HotCard from './HotCard';
 
 const PAGE_SIZE = 10;
 
-export default function CineSqaureList () {
+export default function CineSqaureList() {
     const navigate = useNavigate();
+    const [cineSquareHotList, setCineSquareHotList] = useState<any[]>([]);
     const [cineSquareList, setCineSquareList] = useState<any[]>([]);
     const [categoryId, setCategoryId] = useState<number>(0);
     const [lastPostId, setLastPostId] = useState<number | null>(null);
     const [orderType, setOrderType] = useState<string>('');
-    
+
     const loaderRef = useRef<HTMLDivElement | null>(null);  // 무한스크롤의 관찰 대상 div를 가리키는 참조
     const [isLoading, setIsLoading] = useState(false);      // 로딩 중 여부
     const [hasMore, setHasMore] = useState(true);           // 더 불러올 데이터가 있는지 여부
 
-    const getList = async() => {
+    const getList = async () => {
         // 로딩중 or 불러올 데이터 X
-        if(isLoading || !hasMore) return;   // 중복 요청 방지
+        if (isLoading || !hasMore) return;   // 중복 요청 방지
         // 로딩중으로 만들기
         setIsLoading(true);
 
         const param = {
-            categoryId : categoryId,
-            lastPostId : lastPostId,
-            orderType : orderType
+            categoryId: categoryId,
+            lastPostId: lastPostId,
+            orderType: orderType
         }
 
         // ✅ 처음 요청이 아닐 때만 lastPostId 포함
@@ -51,16 +53,27 @@ export default function CineSqaureList () {
             }
             // 불러올 데이터 X 
             else {
-                setHasMore(false);      
+                setHasMore(false);
             }
         } finally {
             // 로딩중 화면 끄기
             setIsLoading(false)
         }
-        
     }
 
-    const handleCategory = (newCategoryId : number) => setCategoryId(newCategoryId)
+    const getHotList = async () => {
+        try {
+            const response = await getCineSquareHotList();
+
+            if (response && response.length > 0) {
+                setCineSquareHotList(response);
+            }
+        } catch (error) {
+            console.error('게시글 조회 실패' , error);
+        }
+    }
+
+    const handleCategory = (newCategoryId: number) => setCategoryId(newCategoryId)
 
     // 정렬 변경
     const handleOrderChange = (newOrder: string) => setOrderType(newOrder);
@@ -86,7 +99,7 @@ export default function CineSqaureList () {
         }, {
             // 관찰 요소가 얼마만큼 보일 때 콜백을 트리거할지 정하는 값
             // 0.0 ~ 1.0 사이
-            threshold : 0.5,   // 50% 보이면 트리거
+            threshold: 0.5,   // 50% 보이면 트리거
         });
         // div가 화면에 보이게 되면 알려주는 동작 시작
         // 실제 DOM 노드와 연결되어 있으면 요소를 observer가 관찰하도록 등록
@@ -100,18 +113,20 @@ export default function CineSqaureList () {
     }, [hasMore, isLoading]);
 
 
-  const search = () => {
-    navigate("/cinesquare/search")
-  }
+    const search = () => {
+        navigate("/cinesquare/search")
+    }
 
-    return(
+    return (
         <div className="os_sub_contents">
             <div className="os_freetalk_wrap clear">
                 <div className="os_timeline_wrap">
-                    <div className="location_wrap">
+
+                    <section className="location_wrap cursor-pointer" onClick={search}>
                         <Location></Location>
-                    </div>
-                    <div className="os_freetalk_tabmenu">
+                    </section>
+
+                    <section className="os_freetalk_tabmenu">
                         <ul className="os_freetalk_list clear">
                             <li className={categoryId === 0 ? 'on' : ''}>
                                 <a href="#" onClick={() => handleCategory(0)}>전체</a>
@@ -126,137 +141,104 @@ export default function CineSqaureList () {
                                 <a href="#" onClick={() => handleCategory(3)}>구인구직</a>
                             </li>
                         </ul>
-                    </div>
-                    <div className="os_freetalk_hot">
+                    </section>
+                    {/*<select>
+                <option onClick={() => handleOrderChange('latest')}>최신순</option>
+                <option onClick={() => handleOrderChange('views')}>조회순</option>
+                <option onClick={() => handleOrderChange('comments')}>댓글순</option>
+            </select>*/}
+
+                    <section className="os_freetalk_hot">
                         <h3>씨네광장 인기글</h3>
 
                         {/*인기글만 모아보는 화면 생성 필요*/}
-                        <a href="#" className="freetalk_hot_button">더보기</a>
+                        <Link to={"/cinesquare/hot"} className="freetalk_hot_button">더보기</Link>
 
                         <ul className="os_freetalk_hot_list">
-                            <li>인기글이 없습니다</li>
+                            {cineSquareHotList.length > 0 ? (
+                                cineSquareHotList.map((item, idx) => (
+                                    <HotCard
+                                        key={idx}
+                                        title={item.title}
+                                        location={item.location}
+                                        thumbnail={item.thumbnail}
+                                        onClick={() => navigate(`/cinesquare/${item.postId}`)}
+                                    />
+                                ))
+                            ) : (
+                                <li>인기글이 없습니다</li>
+                            )}
                         </ul>
-                    </div>
+                    </section>
 
                     {cineSquareList && cineSquareList.length > 0 ? (
                         cineSquareList.map((item: any, index: number) => (
-                            <div className="os_freetalk_section">
+                            <section className="os_freetalk_section">
                                 <p className="category">{item.categoryName}</p>
                                 <h3 className="title">{item.title}</h3>
 
                                 <ul className="post_info_list clear">
                                     <li><i>{item.authorNickname}</i></li>
-                                    <li><span>{item.createdAt}</span></li>
+                                    <li>
+                                <span>
+                                    {item.createdAt ? item.createdAt.split("T")[0].replace(/-/g, ".") : ""}
+                                </span>
+                                    </li>
                                     <li><p>{item?.city} {item?.district}</p></li>
                                 </ul>
-                            </div>
+                                <Link to={`/cinesquare/${item.postId}`}>
+                                    <div className="freetalk_text_wrap">
+                                        <pre>{item.content}</pre>
+                                    </div>
+
+                                    {item?.representativeFile && (
+                                        <div className="freetalk_img_wrap">
+                                            <FilePreview file={item?.representativeFile ?? []}/>
+                                            {item.totalFiles > 1 && (
+                                                <span>{item.totalFiles - 1}개 이미지 더보기</span>
+                                            )}
+                                        </div>
+                                    )}
+                                </Link>
+
+                                <div className="freetalk_like_comment clear">
+                                    <div className="left">
+                                        <div className="post_like_button">
+                                            <input type="checkbox" id="like" hidden/>
+                                            <label htmlFor="like"
+                                                   className="like-btn">좋아요 <span>{item?.likeCount ?? 0}</span></label>
+                                        </div>
+                                    </div>
+                                    <div className="right">
+                                        <Link to={`/cinesquare/${item.postId}#comment`}
+                                           className="post_comment_button">댓글 <span>{item?.commentCount ?? 0}</span></Link>
+                                    </div>
+                                </div>
+                            </section>
                         ))
-                        ) : (
-                            <div className="os_freetalk_section">
-                                <p>게시글이 없습니다</p>
-                            </div>
+                    ) : (
+                        <section className="os_freetalk_section">
+                            <p>게시글이 없습니다</p>
+                        </section>
                     )}
+
+                    <section>
+                        {/* 로딩 데이터 */}
+                        <div ref={loaderRef}>
+                            {isLoading ? "불러오는 중..." : hasMore ? "" : "마지막 글이에요!"}
+                        </div>
+                    </section>
+                </div>
+
+                {/*광고 영역*/}
+                <div className="os_ad_wrap"></div>
+
+                <div className="os_freetalk_floating">
+                    <a href="#" className="os_freetalk_top_button"><i className="blind">위로</i></a>
+                    <Link to={`/cinesquare/reg`} className="os_freetalk_write_button"><i
+                        className="blind">글쓰기</i></Link>
                 </div>
             </div>
-
-
-                    {/*기존꺼*/}
-
-                <section className="os_board_category_wrap">
-                    {/* 위치 */}
-                    <button onClick={search} className="btn btn-primary">위치검색</button>
-                    <Location></Location>
-                    {/* 카테고리 */}
-                    <select>
-                        <option onClick={() => handleCategory(0)}>전체</option>
-                        <option onClick={() => handleCategory(1)}>공지사항</option>
-                        <option onClick={() => handleCategory(2)}>자유수다</option>
-                        <option onClick={() => handleCategory(3)}>구인구직</option>
-                    </select>
-
-                    {/* 정렬 UI */}
-                    <select>
-                        <option onClick={() => handleOrderChange('latest')}>최신순</option>
-                        <option onClick={() => handleOrderChange('views')}>조회순</option>
-                        <option onClick={() => handleOrderChange('comments')}>댓글순</option>
-                    </select>
-                </section>
-
-                {/* 게시글 테이블 */}
-                <section>
-                    <table>
-                        <thead>
-                        <tr>
-                            <th>번호</th>
-                            <th>카테고리</th>
-                            <th>작성자</th>
-                            <th>작성일자</th>
-                            <th>작성위치</th>
-                            <th>제목</th>
-                            <th>이미지</th>
-                            <th>이미지추가개수</th>
-                            <th>좋아요</th>
-                            <th>조회수</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {cineSquareList && cineSquareList.length > 0 ? (
-                            cineSquareList.map((item: any, index: number) => (
-                                <tr key={`${item.postId}-${index}`}
-                                    onClick={() => navigate(`/cinesquare/${item.postId}`)}
-                                    className="cursor-pointer hover:bg-gray-100 h-24">
-                                    <td>{item.postId}</td>
-                                    <td>{item.categoryName}</td>
-                                    <td>{item.authorNickname}</td>
-                                    <td>{item.createdAt}</td>
-                                    <td>{item?.city} {item?.district}</td>
-                                    <td><Link to={`/cinesquare/${item.postId}`}>{item.title}</Link></td>
-
-                                    {item?.representativeFile ? (
-                                        // 파일이 1개일때
-                                        item.totalFiles === 1 ? (
-                                            <>
-                                                <td colSpan={2}>
-                                                    <FilePreview file={item?.representativeFile ?? []}/>
-                                                </td>
-                                            </>
-                                        ) : (
-                                            <>
-                                                <td>
-                                                    <FilePreview file={item?.representativeFile ?? []}/>
-                                                </td>
-                                                <td>{item.totalFiles - 1}개 이미지 더보기</td>
-                                            </>
-                                        )
-                                    ) : (
-                                        <td colSpan={2}>파일없음</td>
-                                    )}
-                                    <td>?</td>
-                                    <td>{item.views}회</td>
-                                </tr>
-                            ))
-                        ) : (
-                            <tr>
-                                <td colSpan={9} className="text-center py-6 text-gray-500">
-                                    내용이 없습니다 🥲
-                                </td>
-                            </tr>
-                        )}
-                        </tbody>
-                    </table>
-                </section>
-
-                <section>
-                    {/* 로딩 데이터 */}
-                    <div
-                        ref={loaderRef}
-                        className="h-10 mt-8 flex justify-center items-center text-gray-400"
-                    >
-                        {isLoading ? "불러오는 중..." : hasMore ? "" : "마지막 글이에요!"}
-                    </div>
-                </section>
-
-                <button><Link to={`/cinesquare/reg`}>등록</Link></button>
-            </div>
-            )
-            }
+        </div>
+    )
+}

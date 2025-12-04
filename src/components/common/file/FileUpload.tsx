@@ -102,9 +102,11 @@ export const FileUpload: React.FC<FileUploadProps> = ({
                         />
                         <span>{file.fileName}</span>
                         <i>{(file.fileSize / 1024).toFixed(1)} KB</i>
+                        {file.isRepresentative === "Y" && (
+                            <b onClick={() => handleSetRepresentative(index, true)}>대표</b>
+                        )}
                         <button
                             type="button"
-                            onClick={() => handleSetRepresentative(index, true)}
                             className="os_file_delete"
                             style={{ background: file.isRepresentative === "Y" ? "#007bff" : "transparent", color: file.isRepresentative === "Y" ? "#fff" : "#007bff",}}
                         >대표</button>
@@ -118,14 +120,19 @@ export const FileUpload: React.FC<FileUploadProps> = ({
 
                 {/* 새 파일 */}
                 {newFiles.map((file, index) => (
-                    <li key={`new-${index}`}>
-                        <img
-                            src={URL.createObjectURL(file)}
-                            alt={file.name}
-                            style={{ width: 80, height: 80, objectFit: 'cover' }}
-                        />
+                    <li key={`new-${index}`} className="clear">
+                        {/*<img*/}
+                        {/*    src={URL.createObjectURL(file)}*/}
+                        {/*    alt={file.name}*/}
+                        {/*    style={{ width: 80, height: 80, objectFit: 'cover' }}*/}
+                        {/*/>*/}
                         <span>{file.name}</span>
                         <i>{(file.size / 1024).toFixed(1)} KB</i>
+                        {representativeIndex === index+ existingFiles.length  && (
+                            <b
+                                onClick={() => handleSetRepresentative(index + existingFiles.length, false)}
+                            >대표</b>
+                        )}
                         <button
                             type="button"
                             onClick={() => handleSetRepresentative(index + existingFiles.length, false)}
