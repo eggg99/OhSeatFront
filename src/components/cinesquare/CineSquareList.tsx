@@ -84,6 +84,7 @@ export default function CineSqaureList() {
         setLastPostId(null);
         setHasMore(true);
         getList();
+        getHotList();
     }, [categoryId, orderType]);
 
     // Intersection Observer로 무한 스크롤 감지
@@ -158,7 +159,6 @@ export default function CineSqaureList() {
                             {cineSquareHotList.length > 0 ? (
                                 cineSquareHotList.map((item, idx) => (
                                     <HotCard
-                                        key={idx}
                                         title={item.title}
                                         location={item.location}
                                         thumbnail={item.thumbnail}

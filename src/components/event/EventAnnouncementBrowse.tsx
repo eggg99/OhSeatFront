@@ -190,27 +190,7 @@ export default function EventAnnouncementBrowse () {
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <th><span className="notice">필독</span></th>
-                            <th colSpan={2} className="txtl"><a href="#">필독 게시글 제목 <span>[4]</span></a></th>
-                            <th>작성자 아이디</th>
-                            <th>2025.09.17</th>
-                            <th>0,000</th>
-                        </tr>
-                        <tr>
-                            <th><span className="notice">공지</span></th>
-                            <th colSpan={2} className="txtl"><a href="#">공지 게시글 제목</a></th>
-                            <th>작성자 아이디</th>
-                            <th>2025.09.17</th>
-                            <th>0,000</th>
-                        </tr>
-                        <tr>
-                            <th><span className="notice">공지</span></th>
-                            <th colSpan={2} className="txtl"><a href="#">공지 게시글 제목</a></th>
-                            <th>작성자 아이디</th>
-                            <th>2025.09.17</th>
-                            <th>0,000</th>
-                        </tr>
+                        
                     {announcementList && announcementList.content.length > 0 ? (
                         announcementList.content.map((item: any) => (
                             <tr
