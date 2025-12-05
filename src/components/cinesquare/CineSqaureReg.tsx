@@ -58,29 +58,30 @@ export default function CineSquareReg(){
     }
 
     const handleFileUpload = async () => {
+        const regFiles: number[] = [];
         try {
             const formData:FormData = new FormData();
             if (uploadFiles) {
                 for (const file of uploadFiles) {
+                    console.log(file);
                     formData.append("file", file);
                     const response = await fileUpload(formData);
-
-                    return response?.fileId;
+                    if (response) {
+                        regFiles.push(response?.fileId)
+                    }
                 }
+                return {
+                    newFileIds: regFiles,
+                };
             }
-
         } catch (e) {
             console.error(e);
         }
     }
 
-
     // 등록하기
     const handleSubmit = async (e?: SyntheticEvent): Promise<void> => {
         e?.preventDefault();
-
-        const formData:FormData = new FormData();
-
 
         if (!inputValue.categoryId) {
             alert("카테고리를 선택해주세요");
@@ -101,12 +102,18 @@ export default function CineSquareReg(){
             district: location.district,
         };
 
-        formData.append(
-            "data", 
-            new Blob([JSON.stringify(data)], { type: "application/json" })
-        );
+        const uploadResult = await handleFileUpload();
+        const newFileIds = uploadResult?.newFileIds ?? [];
 
+        let representativeFileId: number | null = null;
+        if (representativeIndex !== null && newFileIds.length > representativeIndex) {
+            representativeFileId = newFileIds[representativeIndex];
+        }
 
+        const formData = new FormData();
+        formData.append("data", JSON.stringify(data));
+        formData.append("newFileIds", JSON.stringify(newFileIds));
+        formData.append("representativeFileId", JSON.stringify(representativeFileId));
 
         const response = await postCineSquare(formData);
         alert(response);

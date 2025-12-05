@@ -1,4 +1,4 @@
-import { putCineSquare,getCineSqaureItem  } from "@/apis/api/cinesquare";
+import { putCineSquare,getCineSqaureItem, fileUpload } from "@/apis/api/cinesquare";
 import { useEffect, useState, type ChangeEvent, type SyntheticEvent } from "react"
 import { useNavigate, useParams } from "react-router-dom";
 import Location from "@/components/common/Location";
@@ -71,6 +71,28 @@ export default function CineSquareEdit(){
         navigate(`/cinesquare/list?category=0`);
     }
 
+    const handleFileUpload = async () => {
+        const regFiles: number[] = [];
+        try {
+            const formData:FormData = new FormData();
+            if (newFiles) {
+                for (const file of newFiles) {
+                    console.log(file);
+                    formData.append("file", file);
+                    const response = await fileUpload(formData);
+                    if (response) {
+                        regFiles.push(response?.fileId)
+                    }
+                }
+                return {
+                    newFileIds: regFiles,
+                };
+            }
+        } catch (e) {
+            console.error(e);
+        }
+    }
+
     // 수정하기
     const handleSubmit = async (e?: SyntheticEvent): Promise<void> => {
         e?.preventDefault();
@@ -102,21 +124,18 @@ export default function CineSquareEdit(){
             district: inputValue.district,
         }
 
-        formData.append(
-            "data", 
-            new Blob([JSON.stringify(data)], { type: "application/json" })
-        );
+        const uploadResult = await handleFileUpload();
+        const newFileIds = uploadResult?.newFileIds ?? [];
 
-        if (newFiles) {
-            newFiles.forEach ((file) => {
-                formData.append("new_files", file);
-            })
+        let representativeFileId: number | null = null;
+        if (representativeIndex !== null && newFileIds.length > representativeIndex) {
+            representativeFileId = newFileIds[representativeIndex];
         }
 
-        formData.append(
-            "delete_files_ids",
-            new Blob([JSON.stringify(delete_files_ids)], { type: "application/json" })
-        );
+        formData.append("data", JSON.stringify(data));
+        formData.append("newFileIds", JSON.stringify(newFileIds));
+        formData.append("delete_files_ids", JSON.stringify(delete_files_ids));
+        // 대표이미지 아이디 넣어야함
 
 
         const response = await putCineSquare(postId,formData);
