@@ -3,7 +3,7 @@ import { CineSquareData } from "@/types/CineSquare";
 import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { userStore } from "@/store/userStore";
-import { FileList } from "@/components/common/file/FileList";
+import { FilePreview } from "@/components/common/file/FilePreview";
 
 interface Comment {
     commentId: number;
@@ -224,7 +224,15 @@ export default function CineSquareDetail(){
 
                     <div className="detail_contents">
                         <pre>{detailValue?.content}</pre>
-                        <FileList files={detailValue?.files ?? []} baseUrl="http://localhost:8000/"/>
+
+                        {detailValue?.files?.length
+                            ? detailValue.files.map((file) => (
+                                <img
+                                    src={`http://localhost:8000/${file.fileUrl}`}
+                                    alt={file.fileName}
+                                />
+                            ))
+                            : null}
                     </div>
 
                     <div className="detail_footer">

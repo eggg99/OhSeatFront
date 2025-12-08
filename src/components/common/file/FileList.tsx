@@ -6,7 +6,7 @@ interface UploadedFile {
 	fileUrl: string;
 	fileSize: number;
 	fileType: string;
-	isRepresentative: string; // "Y" | "N"
+	isRepresentative:  "Y" | "N"; //
 }
 
 interface UploadedFileListProps {

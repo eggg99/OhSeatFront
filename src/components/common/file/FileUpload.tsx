@@ -2,87 +2,110 @@ import React, { useRef, useState, useEffect, ChangeEvent } from "react";
 
 interface FileUploadProps {
     onFilesChange: (files: File[]) => void;
-    onRepresentativeChange?: (index: number) => void;
+
+    onRepresentativeChange?: (rep: {
+        type: "existing" | "new";
+        index: number;
+        fileId?: number;
+    }) => void;
+
     initialFiles?: {
         fileId: number;
         fileName: string;
         fileUrl: string;
-        isRepresentative: "Y" | "N";
         fileSize: number;
+        fileType : string;
+        isRepresentative: "Y" | "N";
     }[];
     onDeleteExisting?: (fileId: number) => void;
 }
 
 export const FileUpload: React.FC<FileUploadProps> = ({
-      onFilesChange,
-      onRepresentativeChange,
-      initialFiles,
-      onDeleteExisting,
-    }) => {
-
+                                                          onFilesChange,
+                                                          onRepresentativeChange,
+                                                          initialFiles,
+                                                          onDeleteExisting,
+                                                      }) => {
     const fileInputRef = useRef<HTMLInputElement | null>(null);
     const [newFiles, setNewFiles] = useState<File[]>([]);
     const [existingFiles, setExistingFiles] = useState(initialFiles || []);
-    const [representativeIndex, setRepresentativeIndex] = useState<number | null>(null);
+    const [representative, setRepresentative] = useState<{
+        type: "existing" | "new";
+        index: number;
+    } | null>(null);
 
-    // 초기 대표이미지 설정
     useEffect(() => {
         setExistingFiles(initialFiles || []);
-        const existingRepIdx = initialFiles?.findIndex(f => f.isRepresentative === "Y");
-        if (existingRepIdx !== undefined && existingRepIdx !== -1) {
-            setRepresentativeIndex(existingRepIdx);
+        const repIdx = initialFiles?.findIndex(f => f.isRepresentative === "Y");
+        if (repIdx !== undefined && repIdx !== -1) {
+            setRepresentative({ type: "existing", index: repIdx });
         } else {
-            // 등록 모드: 기존 파일 없으면 새 파일 첫 번째를 대표로 지정
-            if (newFiles.length > 0) setRepresentativeIndex(0);
-            else setRepresentativeIndex(null);
+            setRepresentative(null);
         }
     }, [initialFiles]);
 
     const handleButtonClick = () => fileInputRef.current?.click();
 
-    // 새 파일 추가
     const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
         if (e.target.files) {
-            const selectedFiles = Array.from(e.target.files);
-            const updated = [...newFiles, ...selectedFiles];
+            const selected = Array.from(e.target.files);
+            const updated = [...newFiles, ...selected];
             setNewFiles(updated);
             onFilesChange(updated);
 
-            // 등록 모드에서만 새 파일이 첫 번째일 경우 대표 이미지 지정
-            if (representativeIndex === null && existingFiles.length === 0) {
-                setRepresentativeIndex(0);
-            }
+            if (!representative && existingFiles.length === 0)
+                setRepresentative({ type: "new", index: 0 });
         }
     };
 
-    // 기존 파일 삭제
-    const handleDeleteExisting = (index: number) => {
-        const deletedFile = existingFiles[index];
-        setExistingFiles(existingFiles.filter((_, i) => i !== index));
-        onDeleteExisting?.(deletedFile.fileId);
-        if (representativeIndex === index) setRepresentativeIndex(null);
+    const handleSetRepresentative = (type: "existing" | "new", index: number) => {
+        setRepresentative({ type, index });
+
+        if (type === "existing") {
+            const updated = existingFiles.map((f, i) => ({
+                ...f,
+                isRepresentative: i === index ? "Y" as const : "N" as const,
+            }));
+            setExistingFiles(updated);
+
+            onRepresentativeChange?.({
+                type,
+                index,
+                fileId: updated[index].fileId,
+            });
+        } else {
+            const newIdx = index;
+            const file = newFiles[newIdx];
+
+            const updated = existingFiles.map((f) => ({
+                ...f,
+                isRepresentative: "N" as const,
+            }));
+            setExistingFiles(updated);
+
+            onRepresentativeChange?.({
+                type,
+                index: newIdx,
+            });
+        }
     };
 
-    // 새 파일 삭제
+    const handleDeleteExisting = (index: number) => {
+        const deleted = existingFiles[index];
+        setExistingFiles(existingFiles.filter((_, i) => i !== index));
+        onDeleteExisting?.(deleted.fileId);
+
+        if (representative?.type === "existing" && representative.index === index)
+            setRepresentative(null);
+    };
+
     const handleDeleteNew = (index: number) => {
         const updated = newFiles.filter((_, i) => i !== index);
         setNewFiles(updated);
         onFilesChange(updated);
-        if (representativeIndex === index + existingFiles.length) setRepresentativeIndex(null);
-    };
 
-    // 대표 이미지 선택
-    const handleSetRepresentative = (index: number, isExisting: boolean) => {
-        setRepresentativeIndex(index);
-        onRepresentativeChange?.(index);
-
-        if (isExisting) {
-            const updated = existingFiles.map((f, i) => ({
-                ...f,
-                isRepresentative: (i === index ? "Y" : "N") as "Y" | "N",
-            }));
-            setExistingFiles(updated);
-        }
+        if (representative?.type === "new" && representative.index === index)
+            setRepresentative(null);
     };
 
     return (
@@ -93,60 +116,59 @@ export const FileUpload: React.FC<FileUploadProps> = ({
             <input type="file" ref={fileInputRef} onChange={handleFileChange} multiple hidden />
 
             <ul className="os_file_list">
-                {/* 기존 파일 */}
-                {existingFiles.map((file, index) => (
-                    <li key={`exist-${file.fileId}`}>
-                        <img
-                            src={`http://localhost:8000/${file.fileUrl}`}
-                            alt={file.fileName}
-                        />
+                {existingFiles.map((file, idx) => (
+                    <li key={`exist-${file.fileId}`} className="clear">
                         <span>{file.fileName}</span>
                         <i>{(file.fileSize / 1024).toFixed(1)} KB</i>
-                        {file.isRepresentative === "Y" && (
-                            <b onClick={() => handleSetRepresentative(index, true)}>대표</b>
-                        )}
+
                         <button
                             type="button"
+                            onClick={() => handleSetRepresentative("existing", idx)}
                             className="os_file_delete"
-                            style={{ background: file.isRepresentative === "Y" ? "#007bff" : "transparent", color: file.isRepresentative === "Y" ? "#fff" : "#007bff",}}
-                        >대표</button>
-                        <button
-                            type="button"
-                            className="os_file_delete"
-                            onClick={() => handleDeleteExisting(index)}
-                        >삭제</button>
+                            style={{
+                                background:
+                                    representative?.type === "existing" && representative.index === idx
+                                        ? "#007bff"
+                                        : "transparent",
+                                color:
+                                    representative?.type === "existing" && representative.index === idx
+                                        ? "#fff"
+                                        : "#007bff",
+                            }}
+                        >
+                            대표
+                        </button>
+                        <button type="button" onClick={() => handleDeleteExisting(idx)} className="os_file_delete">
+                            삭제
+                        </button>
                     </li>
                 ))}
 
-                {/* 새 파일 */}
-                {newFiles.map((file, index) => (
-                    <li key={`new-${index}`} className="clear">
-                        {/*<img*/}
-                        {/*    src={URL.createObjectURL(file)}*/}
-                        {/*    alt={file.name}*/}
-                        {/*    style={{ width: 80, height: 80, objectFit: 'cover' }}*/}
-                        {/*/>*/}
+                {newFiles.map((file, idx) => (
+                    <li key={`new-${idx}`} className="clear">
                         <span>{file.name}</span>
                         <i>{(file.size / 1024).toFixed(1)} KB</i>
-                        {representativeIndex === index+ existingFiles.length  && (
-                            <b
-                                onClick={() => handleSetRepresentative(index + existingFiles.length, false)}
-                            >대표</b>
-                        )}
+
                         <button
                             type="button"
-                            onClick={() => handleSetRepresentative(index + existingFiles.length, false)}
+                            onClick={() => handleSetRepresentative("new", idx)}
                             className="os_file_delete"
-                            style={{ background:
-                                    representativeIndex === index + existingFiles.length ? "#007bff" : "transparent",
+                            style={{
+                                background:
+                                    representative?.type === "new" && representative.index === idx
+                                        ? "#007bff"
+                                        : "transparent",
                                 color:
-                                    representativeIndex === index + existingFiles.length ? "#fff" : "#007bff",}}
-                        >대표</button>
-                        <button
-                            type="button"
-                            onClick={() => handleDeleteNew(index)}
-                            className="os_file_delete"
-                        >삭제</button>
+                                    representative?.type === "new" && representative.index === idx
+                                        ? "#fff"
+                                        : "#007bff",
+                            }}
+                        >
+                            대표
+                        </button>
+                        <button type="button" onClick={() => handleDeleteNew(idx)} className="os_file_delete">
+                            삭제
+                        </button>
                     </li>
                 ))}
             </ul>

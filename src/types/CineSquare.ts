@@ -10,12 +10,21 @@ export interface CineSquareData {
   createdAt: string;
   authorId: number;
   authorNickname : string;
-  files : [];
+  files : fileData[];
   likeCount:number;
   liked : boolean;
   commentCount: number;
   createdAtDate?: string;
   createdAtTime?: string;
+}
+
+export interface fileData {
+  fileId : number;
+  fileName : string;
+  fileUrl : string;
+  fileSize : number;
+  fileType : string;
+  isRepresentative :"Y" | "N";
 }
 
 export interface CineSquarePage {
