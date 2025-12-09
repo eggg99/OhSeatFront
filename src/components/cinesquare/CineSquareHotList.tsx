@@ -1,15 +1,29 @@
-import { useState } from "react";
+import {useEffect, useState, useRef} from "react";
+import {getCineSquareHotList} from "@/apis/api/cinesquare";
 import { useNavigate } from "react-router-dom";
 import HotCard from "./HotCard";
+import {CineSquareData} from "../../types/CineSquare";
 
 export default function CineSquareHotList(){
     const navigate = useNavigate();
+    const [cineSquareHotList, setCineSquareHotList] = useState<CineSquareData[]>([]);
     const list = () => navigate(`/cinesquare/list?category=0`);
-    const cineSquareHotList = [
-        { postId: 1, title: "씨네광장 인기글 제목 예시 썸네일의 고양이 귀엽다 호로롥", location: "경기도 수원시", thumbnail: "/img/cat.jpg" },
-        { postId: 2, title: "씨네광장 인기글 제목 예시 텍스트 입니다.", location: "경기도 화성시" },
-        { postId: 3, title: "씨네광장 인기글 제목 예시 텍스트 입니다.", location: "서울특별시" },
-    ]
+
+    useEffect(() => {
+        getHotList();
+    }, []);
+
+    const getHotList = async () => {
+        try {
+            const response = await getCineSquareHotList();
+
+            if (response && response.length > 0) {
+                setCineSquareHotList(response);
+            }
+        } catch (error) {
+            console.error('게시글 조회 실패' , error);
+        }
+    }
 
     return (
     <div className="os_sub_contents">
@@ -25,10 +39,10 @@ export default function CineSquareHotList(){
                     {cineSquareHotList.length > 0 ? (
                         cineSquareHotList.map((item, idx) => (
                             <HotCard
-                                key={idx}
+                                key={`hotcard-${idx}`}
                                 title={item.title}
-                                location={item.location}
-                                thumbnail={item.thumbnail}
+                                location={`${item.city} ${item.district}`}
+                                file={item.representativeFile ?? null}
                                 onClick={() => navigate(`/cinesquare/${item.postId}`)}
                             />
                         ))

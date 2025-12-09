@@ -225,14 +225,22 @@ export default function CineSquareDetail(){
                     <div className="detail_contents">
                         <pre>{detailValue?.content}</pre>
 
-                        {detailValue?.files?.length
-                            ? detailValue.files.map((file) => (
-                                <img
-                                    src={`http://localhost:8000/${file.fileUrl}`}
-                                    alt={file.fileName}
-                                />
-                            ))
-                            : null}
+                        {detailValue?.files?.length ? (
+                            // 대표 이미지가 먼저 오도록 정렬
+                            [...detailValue.files]
+                                .sort((a, b) => {
+                                    if (a.isRepresentative === 'Y') return -1;
+                                    if (b.isRepresentative === 'Y') return 1;
+                                    return 0;
+                                })
+                                .map((file) => (
+                                    <FilePreview
+                                        key={file.fileId} // key 추가
+                                        file={file}
+                                        previewType="ALL"
+                                    />
+                                ))
+                        ) : null}
                     </div>
 
                     <div className="detail_footer">
@@ -246,7 +254,7 @@ export default function CineSquareDetail(){
                                     onChange={handleLike}
                                 />
                                 <label htmlFor="like" className="like-btn">
-                                    좋아요 <span>{detailValue?.likeCount}</span>
+                                    좋아요 <span>{detailValue?.likeCount ?? 0}</span>
                                 </label>
                             </div>
                             <a href="#" className="post_hits_button">조회수 <span>{detailValue?.views}</span></a>

@@ -12,17 +12,15 @@ interface UploadedFile {
 interface FilePreviewProps {
     file: UploadedFile;
     baseUrl?: string;
+    previewType: 'ALL' | 'THUMBNAIL';
 }
 
-export const FilePreview: React.FC<FilePreviewProps> = ({ file, baseUrl = "http://localhost:8000/" }) => {
-    if (!file || file.isRepresentative === 'N') {
-        return '';
-    }
+export const FilePreview: React.FC<FilePreviewProps> = ({ file, baseUrl = "http://localhost:8000/", previewType }) => {
+    if (!file) return null;
 
-    return (
-        <img
-            src={`${baseUrl}${file.fileUrl}`}
-            alt={file.fileName}
-        />
-    );
+    if (previewType === 'THUMBNAIL' && file.isRepresentative === 'N') return null;
+
+    const src = `${baseUrl.replace(/\/$/, '')}/${file.fileUrl.replace(/^\//, '')}`;
+
+    return <img src={src} alt={file.fileName} />;
 };

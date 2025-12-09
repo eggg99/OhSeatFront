@@ -1,5 +1,5 @@
 import {useEffect, useState, useRef} from "react";
-import {getCineSqaureList, getCineSquareHotList} from "@/apis/api/cinesquare";
+import {getCineSqaureList, getCineSquareHotList, likeCineSquare} from "@/apis/api/cinesquare";
 import {Link, useNavigate} from "react-router-dom";
 import Location from "@/components/common/Location";
 import {FilePreview} from '@/components/common/file/FilePreview';
@@ -118,6 +118,29 @@ export default function CineSqaureList() {
         navigate("/cinesquare/search")
     }
 
+    // 좋아요 처리 //여기에 postId 매개변수로 넣기
+    const handleLike = async (postId: number) => {
+        try {
+            await likeCineSquare(postId);
+
+            setCineSquareList(prev =>
+                prev.map(item =>
+                    item.postId === postId
+                        ? {
+                            ...item,
+                            isLiked: !item.isLiked,
+                            likeCount: !item.isLiked
+                                ? item.likeCount + 1
+                                : Math.max(item.likeCount - 1, 0),
+                        }
+                        : item
+                )
+            );
+        } catch (error) {
+            console.error("좋아요 처리 실패", error);
+        }
+    };
+
     return (
         <div className="os_sub_contents">
             <div className="os_freetalk_wrap clear">
@@ -143,11 +166,6 @@ export default function CineSqaureList() {
                             </li>
                         </ul>
                     </section>
-                    {/*<select>
-                <option onClick={() => handleOrderChange('latest')}>최신순</option>
-                <option onClick={() => handleOrderChange('views')}>조회순</option>
-                <option onClick={() => handleOrderChange('comments')}>댓글순</option>
-            </select>*/}
 
                     <section className="os_freetalk_hot">
                         <h3>씨네광장 인기글</h3>
@@ -159,9 +177,10 @@ export default function CineSqaureList() {
                             {cineSquareHotList.length > 0 ? (
                                 cineSquareHotList.map((item, idx) => (
                                     <HotCard
+                                        key={`hotcard-${idx}`}
                                         title={item.title}
-                                        location={item.location}
-                                        thumbnail={item.thumbnail}
+                                        location={`${item.city} ${item.district}`}
+                                        file={item.representativeFile}
                                         onClick={() => navigate(`/cinesquare/${item.postId}`)}
                                     />
                                 ))
@@ -173,27 +192,23 @@ export default function CineSqaureList() {
 
                     {cineSquareList && cineSquareList.length > 0 ? (
                         cineSquareList.map((item: any, index: number) => (
-                            <section className="os_freetalk_section">
+                            <section className="os_freetalk_section" key={`cine-square-${index}`}>
                                 <p className="category">{item.categoryName}</p>
                                 <h3 className="title">{item.title}</h3>
 
                                 <ul className="post_info_list clear">
                                     <li><i>{item.authorNickname}</i></li>
-                                    <li>
-                                <span>
-                                    {item.createdAt ? item.createdAt.split("T")[0].replace(/-/g, ".") : ""}
-                                </span>
-                                    </li>
+                                    <li><span>{item.createdAt ? item.createdAt.split("T")[0].replace(/-/g, ".") : ""}</span></li>
                                     <li><p>{item?.city} {item?.district}</p></li>
                                 </ul>
-                                <Link to={`/cinesquare/${item.postId}`}>
+
+                                <Link to={`/cinesquare/${item.postId}`} className="cursor-pointer">
                                     <div className="freetalk_text_wrap">
                                         <pre>{item.content}</pre>
                                     </div>
-
                                     {item?.representativeFile && (
                                         <div className="freetalk_img_wrap">
-                                            <FilePreview file={item?.representativeFile ?? []}/>
+                                            <FilePreview file={item?.representativeFile ?? []} previewType={"THUMBNAIL"}/>
                                             {item.totalFiles > 1 && (
                                                 <span>{item.totalFiles - 1}개 이미지 더보기</span>
                                             )}
@@ -204,9 +219,16 @@ export default function CineSqaureList() {
                                 <div className="freetalk_like_comment clear">
                                     <div className="left">
                                         <div className="post_like_button">
-                                            <input type="checkbox" id="like" hidden/>
-                                            <label htmlFor="like"
-                                                   className="like-btn">좋아요 <span>{item?.likeCount ?? 0}</span></label>
+                                            <input
+                                                type="checkbox"
+                                                id={`like-${item.postId}`}
+                                                hidden
+                                                checked={item.isLiked}
+                                                onChange={() => handleLike(item.postId)}
+                                            />
+                                            <label htmlFor={`like-${item.postId}`} className="like-btn">
+                                                좋아요 <span>{item?.likeCount ?? 0}</span>
+                                            </label>
                                         </div>
                                     </div>
                                     <div className="right">
@@ -223,9 +245,8 @@ export default function CineSqaureList() {
                     )}
 
                     <section>
-                        {/* 로딩 데이터 */}
                         <div ref={loaderRef}>
-                            {isLoading ? "불러오는 중..." : hasMore ? "" : "마지막 글이에요!"}
+                            {isLoading ? "불러오는 중..." : hasMore ? "" : "-"}
                         </div>
                     </section>
                 </div>

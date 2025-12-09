@@ -198,3 +198,16 @@ export const fileUpload = async (formData) => {
     }
 }
 
+/**
+ * 메인 씨네광장 게시글 랜덤 불러오기
+ * param :
+ */
+export const getCineSquareRandom = async() => {
+    try{
+        const response = await axiosApi.get(`/`,{})
+        return response.data;
+    } catch (error) {
+        console.error("씨네광장 게시글 랜덤 불러오기: ", error);
+    }
+}
+

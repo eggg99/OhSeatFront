@@ -1,6 +1,7 @@
 import '@/styles/css/main.scss'
 import { MULTIPLEX_LIST } from "@/constants/multiplex";
 import { getTrendingCinema, top3Post } from "@/apis/api/recommend";
+import { getCineSquareRandom } from "@/apis/api/cinesquare";
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import WeekString from '@/components/common/WeekString';
@@ -9,6 +10,7 @@ import useEmblaCarousel from 'embla-carousel-react'
 import Autoplay from 'embla-carousel-autoplay'
 import { CRTF_MAP } from '@/constants/certifcate';
 import LoadingSpinner from '@/components/common/LoadingSpinner';
+import {CineSquareData} from "../types/CineSquare";
 
 interface Cinema {
     multiplexId: number;
@@ -29,10 +31,10 @@ interface Movie {
     rank : number;
 }
 
-
 export default function PageMain(){
     const [topCinemas, setTopCinemas] = useState<Cinema>();
     const [recentPost, setRecentPost] = useState<any[]>([]);
+    const [cineSquareList, setCineSquareList] = useState<CineSquareData[]>([]);
     const [movies, setMovies] = useState<Movie[]>([]);
     const [emblaRef] = useEmblaCarousel(
         { loop: true, align: 'start' },
@@ -111,6 +113,16 @@ export default function PageMain(){
         }
     }
 
+    // 메인 씨네광장 게시글 랜덤 불러오기
+    const getRandomCineData = async () => {
+        try {
+            const response: CineSquareData[] = await getCineSquareRandom();
+            setCineSquareList(response);
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
 
     // ✅ multiplexId를 label로 변환
     const getMultiplexLabel = (multiplexId: number) =>
@@ -127,6 +139,7 @@ export default function PageMain(){
             await getData();
             await getTop3Post();
             await getMovieChart();
+            await getRandomCineData();
             setLoading(false);
         };
         fetchData();
@@ -234,38 +247,27 @@ export default function PageMain(){
                     </div>
                     <div className="square_latest_list_wrap">
                         <ul className="square_latest_list clear">
-                            <li>
-                                <a href="#" className='inner'>
-                                    <span className="category">자유수다</span>
-                                    <b className="more_button"><i className="blind">더보기</i></b>
-                                    <p className="post_title">다들 마지막으로 영화관에 가서 본 영화가 뭔가요?</p>
-                                    <i className="date">2025.08.01</i>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#" className="inner">
-                                    <span className="category">공지사항</span>
-                                    <b className="more_button"><i className="blind">더보기</i></b>
-                                    <p className="post_title">다들 마지막으로 영화관에 가서 본 영화가 뭔가요?</p>
-                                    <i className="date">2025.08.01</i>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#" className="inner">
-                                    <span className="category">구인구직</span>
-                                    <b className="more_button"><i className="blind">더보기</i></b>
-                                    <p className="post_title">다들 마지막으로 영화관에 가서 본 영화가 뭔가요?</p>
-                                    <i className="date">2025.08.01</i>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#" className="inner">
-                                    <span className="category">자유수다</span>
-                                    <b className="more_button"><i className="blind">더보기</i></b>
-                                    <p className="post_title">다들 마지막으로 영화관에 가서 본 영화가 뭔가요?</p>
-                                    <i className="date">2025.08.01</i>
-                                </a>
-                            </li>
+                            {cineSquareList && cineSquareList.length > 0 ? (
+                                cineSquareList.map((item: any, index : number)=> (
+                                    <li key={`cine-${index}`}>
+                                        <Link to={`/cinesquare/${item.postId}`} className='inner'>
+                                            <span className="category">{item.categoryName}</span>
+                                            <b className="more_button"><i className="blind">더보기</i></b>
+                                            <p className="post_title">{item.content}</p>
+                                            <i className="date">{item.createdAt ? item.createdAt.split("T")[0].replace(/-/g, ".") : ""}</i>
+                                        </Link>
+                                    </li>
+                                ))
+                            ) : (
+                                <li>
+                                    <Link to={`/cinesquare/list`} className='inner'>
+                                        <span className="category">게시글 등록하러가기</span>
+                                        <b className="more_button"><i className="blind">더보기</i></b>
+                                        <p className="post_title">게시글이 없습니다. <br/> 지금 등록해보세요!</p>
+                                        <i className="date"></i>
+                                    </Link>
+                                </li>
+                            )}
                         </ul>
                     </div>   
                 </div>

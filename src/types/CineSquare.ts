@@ -3,14 +3,16 @@ export interface CineSquareData {
   categoryId: number;
   categoryName: string;
   title: string;
-  city: string;
-  district:string;
   content: string;
   views: number;
   createdAt: string;
   authorId: number;
   authorNickname : string;
+  city: string;
+  district:string;
   files : fileData[];
+  representativeFile : fileData;
+  totalFiles : fileData[];
   likeCount:number;
   liked : boolean;
   commentCount: number;
