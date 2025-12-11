@@ -3,12 +3,14 @@ import {getCineSqaureList, getCineSquareHotList, likeCineSquare} from "@/apis/ap
 import {Link, useNavigate} from "react-router-dom";
 import Location from "@/components/common/Location";
 import {FilePreview} from '@/components/common/file/FilePreview';
+import { userStore } from "@/store/userStore";
 import HotCard from './HotCard';
 
 const PAGE_SIZE = 10;
 
 export default function CineSqaureList() {
     const navigate = useNavigate();
+    const isLogin = userStore((state) => state.isLogin);
     const [cineSquareHotList, setCineSquareHotList] = useState<any[]>([]);
     const [cineSquareList, setCineSquareList] = useState<any[]>([]);
     const [categoryId, setCategoryId] = useState<number>(0);
@@ -256,8 +258,10 @@ export default function CineSqaureList() {
 
                 <div className="os_freetalk_floating">
                     <a href="#" className="os_freetalk_top_button"><i className="blind">위로</i></a>
+                    {isLogin && (
                     <Link to={`/cinesquare/reg`} className="os_freetalk_write_button"><i
                         className="blind">글쓰기</i></Link>
+                      )}
                 </div>
             </div>
         </div>

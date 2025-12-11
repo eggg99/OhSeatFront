@@ -205,7 +205,7 @@ export default function CineSquareDetail(){
                                 <span>{detailValue?.commentCount ?? 0}</span>
                             </a>
 
-                            {isLogin && (
+                            {isLogin && detailValue?.authorId == userId && (
                                 <a href="#" className={`post_setting_button ${isMenuOn ? "on" : ""}`} onClick={handleInnerToggle}>
                                     <span className="blind">더보기</span>
                                 </a>

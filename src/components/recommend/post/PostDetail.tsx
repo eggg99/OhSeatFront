@@ -258,7 +258,7 @@ export default function PostDetail(){
                             <a href="#" className="post_hits_button">조회수 <span>{detailValue.views}</span></a>
                             <a href="#" className="post_comment_button">댓글 <span>{detailValue.commentCount}</span></a>
 
-                            {isLogin && (
+                            {isLogin && detailValue.authorId == userId && (
                                 <a href="#" className={`post_setting_button ${isMenuOn ? "on" : ""}`} onClick={handleInnerToggle}>
                                     <span className="blind">더보기</span>
                                 </a>
