@@ -211,3 +211,15 @@ export const getCineSquareRandom = async() => {
     }
 }
 
+/**
+ * 씨네광장 게시글 삭제
+ * param : postId   게시글 시퀀스
+ */
+export const deleteCineSquareAdmin = async(postId) => {
+    try{
+        const response = await axiosApi.delete(`admin/cinesquare/post/${postId}`, { })
+        return response.data;
+    } catch (error) {
+        console.error("게시글 삭제 실패: ", error);
+    }
+}

@@ -30,7 +30,7 @@ export interface AnnouncementDataDetail {
   createdAtTime?: string; // 시간
   content : string;       // 내용
   likeCount:number;       // 좋아요개수
-  liked : boolean;        // 좋아요여부
+  isLiked : boolean;        // 좋아요여부
   prevSeq : number;       // 이전글
   nextSeq : number;       // 다음글
   views : number;         // 조회수

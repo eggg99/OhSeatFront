@@ -1,4 +1,4 @@
-import { deleteCineSquare, getCineSqaureItem, getCommentList, postComment, deleteComment, likeCineSquare, patchComment} from "@/apis/api/cinesquare";
+import { deleteCineSquare,deleteCineSquareAdmin, getCineSqaureItem, getCommentList, postComment, deleteComment, likeCineSquare, patchComment} from "@/apis/api/cinesquare";
 import { CineSquareData } from "@/types/CineSquare";
 import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
@@ -106,6 +106,20 @@ export default function CineSquareDetail(){
         try {
             if(result){
                 const response = await deleteCineSquare(postId);
+                alert(response);
+                list();
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    // 관리자 게시글 삭제
+    const handleDeleteAdmin = async() => {
+        const result = confirm("관리자 권한으로 삭제하시겠습니까?");
+        try {
+            if(result){
+                const response = await deleteCineSquareAdmin(postId);
                 alert(response);
                 list();
             }

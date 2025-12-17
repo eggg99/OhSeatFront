@@ -229,3 +229,17 @@ export const top3Post = async () => {
         console.error("최신 게시글 3개 조회 실패: ", error);
     }
 }
+
+
+/**
+ * 관리자 게시글 삭제
+ * param : postId       게시글 아이디
+ */
+export const deletePostAdmin = async (postId) => {
+    try{
+        const response = await axiosApi.delete(`admin/recommend/post/${postId}`)
+        return response.data;
+    } catch (error) {
+        console.error("게시글 삭제 실패: ", error);
+    }
+}

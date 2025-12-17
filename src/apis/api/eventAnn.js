@@ -62,7 +62,7 @@ export const putEventAnnouncement = async (announcementId, param) => {
  */
 export const deleteEventAnnouncement = async (announcementId) => {
     try{
-        const response = await axiosApi.delete('/admin/event/announcement/${announcementId}', {})
+        const response = await axiosApi.delete(`/admin/event/announcement/${announcementId}`, {})
         return response.data;
     } catch (error) {
         console.error("이벤트 당첨확인 게시글 등록 실패: ", error);
@@ -74,9 +74,9 @@ export const deleteEventAnnouncement = async (announcementId) => {
  * param : data             게시글 내용
  * param : files            파일 첨부
  */
-export const postEventAnnouncementLike = async (announcementId, param) => {
+export const postEventAnnouncementLike = async (announcementId) => {
     try{
-        const response = await axiosApi.post(`/event/announcement/${announcementId}/like`, param)
+        const response = await axiosApi.post(`/event/announcement/${announcementId}/like`, {})
         return response.data;
     } catch (error) {
         console.error("이벤트 당첨확인 게시글 등록 실패: ", error);
@@ -87,9 +87,9 @@ export const postEventAnnouncementLike = async (announcementId, param) => {
  * 이벤트 당첨확인 좋아요 취소
  * eventAnnouncementId      이벤트 시퀀스
  */
-export const deleteEventAnnouncementLike = async (announcementId, param) => {
+export const deleteEventAnnouncementLike = async (announcementId) => {
     try{
-        const response = await axiosApi.delete('/event/announcement/${announcementId}/like', param)
+        const response = await axiosApi.delete(`/event/announcement/${announcementId}/like`, {})
         return response.data;
     } catch (error) {
         console.error("이벤트 당첨확인 게시글 등록 실패: ", error);

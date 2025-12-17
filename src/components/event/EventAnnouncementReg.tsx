@@ -7,6 +7,7 @@ export default function EventAnnouncementReg () {
     const navigate = useNavigate();
     const userId = userStore((state) => state.userId);
     const isLogin = userStore((state) => state.isLogin);
+    const isAdmin = userStore((state) => state.isAdmin);
 
     // 이벤트 게시글 내용
     const [inputValue, setInputValue] = useState({
@@ -112,7 +113,7 @@ export default function EventAnnouncementReg () {
                     </div>
 
                     <div className="right">
-                        <a href="#" className="post_button write" onClick={() => handleSubmit()}>등록</a>
+                        {isLogin && isAdmin && <a href="#" className="post_button write" onClick={() => handleSubmit()}>등록</a> }
                     </div>
                 </div>
             </div>

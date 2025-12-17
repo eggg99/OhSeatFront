@@ -8,10 +8,11 @@ import { CATEGORY_LABEL, AnnouncementData, AnnouncementPage } from '@/types/Even
 export default function EventAnnouncementBrowse () {
     const navigate = useNavigate();
     const isLogin = userStore((state) => state.isLogin);
+    const isAdmin = userStore((state) => state.isAdmin);
 
     const [searchParams, setSearchParams] = useSearchParams();
 
-    const [category, setCategory] = useState('');
+    const [categoryId, setCategoryId] = useState<number | null>(null);
     const [searchType, setSearchType] = useState('');
     const [searchValue, setSearchValue] = useState('');
     const [announcementList, setAnnouncementList] = useState<AnnouncementPage | null>(null);
@@ -25,23 +26,23 @@ export default function EventAnnouncementBrowse () {
             await getList();
         }
         fetchData();
-    }, [category, orderType]);
+    }, [categoryId, orderType]);
 
     // 페이지 로드 시 URL에 있는 쿼리로 초기화
     useEffect(() => {
-        const param = searchParams.get('category') || '';
-        setCategory(param);
+        const param = Number(searchParams.get('categoryId') || null);
+        setCategoryId(param);
     }, [searchParams]);
 
-    const handleClick = (value: string) => (e: React.MouseEvent) => {
+    const handleClick = (value: number|null) => (e: React.MouseEvent) => {
         e.preventDefault(); // a 태그 기본 동작 방지
-        setCategory(value);
+        setCategoryId(value);
 
         // URL 쿼리 반영
         if (value) {
-            searchParams.set('category', value);
+            searchParams.set('categoryId', String(value));
         } else {
-            searchParams.delete('category');
+            searchParams.delete('categoryId');
         }
         setSearchParams(searchParams);
     };
@@ -64,6 +65,7 @@ export default function EventAnnouncementBrowse () {
     const getList = async () => {
         try {
             const param = {
+                'categoryId' : categoryId,
                 'searchType' : searchType ,
                 'searchValue' : searchValue,
                 'page' : page,
@@ -74,7 +76,6 @@ export default function EventAnnouncementBrowse () {
             if(!response) {
                 console.log('게시글 조회 실패');
             }
-            console.log(response);
             setAnnouncementList(response);
         } catch (error) {
             console.error('게시글 조회 실패' , error);
@@ -105,14 +106,14 @@ export default function EventAnnouncementBrowse () {
             {/* 카테고리영역 */}
             <section className="os_board_category_wrap">
                 <ul className="os_board_list clear">
-                    <li className={category === '' ? 'on' : ''}>
-                        <a href="#" onClick={handleClick('')}>전체</a>
+                    <li className={categoryId === 0 ? 'on' : ''}>
+                        <a href="#" onClick={handleClick(0)}>전체</a>
                     </li>
-                    <li className={category === '1' ? 'on' : ''}>
-                        <a href="#" onClick={handleClick('1')}>시사회</a>
+                    <li className={categoryId === 1 ? 'on' : ''}>
+                        <a href="#" onClick={handleClick(1)}>시사회</a>
                     </li>
-                    <li className={category === '2' ? 'on' : ''}>
-                        <a href="#" onClick={handleClick('2')}>예매권</a>
+                    <li className={categoryId === 2 ? 'on' : ''}>
+                        <a href="#" onClick={handleClick(2)}>예매권</a>
                     </li>
                 </ul>
             </section>
@@ -193,11 +194,16 @@ export default function EventAnnouncementBrowse () {
                             <tr
                                 key={item.eventId}
                                 onClick={() => navigate(`/event/announcement/${item?.eventId}`)}
+                                className="cursor-pointer"
                             >
                                 <td className="txtc">{CATEGORY_LABEL[item.categoryId] ?? '기타'}</td>
-                                <td className="txtc" colSpan={2}>{item?.title}</td>
+                                <td colSpan={2}>
+                                    <Link to={`/event/announcement/${item?.eventId}`}>
+                                        {item?.title}
+                                    </Link>
+                                </td>
                                 <td className="txtc">관리자</td>
-                                <td className="txtc">{item?.createdAt}</td>
+                                <td className="txtc">{item.createdAt ? item.createdAt.split("T")[0].replace(/-/g, ".") : ""}</td>
                                 <td className="txtc">{item?.views}</td>
                             </tr>
                         ))
@@ -214,7 +220,7 @@ export default function EventAnnouncementBrowse () {
                 <div className="post_button_wrap clear">
                     <div className="left"></div>
                     <div className="right">
-                        {isLogin && <Link to={`/event/announcement/reg`} className="post_button write">글쓰기</Link>}
+                        {isLogin && isAdmin && <Link to={`/event/announcement/reg`} className="post_button write">글쓰기</Link>}
                     </div>
                 </div>
 

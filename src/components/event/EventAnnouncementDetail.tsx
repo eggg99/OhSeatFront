@@ -1,13 +1,15 @@
 import { useEffect, useState, useRef } from "react"
 import { userStore } from "@/store/userStore";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { getEventAnnouncementItem, deleteEventAnnouncement } from '@/apis/api/eventAnn'
+import { getEventAnnouncementItem, deleteEventAnnouncement, postEventAnnouncementLike, deleteEventAnnouncementLike } from '@/apis/api/eventAnn'
 import { CATEGORY_LABEL, AnnouncementDataDetail } from '@/types/EventAnn'
 
 export default function EventAnnouncementDetail () {
     const navigate = useNavigate();
     const userId = userStore((state) => state.userId);  // 유저아이디
     const isLogin = userStore((state) => state.isLogin);
+    const isAdmin = userStore((state) => state.isAdmin);
+
     const { eventId } = useParams<{ eventId: string }>();
     const [isMenuOn, setMenuOn] = useState(false);
 
@@ -19,7 +21,7 @@ export default function EventAnnouncementDetail () {
         createdAtTime: '', // 시간
         content : '',
         likeCount:0,
-        liked : false,
+        isLiked : false,
         prevSeq : 0,
         nextSeq : 0,
         views : 0
@@ -59,7 +61,7 @@ export default function EventAnnouncementDetail () {
         const result = confirm("삭제하시겠습니까?");
         if (result) {
             const response = await deleteEventAnnouncement(eventId);
-            alert(response);
+            alert('삭제되었습니다.');
             navigate(`/event/announcement/browse`);
         }
     }
@@ -68,7 +70,21 @@ export default function EventAnnouncementDetail () {
         const isChecked = e.target.checked; // 체크 여부 (true / false)
 
         try {
-            // 좋아요 추가하는 함수 필요함
+            if (isChecked){
+                const res = await postEventAnnouncementLike(eventId)
+                setDetailValue((prev) => ({
+                    ...prev,
+                    isLiked: isChecked,
+                    likeCount: prev.likeCount + 1,
+                }));
+            } else {
+                const res = await deleteEventAnnouncementLike(eventId)
+                setDetailValue((prev) => ({
+                    ...prev,
+                    isLiked: isChecked,
+                    likeCount: Math.max(prev.likeCount - 1, 0),
+                }));
+            }
         } catch (error) {
             console.error("좋아요 처리 실패", error);
         }
@@ -142,8 +158,7 @@ export default function EventAnnouncementDetail () {
 
                             <div className="post_control_wrap clear">
                                 <a href="#" className="post_hits_button">조회수 <span>{detailValue?.views}</span></a>
-                                {/*TODO : 유저타입 admin일 때에만 열기*/}
-                                {isLogin && (
+                                {isLogin && isAdmin && (
                                   <a
                                     href="#"
                                     className={`post_setting_button ${isMenuOn ? "on" : ""}`}
@@ -173,7 +188,7 @@ export default function EventAnnouncementDetail () {
                                       type="checkbox"
                                       id="like"
                                       hidden
-                                      checked={detailValue.liked}
+                                      checked={detailValue.isLiked}
                                       onChange={handleLike}
                                     />
                                     <label htmlFor="like" className="like-btn">
@@ -186,7 +201,7 @@ export default function EventAnnouncementDetail () {
 
                     <div className="post_button_wrap clear">
                         <div className="left">
-                            {isLogin && <Link to={`/event/announcement/reg`} className="post_button write">글쓰기</Link>}
+                            {isLogin && isAdmin && <Link to={`/event/announcement/reg`} className="post_button write">글쓰기</Link>}
                         </div>
 
                         <div className="right">

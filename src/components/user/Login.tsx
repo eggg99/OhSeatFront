@@ -33,7 +33,7 @@ export default function Login(){
                 'userNick': response.nickname, 
                 'userEmail': response.email, 
                 'token':response.token,
-                'role' : response?.role,
+                'isAdmin' : response?.role.toLowerCase() === 'admin',
                 'isLogin':true
             })
             navigate('/');

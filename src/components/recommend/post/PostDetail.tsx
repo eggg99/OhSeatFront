@@ -1,5 +1,5 @@
 import "@/styles/css/sub.scss";
-import { deletePost, getCommentList, getPostDetail, postComment, deleteComment, postIncrementViews, updatePostLike } from "@/apis/api/recommend"
+import { deletePost,deletePostAdmin, getCommentList, getPostDetail, postComment, deleteComment, postIncrementViews, updatePostLike } from "@/apis/api/recommend"
 import { useEffect, useState, useRef } from "react"
 import { useOutletContext, useParams } from "react-router-dom";
 import { userStore } from "@/store/userStore";
@@ -40,6 +40,7 @@ export default function PostDetail(){
     const { postId } = useParams<{ postId: string }>(); 
     const userId = userStore((state) => state.userId);  // 유저아이디
     const isLogin = userStore((state) => state.isLogin);
+    const isAdmin = userStore((state) => state.isAdmin);
 
     const [comment, setComment] = useState("");
     const [commentList, setcommentList] = useState<Comment[]>([]);
@@ -154,6 +155,14 @@ export default function PostDetail(){
             navigate(`/recommend/${brand}`);
         }
     }
+    const handleDeleteAdmin = async () => {
+        const result = confirm("관리자 권한으로 삭제하시겠습니까?");
+        if(result){
+            const response = await deletePostAdmin(detailValue.postId);
+            alert(response);
+            navigate(`/recommend/${brand}`);
+        }
+    }
 
     const handleDeleteComment = async(commentId:number) => {
         const result = confirm("삭제하시겠습니까?");
@@ -226,12 +235,19 @@ export default function PostDetail(){
             <div className="theater_total_board_wrap">
                 <div className="post_button_wrap clear">
                     <div className="right">
+                        {isLogin && isAdmin &&
+                            <a
+                                href="#"
+                                className="post_button del"
+                                onClick={() => handleDeleteAdmin()}
+                            >삭제</a>
+                        }
                         <a
                             href="#"
                             onClick={(e) => {
                                 e.preventDefault();
                                 moveToPost(detailValue?.prevId, 'bef');
-                                }} className="post_button before">이전글</a>
+                            }} className="post_button before">이전글</a>
                         <a
                             href="#"
                             onClick={(e) => {
