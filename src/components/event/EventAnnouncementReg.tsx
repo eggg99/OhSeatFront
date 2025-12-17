@@ -1,8 +1,7 @@
+import { postEventAnnouncement } from "@/apis/api/eventAnn";
 import { useRef, useState, type ChangeEvent, type SyntheticEvent } from "react"
-import { postEventAnnouncement } from "@/apis/api/event";
-import { userStore } from "@/store/userStore";
 import { useNavigate } from "react-router-dom";
-import { FileUpload } from "../common/file/FileUpload";
+import { userStore } from "@/store/userStore";
 
 export default function EventAnnouncementReg () {
     const navigate = useNavigate();
@@ -42,10 +41,10 @@ export default function EventAnnouncementReg () {
             content : inputValue.content,
         }
 
-        const response = postEventAnnouncement(data);
-        alert(response);
-        // TODO : 백엔드에서 상세아이디값 받으면 detail 화면으로 넘어가게 만들기
-        list();
+        const response = await postEventAnnouncement(data);
+        const eventId = response?.eventId;
+        alert('등록되었습니다.');
+        navigate(`/event/announcement/${eventId}`);
     }
 
     // 목록으로
@@ -74,7 +73,7 @@ export default function EventAnnouncementReg () {
                             <tr>
                                 <td>
                                     <select name="categoryId" onChange={handleInput} value={inputValue.categoryId}>
-                                        <option value=''>이벤트 종류 선택</option>
+                                        <option value="">이벤트 종류 선택</option>
                                         <option value='1'>시사회</option>
                                         <option value='2'>예매권</option>
                                     </select>

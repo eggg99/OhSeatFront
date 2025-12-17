@@ -41,6 +41,7 @@ import EventReg from "@/components/event/EventReg";
 import EventAnnouncementBrowse from "@/components/event/EventAnnouncementBrowse";
 import EventAnnouncementDetail from "@/components/event/EventAnnouncementDetail";
 import EventAnnouncementReg from "@/components/event/EventAnnouncementReg";
+import EventAnnouncementEdit from "@/components/event/EventAnnouncementEdit";
 
 function AppRoutes(){
     return(
@@ -87,8 +88,9 @@ function AppRoutes(){
                 <Route path=":id" element={<EventDetail/>}></Route>   {/* 이벤트 상세페이지 */}
                 <Route path="reg" element={<EventReg/>}></Route>   {/* 이벤트 작성페이지 */}
                 <Route path="announcement/browse" element={<EventAnnouncementBrowse/>}></Route>   {/* 이벤트 당첨확인 리스트*/}
-                <Route path="announcement/:id" element={<EventAnnouncementDetail/>}></Route>   {/* 이벤트 당첨확인 상세페이지*/}
+                <Route path="announcement/:eventId" element={<EventAnnouncementDetail/>}></Route>   {/* 이벤트 당첨확인 상세페이지*/}
                 <Route path="announcement/reg" element={<EventAnnouncementReg/>}></Route>   {/* 이벤트 당첨확인 작성페이지*/}
+                <Route path="announcement/edit/:eventId" element={<EventAnnouncementEdit/>}></Route>   {/* 이벤트 당첨확인 수정페이지*/}
             </Route>
 
             <Route path="*" element={<PageNotFound />} />

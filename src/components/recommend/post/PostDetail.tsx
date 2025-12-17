@@ -189,7 +189,6 @@ export default function PostDetail(){
     };
 
     const moveToPost = (postId:number, flag:string) => {
-        console.log('여기옴?')
         if(!postId){
             if(flag === 'bef') {
                 alert('이전글이 존재하지 않습니다.'); 

@@ -75,49 +75,89 @@ export default function Join(){
     };
 
     return(
-        <form 
-            onSubmit={handleSubmit}
-            className='login-form join shadow rounded-xl border bg-card'
-        >
-            <Link to="/user/login">
-                <ArrowBigLeft className="absolute top-1 left-1 w-8 h-8" />
-            </Link>
-            <h1 className='title'>회원가입</h1>
-
-            <div className='input-group'>
-                <input type="text" placeholder="이름" name="name" value={inputValue.name} onChange={handleInput} required maxLength={30}/>
+        <div className="os_user_contents">
+            <div className="os_join_form_wrap">
+                <form
+                  onSubmit={handleSubmit}
+                  className='os_join_form'
+                >
+                    <h3><span>오싵 회원가입</span></h3>
+                    <ul className="os_login_list">
+                        <li className="key">
+                            <span>이름</span>
+                            <input
+                              type="text"
+                              placeholder="이름을 입력하세요"
+                              name="name"
+                              value={inputValue.name}
+                              onChange={handleInput}
+                              required
+                              maxLength={30}/>
+                        </li>
+                        <li className="key">
+                            <span>이메일</span>
+                            <input
+                              type="text"
+                              placeholder="이메일을 입력하세요"
+                              name="email"
+                              value={inputValue.email}
+                              onChange={handleInput}
+                              required
+                              maxLength={240}/>
+                        </li>
+                        <li className="key">
+                            <span>닉네임</span>
+                            <input
+                              type="text"
+                              placeholder="닉네임을 입력하세요"
+                              name="nickname"
+                              value={inputValue.nickname}
+                              onChange={handleInput}
+                              required
+                              maxLength={80}/>
+                        </li>
+                        <li className="key">
+                            <span>비밀번호</span>
+                            <input
+                              type="password"
+                              placeholder="비밀번호를 입력하세요"
+                              name="password"
+                              value={inputValue.password}
+                              onChange={handleInput}
+                              required/>
+                            <div className="text-red-500">{errorMessages.password &&
+                              <div className="error-msg">{errorMessages.password}</div>}</div>
+                        </li>
+                        <li className="key">
+                            <span>비밀번호</span>
+                            <input
+                              type="password"
+                              placeholder="비밀번호를 입력하세요"
+                              name="password2"
+                              value={inputValue.password2}
+                              onChange={handleInput}
+                              required/>
+                            <div className="text-red-500">{errorMessages.password2 &&
+                              <div className="error-msg">{errorMessages.password2}</div>}</div>
+                        </li>
+                        <li className="key">
+                            <span>휴대폰번호</span>
+                            <input
+                              type="text"
+                              placeholder="휴대폰번호(- 제외)"
+                              name="phoneNumber"
+                              value={inputValue.phoneNumber}
+                              onChange={handleInput}
+                              required
+                              maxLength={12}/>
+                        </li>
+                        <li>
+                            <button type="submit" className="user_login_button">회원가입</button>
+                        </li>
+                    </ul>
+                </form>
             </div>
-            <div className='input-group'>
-                <div className="flex w-full items-center space-x-2">
-                    <input type="email" placeholder="이메일" name="email" value={inputValue.email} onChange={handleInput} required maxLength={240}/>
-                </div>
-            </div>
-            <div className='input-group'>
-                <div className="flex w-full items-center space-x-2">
-                    <input type="text" placeholder="닉네임" name="nickname" value={inputValue.nickname} onChange={handleInput} required maxLength={80}/>
-                </div>
-            </div>
-            <div className='input-group'>
-                <input type="password" 
-                    placeholder="비밀번호" 
-                    name="password" 
-                    value={inputValue.password} 
-                    onChange={handleInput}
-                    required
-                />
-                <div className="text-red-500">{errorMessages.password && <div className="error-msg">{errorMessages.password}</div>}</div>
-            </div>
-            <div className='input-group'>
-                <input type="password" placeholder="비밀번호 확인" name="password2" value={inputValue.password2} onChange={handleInput} required/>
-                <div className="text-red-500">{errorMessages.password2 && <div className="error-msg">{errorMessages.password2}</div>}</div>
-                
-            </div>
-            <div className='input-group'>
-                <input type="text" placeholder="휴대폰번호(- 제외)" name="phoneNumber" value={inputValue.phoneNumber} onChange={handleInput} required maxLength={12}/>
-            </div>
-            
-            <button className="btn btn-primary w-full text-sm" type="submit">회원가입</button>
-        </form>
+        </div>
     )
 }
 

@@ -1,41 +1,24 @@
-import { getEventAnnouncementList } from "@/apis/api/event";
+import { getEventAnnouncementList } from "@/apis/api/eventAnn";
 import { useEffect, useState } from "react"
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { Pagination } from "@/components/common/Pagination";
 import { userStore } from "@/store/userStore";
-import { useSearchParams } from 'react-router-dom';
-
-interface AnnouncementData {
-    id : number;            // 시퀀스
-    category : string;      // 카테고리
-    title : string;         // 제목
-    createAt : Date;        // 작성일
-    content : string;       // 내용
-}
-
-interface AnnouncementPage {
-    content : AnnouncementData[];
-    totalPages : number;
-    totalElements : number;
-    number: number;
-    size : number;
-    first : boolean;
-    last : boolean;
-}
+import { CATEGORY_LABEL, AnnouncementData, AnnouncementPage } from '@/types/EventAnn'
 
 export default function EventAnnouncementBrowse () {
     const navigate = useNavigate();
-
     const isLogin = userStore((state) => state.isLogin);
+
+    const [searchParams, setSearchParams] = useSearchParams();
+
     const [category, setCategory] = useState('');
     const [searchType, setSearchType] = useState('');
     const [searchValue, setSearchValue] = useState('');
-    const [searchParams, setSearchParams] = useSearchParams();
-
     const [announcementList, setAnnouncementList] = useState<AnnouncementPage | null>(null);
+
     const [page, setPage] = useState<number>(0);
     const [size, setSize] = useState<number>(10);
-    const [orderType, setOrderType] = useState<string>('');
+    const [orderType, setOrderType] = useState<string>('latest');
 
     useEffect(() => {
         const fetchData = async () => {
@@ -80,13 +63,19 @@ export default function EventAnnouncementBrowse () {
     // 게시글 리스트 조회
     const getList = async () => {
         try {
-            const param = { 'searchType' : searchType , 'searchValue' : searchValue}
+            const param = {
+                'searchType' : searchType ,
+                'searchValue' : searchValue,
+                'page' : page,
+                'size' : size,
+                'orderType' : orderType,
+            }
             const response = await getEventAnnouncementList(param);
             if(!response) {
                 console.log('게시글 조회 실패');
             }
-            // console.log('게시글 조회 완료');
-            // setEventList(response);
+            console.log(response);
+            setAnnouncementList(response);
         } catch (error) {
             console.error('게시글 조회 실패' , error);
         }
@@ -108,8 +97,8 @@ export default function EventAnnouncementBrowse () {
 
                 <ul className="breadcrumbs_list clear">
                     <li className="home"><Link to="/"><i className="blind">홈</i></Link></li>
-                    <li><Link to="/event/browse">이벤트</Link></li>
-                    <li><Link to={`/event/announcement/browse`}>이벤트 당첨발표</Link></li>
+                    <li><Link to="/event/announcement/browse">이벤트</Link></li>
+                    <li><Link to="/event/announcement/browse">이벤트 당첨발표</Link></li>
                 </ul>
             </div>
 
@@ -128,15 +117,17 @@ export default function EventAnnouncementBrowse () {
                 </ul>
             </section>
 
-
             {/* 검색영역 */}
             <div className="os_search_wrap">
                 <ul className="os_search_list">
                     <li>
-                        <select>
-                            <option onClick={() => setSearchType('')}>전체</option>
-                            <option onClick={() => setSearchType('1')}>시사회</option>
-                            <option onClick={() => setSearchType('2')}>예매권</option>
+                        <select
+                          value={searchType}
+                          onChange={(e) => setSearchType(e.target.value)}
+                        >
+                            <option value=''>전체</option>
+                            <option value='1'>시사회</option>
+                            <option value='2'>예매권</option>
                         </select>
                     </li>
                     <li>
@@ -144,7 +135,7 @@ export default function EventAnnouncementBrowse () {
                             type="text" value={searchValue}
                             onChange={(e) => setSearchValue(e.target.value)}
                             onKeyDown={handleKeyDown}
-                            placeholder="이벤트를 찾아보세요"/>
+                            placeholder="이벤트 당첨 발표를 확인해보세요"/>
                     </li>
                     <li>
                         <button onClick={handleSearch}>검색</button>
@@ -159,14 +150,20 @@ export default function EventAnnouncementBrowse () {
                     <p>{announcementList?.totalElements ?? 0}개의 글</p>
 
                     <div className="post_filter_wrap clear">
-                        <select>
-                            <option onClick={() =>handleSizeChange(10)}>10개씩</option>
-                            <option onClick={() =>handleSizeChange(20)}>20개씩</option>
+                        <select
+                            value={size}
+                            onChange={(e) => handleSizeChange(Number(e.target.value))}
+                        >
+                            <option value={10}>10개씩</option>
+                            <option value={20}>20개씩</option>
                         </select>
-                        <select>
-                            <option onClick={() =>handleOrderChange('latest')}>최신순</option>
-                            <option onClick={() =>handleOrderChange('views')}>조회순</option>
-                            <option onClick={() =>handleOrderChange('recommend')}>추천순</option>
+                        <select
+                            value={orderType}
+                            onChange={(e)=>handleOrderChange(e.target.value)}
+                        >
+                            <option value='latest'>최신순</option>
+                            <option value='views'>조회순</option>
+                            <option value='recommend'>추천순</option>
                         </select>
                     </div>
                 </div>
@@ -191,18 +188,17 @@ export default function EventAnnouncementBrowse () {
                     </thead>
                     <tbody>
                         
-                    {announcementList && announcementList.content.length > 0 ? (
+                    {announcementList && announcementList?.content?.length > 0 ? (
                         announcementList.content.map((item: any) => (
                             <tr
-                                key={item.id}
-                                onClick={() => navigate(`/event/announcement/${item?.id}`)}
+                                key={item.eventId}
+                                onClick={() => navigate(`/event/announcement/${item?.eventId}`)}
                             >
-                                <td className="txtc">{item?.title}</td>
-                                <td className="txtc">{item?.title}</td>
-                                <td className="txtc">{item?.title}</td>
-                                <td className="txtc">{item?.title}</td>
-                                <td className="txtc">{item?.title}</td>
-                                <td className="txtc">{item.createdAt}</td>
+                                <td className="txtc">{CATEGORY_LABEL[item.categoryId] ?? '기타'}</td>
+                                <td className="txtc" colSpan={2}>{item?.title}</td>
+                                <td className="txtc">관리자</td>
+                                <td className="txtc">{item?.createdAt}</td>
+                                <td className="txtc">{item?.views}</td>
                             </tr>
                         ))
                     ) : (
@@ -217,11 +213,11 @@ export default function EventAnnouncementBrowse () {
 
                 <div className="post_button_wrap clear">
                     <div className="left"></div>
-
                     <div className="right">
-                        {isLogin &&<Link to={`/event/announcement/reg`} className="post_button write">글쓰기</Link>}
+                        {isLogin && <Link to={`/event/announcement/reg`} className="post_button write">글쓰기</Link>}
                     </div>
                 </div>
+
                 {announcementList &&
                     <Pagination
                         currentPage={announcementList.number}
