@@ -38,7 +38,7 @@ export default function EventAnnouncementDetail () {
     const getData = async () => {
         try {
             const response = await getEventAnnouncementItem(eventId);
-            const dateObj = new Date(response.createdAt);
+            const dateObj = new Date(response?.createdAt);
             const date = dateObj.toISOString().slice(0, 10).replace(/-/g, "."); // YYYY.MM.DD
             const time = dateObj.toTimeString().slice(0, 5); // HH:mm
 

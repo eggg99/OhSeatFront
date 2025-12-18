@@ -49,9 +49,6 @@ export default function EventAnnouncementBrowse () {
 
     const handleSearch = async () => {
         if (!searchValue.trim()) return; // 빈값 방지
-        // 실제 검색 로직 (API 호출 등)을 여기에 추가
-        console.log('검색 실행:', searchValue);
-
         await getList();
     };
 
