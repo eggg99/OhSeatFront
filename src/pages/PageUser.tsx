@@ -3,7 +3,7 @@ import '@/styles/css/user.scss'
 
 const PageUser = () => {
     return (
-        <div className="os_sub_contents">
+        <div className="os_user_contents">
             <Outlet />
         </div>
     );
