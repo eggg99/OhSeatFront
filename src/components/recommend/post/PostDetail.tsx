@@ -1,5 +1,5 @@
 import "@/styles/css/sub.scss";
-import { deletePost,deletePostAdmin, getCommentList, getPostDetail, postComment, deleteComment, postIncrementViews, updatePostLike } from "@/apis/api/recommend"
+import { patchComment, deletePost,deletePostAdmin, getCommentList, getPostDetail, postComment, deleteComment, postIncrementViews, updatePostLike } from "@/apis/api/recommend"
 import { useEffect, useState, useRef } from "react"
 import { useOutletContext, useParams } from "react-router-dom";
 import { userStore } from "@/store/userStore";
@@ -32,6 +32,7 @@ interface Comment {
   commenterId : string;
   authorNickname: string;
   createdAt: string;
+  updatedAt: string;
 }
 
 export default function PostDetail(){
@@ -216,9 +217,20 @@ export default function PostDetail(){
     const [editContent, setEditContent] = useState("");
 
     // 댓글 수정 함수
-    const handleEditComplete = (id:number) => {
-        // TODO : 댓글 아이디를 넣어서 수정 api 만들어야함
-        alert('준비중입니다!');
+    const handleEditComplete = async (commentId:number) => {
+        if (!editContent.trim()) return;
+        else if (!isLogin) {alert('로그인해주세요'); navigate(`/user/login`);return;}
+
+        try {
+            const param = {'content' : editContent };
+            const res = await patchComment(commentId, param);
+            alert(res);
+
+            setEditingCommentId(null);
+            await getDataComment();     // 댓글 리스트 갱신
+        } catch (error) {
+            console.error(error);
+        }  
     }
 
 
@@ -340,7 +352,10 @@ export default function PostDetail(){
                                                                 </button>
                                                             </div>
                                                         </div>
-                                                        <span>{c.createdAt} <i>수정됨</i></span>
+                                                        <span>
+                                                            {c.createdAt} 
+                                                            {c.updatedAt && <i>수정됨</i>}
+                                                        </span>
                                                         <div className="comment_control_wrap clear">
                                                             <button disabled>수정</button>
                                                             {c.commenterId == userId && (
@@ -355,7 +370,10 @@ export default function PostDetail(){
                                                     <>
                                                         <h4>{c.authorNickname}</h4>
                                                         <p>{c.content}</p>
-                                                        <span>{c.createdAt} <i>수정됨</i></span>
+                                                        <span>
+                                                            {c.createdAt} 
+                                                            {c.updatedAt && <i>수정됨</i>}
+                                                        </span>
                                                         <div className="comment_control_wrap clear">
                                                             <button
                                                                 onClick={() => {

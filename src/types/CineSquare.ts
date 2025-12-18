@@ -14,7 +14,7 @@ export interface CineSquareData {
   representativeFile : fileData;
   totalFiles : fileData[];
   likeCount:number;
-  liked : boolean;
+  isLiked : boolean;
   commentCount: number;
   createdAtDate?: string;
   createdAtTime?: string;

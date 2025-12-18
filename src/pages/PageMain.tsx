@@ -117,6 +117,7 @@ export default function PageMain(){
     const getRandomCineData = async () => {
         try {
             const response: CineSquareData[] = await getCineSquareRandom();
+            console.log(response);
             setCineSquareList(response);
         } catch (error) {
             console.error(error);
@@ -253,7 +254,7 @@ export default function PageMain(){
                                         <Link to={`/cinesquare/${item.postId}`} className='inner'>
                                             <span className="category">{item.categoryName}</span>
                                             <b className="more_button"><i className="blind">더보기</i></b>
-                                            <p className="post_title">{item.content}</p>
+                                            <p className="post_title">{item.title}</p>
                                             <i className="date">{item.createdAt ? item.createdAt.split("T")[0].replace(/-/g, ".") : ""}</i>
                                         </Link>
                                     </li>

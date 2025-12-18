@@ -11,6 +11,7 @@ interface Comment {
     commenterId : string;
     authorNickname: string;
     createdAt: string;
+    updatedAt: string;
 }
 
 export default function CineSquareDetail(){
@@ -18,7 +19,8 @@ export default function CineSquareDetail(){
     const { postId } = useParams<{ postId: string }>(); 
     const userId = userStore((state) => state.userId);
     const isLogin = userStore((state) => state.isLogin);
-    
+    const isAdmin = userStore((state) => state.isAdmin);
+
     const [comment, setComment] = useState("");
     const [commentList, setcommentList] = useState<Comment[]>([]);
 
@@ -91,10 +93,12 @@ export default function CineSquareDetail(){
 
         try {
             const param = {'content' : comment };
-            await postComment(postId, param);
+            const res = await postComment(postId, param);
+            alert(res);
             setComment(""); // input 초기화
             await getData();     // 게시글 다시 불러오기 (commentCount 갱신)
             await getDataComment();     // 댓글 리스트 갱신
+            
         } catch (error) {
             console.error("댓글 제출 실패", error);
         }
@@ -152,7 +156,7 @@ export default function CineSquareDetail(){
 
                 return {
                     ...prev,
-                    liked: isChecked,
+                    isLiked: isChecked,
                     likeCount: isChecked
                         ? (prev.likeCount ?? 0) + 1
                         : Math.max((prev.likeCount ?? 0) - 1, 0),
@@ -174,19 +178,21 @@ export default function CineSquareDetail(){
 
     // 댓글 수정 함수
     const handleEditComplete = async (commentId:number) => {
-        console.log('1');
         if (!editContent.trim()) return;
         else if (!isLogin) {alert('로그인해주세요'); navigate(`/user/login`);return;}
 
         try {
             const param = {'content' : editContent };
-            await patchComment(commentId, param);
+            const res = await patchComment(commentId, param);
+            alert(res);
+
             setEditingCommentId(null);
             await getDataComment();     // 댓글 리스트 갱신
         } catch (error) {
             console.error(error);
         }
     }
+    
 
     return(
         <div className="os_sub_contents">
@@ -195,6 +201,13 @@ export default function CineSquareDetail(){
                     <button onClick={list} className="go_before_button">목록으로 돌아가기</button>
 
                     <h3>씨네광장 소식</h3>
+                    {isLogin && isAdmin &&
+                        <a
+                            href="#"
+                            className="post_button del"
+                            onClick={() => handleDeleteAdmin()}
+                        >삭제</a>
+                    }
                 </div>
 
                 <div className="theater_detail_board_wrap2">
@@ -264,7 +277,7 @@ export default function CineSquareDetail(){
                                     type="checkbox"
                                     id="like"
                                     hidden
-                                    checked={detailValue?.liked}
+                                    checked={detailValue?.isLiked}
                                     onChange={handleLike}
                                 />
                                 <label htmlFor="like" className="like-btn">
@@ -303,7 +316,15 @@ export default function CineSquareDetail(){
                                                                 </button>
                                                             </div>
                                                         </div>
-                                                        <span>{c.createdAt} <i>수정됨</i></span>
+                                                        <span>
+                                                            {c.createdAt 
+                                                                ? c.createdAt.replace("T", " ")
+                                                                             .substring(0, 16)
+                                                                             .replace(/-/g, ".")
+                                                                : ""
+                                                            }
+                                                            {c.updatedAt && <i>수정됨</i>}
+                                                        </span>
                                                         <div className="comment_control_wrap clear">
                                                             <button disabled>수정</button>
                                                             {c.commenterId == userId && (
@@ -318,7 +339,15 @@ export default function CineSquareDetail(){
                                                     <>
                                                         <h4>{c.authorNickname}</h4>
                                                         <p className='pre-line'>{c.content}</p>
-                                                        <span>{c.createdAt} <i>수정됨</i></span>
+                                                        <span>
+                                                            {c.createdAt 
+                                                                ? c.createdAt.replace("T", " ")
+                                                                             .substring(0, 16)
+                                                                             .replace(/-/g, ".")
+                                                                : ""
+                                                            }
+                                                            {c.updatedAt && <i>수정됨</i>}
+                                                        </span>
                                                         <div className="comment_control_wrap clear">
                                                             <button
                                                                 onClick={() => {

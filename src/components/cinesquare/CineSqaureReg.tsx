@@ -97,7 +97,7 @@ export default function CineSquareReg() {
         };
 
         // 파일 업로드
-        const uploadedFiles = await handleFileUpload();
+        const uploadedFiles = uploadFiles.length > 0 ? await handleFileUpload() : [];
         const newFileIds = uploadedFiles.map(u => u.fileId);
         const representativeFile = uploadedFiles.find(u => u.isRepresentative === "Y");
         const representativeFileId = representativeFile ? representativeFile.fileId : null;
@@ -105,7 +105,9 @@ export default function CineSquareReg() {
         const formData = new FormData();
         formData.append("data", JSON.stringify(data));
         formData.append("newFileIds", newFileIds.join(","));
-        formData.append("representativeFileId", JSON.stringify(representativeFileId));
+        if (representativeFileId !== null) {
+            formData.append("representativeFileId",String(representativeFileId));
+        }
 
         const response = await postCineSquare(formData);
         if (response) {
@@ -145,7 +147,6 @@ export default function CineSquareReg() {
                                 <td>
                                     <select name="categoryId" onChange={handleInput} value={inputValue.categoryId}>
                                         <option value="">게시글 종류 선택</option>
-                                        <option value="1">공지사항</option>
                                         <option value="2">자유수다</option>
                                         <option value="3">구인구직</option>
                                     </select>

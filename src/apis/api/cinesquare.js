@@ -204,7 +204,7 @@ export const fileUpload = async (formData) => {
  */
 export const getCineSquareRandom = async() => {
     try{
-        const response = await axiosApi.get(`/`,{})
+        const response = await axiosApi.get(`cinesquare/main/random`,{})
         return response.data;
     } catch (error) {
         console.error("씨네광장 게시글 랜덤 불러오기: ", error);
@@ -212,7 +212,7 @@ export const getCineSquareRandom = async() => {
 }
 
 /**
- * 씨네광장 게시글 삭제
+ * 씨네광장 게시글 삭제 - 관리자
  * param : postId   게시글 시퀀스
  */
 export const deleteCineSquareAdmin = async(postId) => {
@@ -223,3 +223,17 @@ export const deleteCineSquareAdmin = async(postId) => {
         console.error("게시글 삭제 실패: ", error);
     }
 }
+
+/**
+ * 씨네광장 게시글 작성
+ * param : data : 게시글 내용
+ * param : files : 파일 첨부
+ */
+export const postCineSquareAdmin = async (param) => {
+    try {
+        const response = await axiosApi.post("/admin/cinesquare/notice", param);
+        return response.data;
+    } catch (error) {
+        console.error("게시글 등록 실패: ", error);
+    }
+};

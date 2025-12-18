@@ -11,6 +11,7 @@ const PAGE_SIZE = 10;
 export default function CineSqaureList() {
     const navigate = useNavigate();
     const isLogin = userStore((state) => state.isLogin);
+    const isAdmin = userStore((state) => state.isAdmin);
     const [cineSquareHotList, setCineSquareHotList] = useState<any[]>([]);
     const [cineSquareList, setCineSquareList] = useState<any[]>([]);
     const [categoryId, setCategoryId] = useState<number>(0);
@@ -167,6 +168,17 @@ export default function CineSqaureList() {
                                 <a href="#" onClick={() => handleCategory(3)}>구인구직</a>
                             </li>
                         </ul>
+                        <div className="post_filter_wrap2 clear">
+                                <select 
+                                    value={orderType}
+                                    onChange={(e) => handleOrderChange(e.target.value)}
+                                >
+                                    <option value={'latest'}>최신순</option>
+                                    <option value={'liked'}>추천순</option>
+                                    <option value={'views'}>조회순</option>
+                                    <option value={'comments'}>댓글순</option>
+                                </select>
+                            </div>
                     </section>
 
                     <section className="os_freetalk_hot">
@@ -259,9 +271,13 @@ export default function CineSqaureList() {
                 <div className="os_freetalk_floating">
                     <a href="#" className="os_freetalk_top_button"><i className="blind">위로</i></a>
                     {isLogin && (
-                    <Link to={`/cinesquare/reg`} className="os_freetalk_write_button"><i
-                        className="blind">글쓰기</i></Link>
-                      )}
+                        <Link
+                            to={isAdmin ? "/cinesquare/admin/reg" : "/cinesquare/reg"}
+                            className="os_freetalk_write_button"
+                        >
+                            <i className="blind">글쓰기</i>
+                        </Link>
+                    )}
                 </div>
             </div>
         </div>

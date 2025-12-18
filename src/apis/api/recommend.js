@@ -192,6 +192,19 @@ export const deleteComment = async(commentId) => {
 }
 
 /**
+ * 댓글 수정
+ * param : commentId     댓글 아이디
+ */
+export const patchComment = async(commentId, param) => {
+    try{
+        const response = await axiosApi.patch(`/rcmd/comment/edit/${commentId}`, param)
+        return response.data;
+    } catch (error) {
+        console.error("게시글 삭제 실패: ", error);
+    }      
+}
+
+/**
  * 조회수 증가
  * param : postId       게시글 아이디
  */
@@ -241,5 +254,15 @@ export const deletePostAdmin = async (postId) => {
         return response.data;
     } catch (error) {
         console.error("게시글 삭제 실패: ", error);
+    }
+}
+
+export const insertPostAdmin = async(param) => {
+    try{
+        const response = await axiosApi.post("/admin/recommend/notice", param)
+        return response.data;
+    } catch (error) {
+        console.error("게시글 등록 실패: ", error);
+        return false;
     }
 }
