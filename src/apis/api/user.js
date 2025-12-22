@@ -104,3 +104,13 @@ export const findPw = async (formData) => {
         return false;
     }
 }
+
+// 닉네임 중복확인
+export const duplicateNickname = async (param) => {
+    try {
+        const response = await axiosApi.post('/user/duplicateNickname', param);
+        return response.data;
+    } catch (error) {
+        console.error(error);
+    }
+}

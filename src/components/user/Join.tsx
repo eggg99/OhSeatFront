@@ -1,8 +1,6 @@
-import { ArrowBigLeft } from "lucide-react"
-import { Link } from "react-router-dom";
 import { use, useState } from "react"
 import { useNavigate } from 'react-router-dom';
-import { registerUser } from "@/apis/api/user";
+import { duplicateNickname, registerUser } from "@/apis/api/user";
 
 export default function Join(){
   const navigate = useNavigate(); // 이동을 위한 훅
@@ -16,6 +14,7 @@ export default function Join(){
     phoneNumber: '',        // 핸드폰번호
 
     validPassword : false,  // 비밀번호 정규식 충족 여부
+    validDuplicate : false, // 닉네임 중복여부
   });
 
   const [errorMessages, setErrorMessages] = useState({
@@ -58,10 +57,31 @@ export default function Join(){
     }
   }
 
+  const duplicateNick = async () => {
+    const param = {}
+    try{
+      const response = await duplicateNickname(param);
+      if (response) {
+        alert('사용할 수 있습니다.');
+        inputValue.validDuplicate = true;
+      } else {
+        alert('사용할 수 없습니다.')
+        inputValue.validDuplicate = false;
+      }
+    } catch (error) {
+      alert('에러 발생')
+      console.log(error);
+    }
+  }
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if(!inputValue.validPassword){
       alert("비밀번호를 확인해주세요");
+      return false;
+    }
+    if(!inputValue.validDuplicate){
+      alert("닉네임 중복확인을 확인해주세요");
       return false;
     }
     const response = await registerUser(inputValue);
@@ -139,8 +159,14 @@ export default function Join(){
                 value={inputValue.nickname}
                 onChange={handleInput}
                 required
-                maxLength={15}/>
-              <button type="button">중복확인</button>
+                maxLength={15}
+                disabled={inputValue.validDuplicate}
+              />
+              <button
+                type="button"
+                onClick={() => duplicateNick()}
+                disabled={inputValue.validDuplicate}
+              >중복확인</button>
             </div>
           </li>
           <li>
