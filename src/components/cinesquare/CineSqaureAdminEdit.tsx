@@ -1,16 +1,11 @@
-import { insertNotice } from "@/apis/api/admin";
-import { insertPostAdmin } from "@/apis/api/recommend";
-import { useState, type ChangeEvent, type SyntheticEvent } from "react";
-import { useNavigate } from "react-router-dom";
-import Location from "@/components/common/Location";
-import { locationStore } from "@/store/userLocation";
-import { FileUpload } from "@/components/common/file/FileUpload";
+import { getNotice, updateNotice} from "@/apis/api/admin";
+import { useEffect, useState, type SyntheticEvent } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 
-export default function CineSqaureAdminReg() {
+export default function CineSquareEdit() {
     const navigate = useNavigate();
+    const { id } = useParams<{ id: string }>();
 
-    // 게시글 정보
-    const location = locationStore((state) => state.currentLocation);
     const [inputValue, setInputValue] = useState({
         menuId : "",
         categoryId: "1",
@@ -18,57 +13,51 @@ export default function CineSqaureAdminReg() {
         content: "",
     });
 
-    /** 입력값 변경 */
-    const handleInput = (
-        e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
-    ) => {
-        const { name, value } = e.target;
-        setInputValue((prev) => ({
-            ...prev,
-            [name]: value,
-        }));
+    const getData = async () => {
+        try {
+            const res = await getNotice(id);
+            console.log(res);
+            setInputValue(res);
+        } catch (err) {
+            console.error(err);
+        }
     };
 
-    /** 목록으로 이동 */
-    const list = () => navigate(`/cinesquare/list?category=0`);
-
-    /** 등록하기 */
     const handleSubmit = async (e?: SyntheticEvent) => {
         e?.preventDefault();
 
-        if (!inputValue.categoryId) return alert("카테고리를 선택해주세요");
-        if (!inputValue.title) return alert("제목을 입력해주세요");
-        if (!inputValue.content) return alert("내용을 입력해주세요");
-        if (!inputValue.menuId) return alert('공지를 올릴 메뉴를 선택해주세요');
-        
         const data = {
-            targetBoard: inputValue.menuId,
+            categoryId: inputValue.categoryId,
             title: inputValue.title,
             content: inputValue.content,
         };
 
-        try{
-            const response = await insertNotice(data);
-            alert('저장되었습니다');
-            navigate('/cinesquare/list');
-        } catch (e) {
-            console.error(e);
+        const response = await updateNotice(id, data);
+        if (response) {
+            alert(response);
+            navigate(`/cinesquare/admin/${id}`);
         }
-
     };
+
+    useEffect(() => {
+        if (id) getData();
+    }, [id]);
+
+    const handleInput = (e: any) =>
+        setInputValue(prev => ({ ...prev, [e.target.name]: e.target.value }));
 
     return (
         <div className="os_sub_contents">
             <div className="os_freetalk_wrap clear">
                 <div className="os_freetalk_subtitle">
-                    <button onClick={list} className="go_before_button">
+                    <button onClick={() => navigate(`/cinesquare/list?category=0`)} className="go_before_button">
                         목록으로 돌아가기
                     </button>
 
-                    <h3>씨네광장 관리자 글쓰기</h3>
+                    <h3>공지사항 수정하기</h3>
                     <div className="freetalk_button_wrap">
-                        <a onClick={() => handleSubmit()} className="post_button write cursor-pointer">
-                            등록
+                        <a onClick={handleSubmit} className="post_button write cursor-pointer">
+                            수정
                         </a>
                     </div>
                 </div>
@@ -79,7 +68,7 @@ export default function CineSqaureAdminReg() {
                             <tbody>
                             <tr>
                                 <td>
-                                    <select name="categoryId" onChange={handleInput} value={inputValue.categoryId} disabled>
+                                    <select name="categoryId" value={inputValue.categoryId} onChange={handleInput}>
                                         <option value="1">공지사항</option>
                                     </select>
                                 </td>
@@ -90,7 +79,7 @@ export default function CineSqaureAdminReg() {
                                         <option value={'cinesquare'}>씨네광장</option>
                                     </select>
                                 </td>
-                                <td colSpan={2}>
+                                <td colSpan={3}>
                                     <input
                                         type="text"
                                         name="title"
@@ -105,12 +94,12 @@ export default function CineSqaureAdminReg() {
                             <tr>
                                 <td colSpan={4}>
                                     <div className="post_textarea_wrap">
-                                            <textarea
-                                                name="content"
-                                                placeholder="내용을 입력하세요"
-                                                value={inputValue.content}
-                                                onChange={handleInput}
-                                            />
+                                        <textarea
+                                            name="content"
+                                            placeholder="내용을 입력하세요"
+                                            value={inputValue.content}
+                                            onChange={handleInput}
+                                        />
                                     </div>
                                 </td>
                             </tr>

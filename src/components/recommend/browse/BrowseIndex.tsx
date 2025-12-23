@@ -1,4 +1,5 @@
 import { getTrendingCinema, getPostList } from "@/apis/api/recommend";
+import { getNoticeList } from "@/apis/api/admin";
 import { MULTIPLEX_LIST } from "@/constants/multiplex";
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
@@ -39,10 +40,16 @@ export default function BrowseIndex() {
         setPostList(response);
     }
 
+    // 공지사항 조회
+    const getNoticeData = async () => {
+        const response = await getNoticeList('recommend');
+    }
+
     // 마운트 될 때 데이터 가져오기
     useEffect(() => {
         getData(); 
         getPostData();
+        getNoticeData();
     }, []);
 
     // 페이지/정렬 변경 시 데이터 재요청
