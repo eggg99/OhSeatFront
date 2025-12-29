@@ -2,14 +2,13 @@ import '@/styles/css/main.scss'
 import { MULTIPLEX_LIST } from "@/constants/multiplex";
 import { getTrendingCinema, top3Post } from "@/apis/api/recommend";
 import { getCineSquareRandom } from "@/apis/api/cinesquare";
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import WeekString from '@/components/common/WeekString';
 import { getBoxoffice } from '@/apis/api/movie';
 import useEmblaCarousel from 'embla-carousel-react'
 import Autoplay from 'embla-carousel-autoplay'
 import { CRTF_MAP } from '@/constants/certifcate';
-import LoadingSpinner from '@/components/common/LoadingSpinner';
 import {CineSquareData} from "../types/CineSquare";
 
 interface Cinema {
@@ -46,6 +45,7 @@ export default function PageMain(){
             })
         ]
     )
+    const listWrapRef = useRef<HTMLDivElement | null>(null);
 
     const [loading, setLoading] = useState(false);
 
@@ -117,7 +117,6 @@ export default function PageMain(){
     const getRandomCineData = async () => {
         try {
             const response: CineSquareData[] = await getCineSquareRandom();
-            console.log(response);
             setCineSquareList(response);
         } catch (error) {
             console.error(error);
@@ -145,6 +144,26 @@ export default function PageMain(){
         };
         fetchData();
     }, []);
+
+    // 씨네광장 이전/다음 버튼 클릭 함수
+    const handlePrev = () => {
+        if (!listWrapRef.current) return;
+
+        listWrapRef.current.scrollBy({
+            left: -350,
+            behavior: 'smooth',
+        });
+    };
+
+    const handleNext = () => {
+        if (!listWrapRef.current) return;
+
+        listWrapRef.current.scrollBy({
+            left: 350,
+            behavior: 'smooth',
+        });
+    };
+
 
     return(
         <main className="os_main_contents">
@@ -242,11 +261,17 @@ export default function PageMain(){
                         <i>지금 모두들 무슨 이야기를<br/>하고 있을까?</i>
 
                         <div className="square_button_wrap">
-                            <a href="#" className="square_before"><i className="blind">이전</i></a>
-                            <a href="#" className="square_after"><i className="blind">다음</i></a>
+                            <a href="#" className="square_before" onClick={(e) => {
+                                e.preventDefault();
+                                handlePrev();
+                            }}><i className="blind">이전</i></a>
+                            <a href="#" className="square_after" onClick={(e) => {
+                                e.preventDefault();
+                                handleNext();
+                            }}><i className="blind">다음</i></a>
                         </div>
                     </div>
-                    <div className="square_latest_list_wrap">
+                    <div className="square_latest_list_wrap" ref={listWrapRef}>
                         <ul className="square_latest_list clear">
                             {cineSquareList && cineSquareList.length > 0 ? (
                                 cineSquareList.map((item: any, index : number)=> (
