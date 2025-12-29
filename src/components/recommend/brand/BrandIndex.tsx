@@ -1,7 +1,7 @@
 import { useEffect, useState, useCallback } from "react";
 import { getCinemaList, getPostList, getScreenList } from "@/apis/api/recommend";
 import useEmblaCarousel from "embla-carousel-react";
-
+import { getRecommendNotice } from "@/apis/api/admin";
 import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
@@ -18,6 +18,7 @@ export default function BrandIndex() {
     const navigate = useNavigate();
     
     const isLogin = userStore((state) => state.isLogin);
+    const isAdmin = userStore((state) => state.isAdmin);
     const [emblaRef2] = useEmblaCarousel({ loop: false });
     const [emblaRef3] = useEmblaCarousel({ loop: false });
     
@@ -36,6 +37,7 @@ export default function BrandIndex() {
     const [page, setPage] = useState<number>(0);
     const [orderType, setOrderType] = useState<string>("latest");
     const [size, setSize] = useState<number>(10);
+    const [noticeList, setNoticeList] = useState<any[]>([]);
 
     // 지역 선택
     const handleAreaChange = async (areaId: string) => {
@@ -49,7 +51,6 @@ export default function BrandIndex() {
     const handleCinemaChange = async (cinema: any) => {
         setSelectedCinema(cinema);                                                  // 선택한 영화관 설정
         const response = await getScreenList(multiplexId, cinema.cinemaId);  // 상영관 리스트 조회 api
-        console.log(response);
         setScreenList(response?.length ? [ALL_SCREEN, ...response] : [ALL_SCREEN])  // 상영관 리스트 설정
         setSelectedScreen(ALL_SCREEN);                                              // 상영관 '전체'로 설정
     };
@@ -77,12 +78,14 @@ export default function BrandIndex() {
     // 첫 진입 시, 지역 전체로 선택
     useEffect(() => {
         handleAreaChange("00");
+        getNoticeData();
     }, [brand]);
 
      // 페이지/정렬 변경 시 데이터 재요청
     useEffect(() => {
         if (selectedAreaId && selectedCinema && selectedScreen) {
             handlePostList();
+            getNoticeData();
         }
     }, [brand, selectedAreaId, selectedCinema, selectedScreen, page, orderType, size]);
 
@@ -90,6 +93,12 @@ export default function BrandIndex() {
     const handleInnerToggle = () => {
         setIsInnerOn((prev) => !prev);
     };
+
+    // 공지사항 조회 - 좌석추천
+    const getNoticeData = async () => {
+        const response = await getRecommendNotice('RECOMMEND');
+        setNoticeList(response);
+    }
 
     return (
         <div className="os_sub_contents">
@@ -229,6 +238,18 @@ export default function BrandIndex() {
                         </tr>
                     </thead>
                     <tbody>
+                        {noticeList && noticeList.length > 0 && (
+                          noticeList.map((item:any) => (
+                            <tr key={`notice-${item.noticeId}`}>
+                                <th><span className="notice">공지</span></th>
+                                <th colSpan={2} className="txtl"><Link to={`/cinesquare/admin/${item.noticeId}`}>{item.title}</Link></th>
+                                <th>{item.authorNickName}</th>
+                                <th>{item.createdAt ? item.createdAt.split("T")[0].replace(/-/g, ".") : ""}</th>
+                                <th>{item.views}</th>
+                                <th>-</th>
+                            </tr>
+                          ))
+                        )}
                         {postList && postList.content.length > 0 ? (
                             postList.content.map((item: any) => (
                                 <tr
@@ -258,7 +279,7 @@ export default function BrandIndex() {
                         <div className="left"></div>
 
                         <div className="right">
-                            {isLogin &&<Link to={`/recommend/${brand}/reg`} className="post_button write">글쓰기</Link>}
+                            {isLogin && !isAdmin && <Link to={`/recommend/${brand}/reg`} className="post_button write">글쓰기</Link>}
                         </div>
                 </div>
                 {postList &&

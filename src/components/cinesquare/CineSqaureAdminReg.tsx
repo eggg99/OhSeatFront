@@ -12,7 +12,7 @@ export default function CineSqaureAdminReg() {
     // 게시글 정보
     const location = locationStore((state) => state.currentLocation);
     const [inputValue, setInputValue] = useState({
-        menuId : "",
+        targetBoard : "",
         categoryId: "1",
         title: "",
         content: "",
@@ -39,10 +39,10 @@ export default function CineSqaureAdminReg() {
         if (!inputValue.categoryId) return alert("카테고리를 선택해주세요");
         if (!inputValue.title) return alert("제목을 입력해주세요");
         if (!inputValue.content) return alert("내용을 입력해주세요");
-        if (!inputValue.menuId) return alert('공지를 올릴 메뉴를 선택해주세요');
+        if (!inputValue.targetBoard) return alert('공지를 올릴 메뉴를 선택해주세요');
         
         const data = {
-            targetBoard: inputValue.menuId,
+            targetBoard: inputValue.targetBoard,
             title: inputValue.title,
             content: inputValue.content,
         };
@@ -84,10 +84,10 @@ export default function CineSqaureAdminReg() {
                                     </select>
                                 </td>
                                 <td>
-                                    <select name="menuId" onChange={handleInput} value={inputValue.menuId}>
+                                    <select name="targetBoard" onChange={handleInput} value={inputValue.targetBoard}>
                                         <option value={''}>선택</option>
-                                        <option value={'recmmend'}>좌석추천</option>
-                                        <option value={'cinesquare'}>씨네광장</option>
+                                        <option value={'RECOMMEND'}>좌석추천</option>
+                                        <option value={'CINESQUARE'}>씨네광장</option>
                                     </select>
                                 </td>
                                 <td colSpan={2}>

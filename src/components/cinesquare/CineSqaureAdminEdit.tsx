@@ -7,7 +7,7 @@ export default function CineSquareEdit() {
     const { id } = useParams<{ id: string }>();
 
     const [inputValue, setInputValue] = useState({
-        menuId : "",
+        targetBoard : "",
         categoryId: "1",
         title: "",
         content: "",
@@ -16,7 +16,6 @@ export default function CineSquareEdit() {
     const getData = async () => {
         try {
             const res = await getNotice(id);
-            console.log(res);
             setInputValue(res);
         } catch (err) {
             console.error(err);
@@ -27,16 +26,14 @@ export default function CineSquareEdit() {
         e?.preventDefault();
 
         const data = {
-            categoryId: inputValue.categoryId,
+            targetBoard: inputValue.targetBoard,
             title: inputValue.title,
             content: inputValue.content,
         };
 
         const response = await updateNotice(id, data);
-        if (response) {
-            alert(response);
-            navigate(`/cinesquare/admin/${id}`);
-        }
+        alert('수정되었습니다');
+        navigate(`/cinesquare/admin/${id}`);
     };
 
     useEffect(() => {
@@ -73,10 +70,10 @@ export default function CineSquareEdit() {
                                     </select>
                                 </td>
                                 <td>
-                                    <select name="menuId" onChange={handleInput} value={inputValue.menuId}>
+                                    <select name="targetBoard" onChange={handleInput} value={inputValue.targetBoard}>
                                         <option value={''}>선택</option>
-                                        <option value={'recmmend'}>좌석추천</option>
-                                        <option value={'cinesquare'}>씨네광장</option>
+                                        <option value={'RECOMMEND'}>좌석추천</option>
+                                        <option value={'CINESQUARE'}>씨네광장</option>
                                     </select>
                                 </td>
                                 <td colSpan={3}>

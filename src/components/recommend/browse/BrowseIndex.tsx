@@ -1,5 +1,5 @@
 import { getTrendingCinema, getPostList } from "@/apis/api/recommend";
-import { getNoticeList } from "@/apis/api/admin";
+import { getRecommendNotice } from "@/apis/api/admin";
 import { MULTIPLEX_LIST } from "@/constants/multiplex";
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
@@ -24,6 +24,7 @@ export default function BrowseIndex() {
     const [page, setPage] = useState<number>(1);
     const [orderType, setOrderType] = useState<string>("latest");
     const [size, setSize] = useState<number>(10);
+    const [noticeList, setNoticeList] = useState<any[]>([]);
 
     // 언급량 top5 조회
     const getData = async () => {
@@ -40,9 +41,10 @@ export default function BrowseIndex() {
         setPostList(response);
     }
 
-    // 공지사항 조회
+    // 공지사항 조회 - 좌석추천
     const getNoticeData = async () => {
-        const response = await getNoticeList('recommend');
+        const response = await getRecommendNotice('RECOMMEND');
+        setNoticeList(response);
     }
 
     // 마운트 될 때 데이터 가져오기
@@ -214,8 +216,20 @@ export default function BrowseIndex() {
                         </tr>
                     </thead>
                     <tbody>
+                        {noticeList && noticeList.length > 0 && (
+                          noticeList.map((item:any) => (
+                            <tr key={`notice-${item.noticeId}`}>
+                                <th><span className="notice">공지</span></th>
+                                <th colSpan={2} className="txtl"><Link to={`/cinesquare/admin/${item.noticeId}`}>{item.title}</Link></th>
+                                <th>{item.authorNickName}</th>
+                                <th>{item.createdAt ? item.createdAt.split("T")[0].replace(/-/g, ".") : ""}</th>
+                                <th>{item.views}</th>
+                                <th>-</th>
+                            </tr>
+                          ))
+                        )}
                         {postList && postList.content.length > 0 ? (
-                            postList.content.map((item: any) => (
+                          postList.content.map((item: any) => (
                             <tr
                                 key={item.postId}
                                 onClick={() => navigate(`/recommend/${getMultiplexBrand(item.multiplexId)}/${item.postId}`)}
@@ -228,14 +242,14 @@ export default function BrowseIndex() {
                                 <td className="txtc">{item.views}회</td>
                                 <td className="txtc">{item.commentCount}개</td>
                             </tr>
-                            ))
-                            ) : (
-                            <tr>
-                                <td colSpan={7} className="txtc">
-                                    추천 내용이 없습니다 🥲
-                                </td>
-                            </tr>
-                            )}
+                          ))
+                        ) : (
+                          <tr>
+                            <td colSpan={7} className="txtc">
+                                추천 내용이 없습니다 🥲
+                            </td>
+                          </tr>
+                        )}
                     </tbody>
                 </table>
                 {postList &&

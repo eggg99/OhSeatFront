@@ -123,7 +123,7 @@ export default function CineSquareDetail(){
         const result = confirm("관리자 권한으로 삭제하시겠습니까?");
         try {
             if(result){
-                const response = await deleteCineSquareAdmin(postId);
+                const response = await deleteCineSquare(postId);
                 alert(response);
                 list();
             }

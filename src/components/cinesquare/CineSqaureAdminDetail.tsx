@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { userStore } from "@/store/userStore";
 
-export default function CineSquareAdminDetail(){
+export default function CineSqaureAdminDetail(){
     const navigate = useNavigate();
     const { id } = useParams<{ id: string }>();
     const userId = userStore((state) => state.userId);
@@ -17,14 +17,7 @@ export default function CineSquareAdminDetail(){
 
     // 목록으로
     const list = () => {
-        navigate(`/cinesquare/list?category=0`);
-    }
-
-    const handleViews = async () => {
-        // 로그인한 유저만 조회수 증가 가능 => 민정이한테 만들어달라하기
-        if(userId){
-            // await postIncrementViews(id);
-        }
+        navigate('/cinesquare/list'); // 목록 페이지
     }
 
     useEffect(() => {
@@ -37,7 +30,7 @@ export default function CineSquareAdminDetail(){
         fetchData();
     }, [id]);
 
-    // 게시글 내용 불러오기
+    // 공지사항 내용 불러오기
     const getData = async () => {
         try {
             const response = await getNotice(id);
@@ -56,14 +49,14 @@ export default function CineSquareAdminDetail(){
         }
     }
 
-    // 게시글 삭제
+    // 공지사항 삭제
     const handleDelete = async() => {
         const result = confirm("삭제하시겠습니까?");
         try {
             if(result){
                 const response = await deleteNotice(id);
-                alert(response);
-                list();
+                alert('삭제되었습니다');
+                navigate('/cinesquare/list', { replace: true });
             }
         } catch (error) {
             console.error(error);
@@ -100,10 +93,6 @@ export default function CineSquareAdminDetail(){
                         <div className="post_control_wrap clear">
                             <a href="#" className="post_hits_button">조회수
                                 <span>{detailValue?.views ?? 0}</span>
-                            </a>
-
-                            <a href="#" className="post_comment_button">댓글
-                                <span>{detailValue?.commentCount ?? 0}</span>
                             </a>
 
                             {isLogin && detailValue?.authorId == userId && (

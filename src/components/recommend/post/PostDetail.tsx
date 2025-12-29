@@ -159,7 +159,7 @@ export default function PostDetail(){
     const handleDeleteAdmin = async () => {
         const result = confirm("관리자 권한으로 삭제하시겠습니까?");
         if(result){
-            const response = await deletePostAdmin(detailValue.postId);
+            const response = await deletePost(detailValue.postId);
             alert(response);
             navigate(`/recommend/${brand}`);
         }
@@ -412,7 +412,7 @@ export default function PostDetail(){
 
                 <div className="post_button_wrap clear">
                     <div className="left">
-                        <Link to={`/recommend/${brand}/reg`} className="post_button write">글쓰기</Link>
+                        {isLogin && !isAdmin && <Link to={`/recommend/${brand}/reg`} className="post_button write">글쓰기</Link>}
                     </div>
 
                     <div className="right">

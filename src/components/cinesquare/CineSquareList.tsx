@@ -5,6 +5,7 @@ import Location from "@/components/common/Location";
 import {FilePreview} from '@/components/common/file/FilePreview';
 import { userStore } from "@/store/userStore";
 import HotCard from './HotCard';
+import { getCinesquareNotice } from "@/apis/api/admin";
 
 const PAGE_SIZE = 10;
 
@@ -21,6 +22,7 @@ export default function CineSqaureList() {
     const loaderRef = useRef<HTMLDivElement | null>(null);  // 무한스크롤의 관찰 대상 div를 가리키는 참조
     const [isLoading, setIsLoading] = useState(false);      // 로딩 중 여부
     const [hasMore, setHasMore] = useState(true);           // 더 불러올 데이터가 있는지 여부
+    const [noticeList, setNoticeList] = useState<any[]>([]);
 
     const getList = async () => {
         // 로딩중 or 불러올 데이터 X
@@ -88,7 +90,15 @@ export default function CineSqaureList() {
         setHasMore(true);
         getList();
         getHotList();
+        getNoticeData();
     }, [categoryId, orderType]);
+
+    // 공지사항 조회 - 좌석추천
+    const getNoticeData = async () => {
+        const response = await getCinesquareNotice('CINESQUARE');
+        console.log(response);
+        setNoticeList(response);
+    }
 
     // Intersection Observer로 무한 스크롤 감지
     useEffect(() => {
@@ -203,7 +213,23 @@ export default function CineSqaureList() {
                             )}
                         </ul>
                     </section>
-
+                    {noticeList && noticeList.length > 0 && (
+                      noticeList.map((item:any) => (
+                        <section className="os_freetalk_section" key={`notice-${item.noticeId}`}>
+                            <p className="category">공지사항</p>
+                                <h3 className="title">{item.title}</h3>
+                                <ul className="post_info_list clear">
+                                    <li><i>{item.authorNickName}</i></li>
+                                    <li><span>{item.createdAt ? item.createdAt.split("T")[0].replace(/-/g, ".") : ""}</span></li>
+                                </ul>
+                            <Link to={`/cinesquare/admin/${item.noticeId}`}>
+                                <div className="freetalk_text_wrap">
+                                    <pre>내용이 들어갈 곳 {item.content}</pre>
+                                </div>
+                            </Link>
+                        </section>
+                      ))
+                    )}
                     {cineSquareList && cineSquareList.length > 0 ? (
                         cineSquareList.map((item: any, index: number) => (
                             <section className="os_freetalk_section" key={`cine-square-${index}`}>
