@@ -47,7 +47,7 @@ export default function Join(){
 
         setErrorMessages(prev => ({
           ...prev,
-          password: isValid ? "" : "숫자+영문자+특수문자 조합으로 8자리 이상 입력해주세요",
+          password: isValid ? "" : "숫자+영문자+특수문자 조합으로 8자리 이상 입력",
         }));
       case "password2" :
         setErrorMessages(prev => ({
@@ -104,18 +104,19 @@ export default function Join(){
 
         <ul className="os_join_list">
           <li>
-            <span>아이디(이메일)</span>
+            <span>이메일</span>
             <input
               type="text"
-              placeholder="사용하실 아이디를 이메일 형태로 입력하세요"
+              placeholder="example@naver.com"
               name="email"
               value={inputValue.email}
               onChange={handleInput}
               required
               maxLength={240}/>
+            <p className="noti">아이디로 이메일이 사용됩니다</p>
           </li>
           <li>
-            <span>비밀번호</span>
+            <span>비밀번호<i>숫자+영문자+특수문자 조합으로 8자리 이상</i></span>
             <input
               type="password"
               placeholder="비밀번호를 입력하세요"
@@ -123,8 +124,9 @@ export default function Join(){
               value={inputValue.password}
               onChange={handleInput}
               required/>
-            <div className="text-red-500">{errorMessages.password &&
-                <div className="error-msg">{errorMessages.password}</div>}</div>
+            {errorMessages.password &&
+                <p className="alert">{errorMessages.password}</p>
+            }
           </li>
           <li>
             <span>비밀번호 확인</span>
@@ -135,11 +137,12 @@ export default function Join(){
               value={inputValue.password2}
               onChange={handleInput}
               required/>
-            <div className="text-red-500">{errorMessages.password2 &&
-                <div className="error-msg">{errorMessages.password2}</div>}</div>
+            {errorMessages.password2 &&
+              <p className="alert">{errorMessages.password2}</p>
+            }
           </li>
           <li>
-            <span>이름</span>
+          <span>이름</span>
             <input
               type="text"
               placeholder="이름을 입력하세요"
@@ -150,7 +153,18 @@ export default function Join(){
               maxLength={30}/>
           </li>
           <li>
-            <span>닉네임</span>
+            <span>휴대전화<i>- 제외하고 입력</i></span>
+            <input
+              type="text"
+              placeholder="휴대전화번호를 입력하세요"
+              name="phoneNumber"
+              value={inputValue.phoneNumber}
+              onChange={handleInput}
+              required
+              maxLength={12}/>
+          </li>
+          <li>
+            <span>닉네임<i>글자 수 15자 제한</i></span>
             <div className="input_with_btn">
               <input
                 type="text"
@@ -168,17 +182,6 @@ export default function Join(){
                 disabled={inputValue.validDuplicate}
               >중복확인</button>
             </div>
-          </li>
-          <li>
-            <span>휴대전화</span>
-            <input
-              type="text"
-              placeholder="휴대전화번호를 입력하세요"
-              name="phoneNumber"
-              value={inputValue.phoneNumber}
-              onChange={handleInput}
-              required
-              maxLength={12}/>
           </li>
           <li>
             <button type="submit" className="user_join_button">가입하기</button>

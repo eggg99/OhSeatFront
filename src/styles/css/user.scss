@@ -167,6 +167,16 @@
       line-height: 20px;
       color: #121212;
       font-weight: 600;
+
+      > i {
+        display: inline-block;
+        margin-left: 8px;
+        font-size: 13px;
+        font-style: normal;
+        font-weight: 400;
+        color: #afafaf;
+        vertical-align: top;
+      }
     }
 
     input {
@@ -216,6 +226,22 @@
 
     span + button, input + button {
       margin-top: 8px;
+    }
+
+    p {
+      &.noti {
+        padding-left: 21px;
+        margin-top: 10px;
+        color: #AE0200;
+        background: url(../img/os_join_list_p.png) no-repeat left center;
+      }
+
+      &.alert {
+        padding-left: 21px;
+        margin-top: 10px;
+        color: #AE0200;
+        background: url(../img/os_join_list_p_alert.png) no-repeat left center;
+      }
     }
   }
 }
