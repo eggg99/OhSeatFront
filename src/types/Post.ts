@@ -7,6 +7,8 @@ export interface PostData {
   views: number;
   createdAt: string;
   commentCount: number;
+  multiplexName:string;
+  cinemaName:string;
 }
 
 export interface PostPage {

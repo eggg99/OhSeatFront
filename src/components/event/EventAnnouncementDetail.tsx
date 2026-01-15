@@ -142,7 +142,7 @@ export default function EventAnnouncementDetail () {
                     <div className="theater_detail_board_wrap">
                         <div className="detail_header">
                             <Link
-                              to={`/event/announcement/browse?category=${detailValue?.categoryId}`}
+                              to={`/event/announcement/browse?categoryId=${detailValue?.categoryId}`}
                               className="category_go_button">
                                 {CATEGORY_LABEL[detailValue.categoryId] ?? '기타'}
                             </Link>

@@ -10,6 +10,8 @@ import { MULTIPLEX_LIST } from "@/constants/multiplex";
 import { AREA_LIST } from "@/constants/area";
 import { userStore } from "@/store/userStore";
 import { Pagination } from "@/components/common/Pagination";
+import { NoticeList } from "@/components/common/list/NoticeList";
+import { NoticeData, NoticeListType } from "@/types/Notice";
 
 const ALL_CINEMA = { cinemaId: 'all_c', cinemaName: '전체' };
 const ALL_SCREEN = { screenId: 'all_s', screenName: '전체' };
@@ -37,7 +39,7 @@ export default function BrandIndex() {
     const [page, setPage] = useState<number>(0);
     const [orderType, setOrderType] = useState<string>("latest");
     const [size, setSize] = useState<number>(10);
-    const [noticeList, setNoticeList] = useState<any[]>([]);
+    const [noticeList, setNoticeList] = useState<NoticeData[]>([]);
 
     // 지역 선택
     const handleAreaChange = async (areaId: string) => {
@@ -238,18 +240,9 @@ export default function BrandIndex() {
                         </tr>
                     </thead>
                     <tbody>
-                        {noticeList && noticeList.length > 0 && (
-                          noticeList.map((item:any) => (
-                            <tr key={`notice-${item.noticeId}`}>
-                                <th><span className="notice">공지</span></th>
-                                <th colSpan={2} className="txtl"><Link to={`/cinesquare/admin/${item.noticeId}`}>{item.title}</Link></th>
-                                <th>{item.authorNickName}</th>
-                                <th>{item.createdAt ? item.createdAt.split("T")[0].replace(/-/g, ".") : ""}</th>
-                                <th>{item.views}</th>
-                                <th>-</th>
-                            </tr>
-                          ))
-                        )}
+                        <NoticeList
+                          noticeList={noticeList}
+                        />
                         {postList && postList.content.length > 0 ? (
                             postList.content.map((item: any) => (
                                 <tr

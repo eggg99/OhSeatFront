@@ -1,11 +1,16 @@
 import { getTrendingCinema, getPostList } from "@/apis/api/recommend";
 import { getRecommendNotice } from "@/apis/api/admin";
-import { MULTIPLEX_LIST } from "@/constants/multiplex";
+import { getMultiplexBrand, getMultiplexLabel } from "@/utils/recommend";
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { PostPage } from "@/types/Post";
 import WeekString from '@/components/common/WeekString';
 import { Pagination } from "@/components/common/Pagination";
+import { NoticeList } from "@/components/common/list/NoticeList";
+import { RecommendList } from "@/components/common/list/RecommendList";
+import { NoticeData } from "@/types/Notice";
+import { userStore } from "@/store/userStore";
+
 
 interface Cinema {
     multiplexId: number;
@@ -20,11 +25,14 @@ interface Cinema {
 export default function BrowseIndex() {
     const navigate = useNavigate();
     const [topCinemas, setTopCinemas] = useState<Cinema[]>([]);
-    const [postList, setPostList] = useState<PostPage | null>(null);
+    const [postList, setPostList] = useState<PostPage>();
     const [page, setPage] = useState<number>(1);
     const [orderType, setOrderType] = useState<string>("latest");
     const [size, setSize] = useState<number>(10);
-    const [noticeList, setNoticeList] = useState<any[]>([]);
+    const [noticeList, setNoticeList] = useState<NoticeData[]>([]);
+    const isAdmin = userStore((state) => state.isAdmin);
+    const [isEditMode, setIsEditMode] = useState(false);
+    const [selectedPostIds, setSelectedPostIds] = useState<number[]>([]);       // 관리자용 삭제할 게시글 배열
 
     // 언급량 top5 조회
     const getData = async () => {
@@ -59,14 +67,6 @@ export default function BrowseIndex() {
         getPostData();
     }, [page, orderType, size]);
 
-    // ✅ multiplexId를 label로 변환
-    const getMultiplexLabel = (multiplexId: number) =>
-        MULTIPLEX_LIST.find(m => m.id === multiplexId)?.label || "Unknown";
-
-        // ✅ multiplexId를 브랜드로 변환
-    const getMultiplexBrand = (multiplexId: number) =>
-        MULTIPLEX_LIST.find(m => m.id === multiplexId)?.brand || "Unknown";
-
     // 1위 영화관
     const firstCinema = topCinemas[0];
 
@@ -80,6 +80,14 @@ export default function BrowseIndex() {
     // 사이즈 변경
     const handleSizeChange = (newSize: number) => setSize(newSize);
 
+    // 관리자용 체크박스 선택/해제 핸들러
+    const handleSelectPost = (postId: number) => {
+      setSelectedPostIds((prev) =>
+        prev.includes(postId)
+          ? prev.filter((id) => id !== postId) // 이미 있으면 제거
+          : [...prev, postId]                  // 없으면 추가
+      );
+    };
     return (
         <div className="os_sub_contents">
             <section className="hot_theater_weekly">
@@ -194,6 +202,10 @@ export default function BrowseIndex() {
                             <option onClick={() =>handleOrderChange('views')}>조회순</option>
                             <option onClick={() =>handleOrderChange('comments')}>댓글순</option>
                         </select>
+
+                        <button onClick={() => setIsEditMode(!isEditMode)}>
+                            {isEditMode ? "수정 완료" : "수정하기"}
+                        </button>
                     </div>
                 </div>
                 <table className="basic_board1">
@@ -216,39 +228,17 @@ export default function BrowseIndex() {
                         </tr>
                     </thead>
                     <tbody>
-                        {noticeList && noticeList.length > 0 && (
-                          noticeList.map((item:any) => (
-                            <tr key={`notice-${item.noticeId}`}>
-                                <th><span className="notice">공지</span></th>
-                                <th colSpan={2} className="txtl"><Link to={`/cinesquare/admin/${item.noticeId}`}>{item.title}</Link></th>
-                                <th>{item.authorNickName}</th>
-                                <th>{item.createdAt ? item.createdAt.split("T")[0].replace(/-/g, ".") : ""}</th>
-                                <th>{item.views}</th>
-                                <th>-</th>
-                            </tr>
-                          ))
-                        )}
-                        {postList && postList.content.length > 0 ? (
-                          postList.content.map((item: any) => (
-                            <tr
-                                key={item.postId}
-                                onClick={() => navigate(`/recommend/${getMultiplexBrand(item.multiplexId)}/${item.postId}`)}
-                            >
-                                <td className="txtc"><a href="#">{item.multiplexName}</a></td>
-                                <td><a href="#" className="board_fix">{item.cinemaName}</a></td>
-                                <td><a href="#">{item.title}</a></td>
-                                <td className="txtc">{item.authorNickname}</td>
-                                <td className="txtc">{item.createdAt}</td>
-                                <td className="txtc">{item.views}회</td>
-                                <td className="txtc">{item.commentCount}개</td>
-                            </tr>
-                          ))
-                        ) : (
-                          <tr>
-                            <td colSpan={7} className="txtc">
-                                추천 내용이 없습니다 🥲
-                            </td>
-                          </tr>
+                        <NoticeList
+                          noticeList={noticeList}
+                        />
+
+                        {postList && (
+                          <RecommendList
+                            postList={postList}
+                            isEditMode={isEditMode}
+                            selectedPostIds={selectedPostIds}
+                            onSelectPost={handleSelectPost}
+                          />
                         )}
                     </tbody>
                 </table>
