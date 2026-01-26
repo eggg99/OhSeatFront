@@ -11,7 +11,6 @@ import { RecommendList } from "@/components/common/list/RecommendList";
 import { NoticeData } from "@/types/Notice";
 import { userStore } from "@/store/userStore";
 
-
 interface Cinema {
     multiplexId: number;
     areaId: number;
@@ -30,9 +29,6 @@ export default function BrowseIndex() {
     const [orderType, setOrderType] = useState<string>("latest");
     const [size, setSize] = useState<number>(10);
     const [noticeList, setNoticeList] = useState<NoticeData[]>([]);
-    const isAdmin = userStore((state) => state.isAdmin);
-    const [isEditMode, setIsEditMode] = useState(false);
-    const [selectedPostIds, setSelectedPostIds] = useState<number[]>([]);       // 관리자용 삭제할 게시글 배열
 
     // 언급량 top5 조회
     const getData = async () => {
@@ -80,14 +76,6 @@ export default function BrowseIndex() {
     // 사이즈 변경
     const handleSizeChange = (newSize: number) => setSize(newSize);
 
-    // 관리자용 체크박스 선택/해제 핸들러
-    const handleSelectPost = (postId: number) => {
-      setSelectedPostIds((prev) =>
-        prev.includes(postId)
-          ? prev.filter((id) => id !== postId) // 이미 있으면 제거
-          : [...prev, postId]                  // 없으면 추가
-      );
-    };
     return (
         <div className="os_sub_contents">
             <section className="hot_theater_weekly">
@@ -202,10 +190,6 @@ export default function BrowseIndex() {
                             <option onClick={() =>handleOrderChange('views')}>조회순</option>
                             <option onClick={() =>handleOrderChange('comments')}>댓글순</option>
                         </select>
-
-                        <button onClick={() => setIsEditMode(!isEditMode)}>
-                            {isEditMode ? "수정 완료" : "수정하기"}
-                        </button>
                     </div>
                 </div>
                 <table className="basic_board1">
@@ -231,13 +215,9 @@ export default function BrowseIndex() {
                         <NoticeList
                           noticeList={noticeList}
                         />
-
                         {postList && (
                           <RecommendList
                             postList={postList}
-                            isEditMode={isEditMode}
-                            selectedPostIds={selectedPostIds}
-                            onSelectPost={handleSelectPost}
                           />
                         )}
                     </tbody>

@@ -1,7 +1,7 @@
 import { useEffect, useState, useCallback } from "react";
 import { getCinemaList, getPostList, getScreenList } from "@/apis/api/recommend";
 import useEmblaCarousel from "embla-carousel-react";
-import { getRecommendNotice } from "@/apis/api/admin";
+import { getRecommendNotice, deleteAdminPost } from "@/apis/api/admin";
 import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
@@ -12,6 +12,7 @@ import { userStore } from "@/store/userStore";
 import { Pagination } from "@/components/common/Pagination";
 import { NoticeList } from "@/components/common/list/NoticeList";
 import { NoticeData, NoticeListType } from "@/types/Notice";
+import { RecommendList } from "@/components/common/list/RecommendList";
 
 const ALL_CINEMA = { cinemaId: 'all_c', cinemaName: '전체' };
 const ALL_SCREEN = { screenId: 'all_s', screenName: '전체' };
@@ -21,6 +22,7 @@ export default function BrandIndex() {
     
     const isLogin = userStore((state) => state.isLogin);
     const isAdmin = userStore((state) => state.isAdmin);
+    const [isEditMode, setIsEditMode] = useState(false);
     const [emblaRef2] = useEmblaCarousel({ loop: false });
     const [emblaRef3] = useEmblaCarousel({ loop: false });
     
@@ -40,6 +42,7 @@ export default function BrandIndex() {
     const [orderType, setOrderType] = useState<string>("latest");
     const [size, setSize] = useState<number>(10);
     const [noticeList, setNoticeList] = useState<NoticeData[]>([]);
+    const [selectedPostIds, setSelectedPostIds] = useState<number[]>([]);       // 관리자용 삭제할 게시글 배열
 
     // 지역 선택
     const handleAreaChange = async (areaId: string) => {
@@ -76,6 +79,33 @@ export default function BrandIndex() {
 
     // 사이즈 변경
     const handleSizeChange = (newSize: number) => setSize(newSize);
+
+    // 관리자용 체크박스 선택/해제 핸들러
+    const handleSelectPost = (postId: number) => {
+        setSelectedPostIds((prev) =>
+          prev.includes(postId)
+            ? prev.filter((id) => id !== postId) // 이미 있으면 제거
+            : [...prev, postId]                  // 없으면 추가
+        );
+    };
+
+    // 관리자용 체크박스 선택한 게시글 삭제
+    const deleteArray = async () => {
+        try {
+            const param = {
+                boardType : 'RECOMMEND',
+                postIds : selectedPostIds,
+            }
+            await deleteAdminPost(param);
+            alert ('삭제되었습니다');
+
+            await handleAreaChange("00");
+            await handlePostList();
+            setIsEditMode(false);
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
     // 첫 진입 시, 지역 전체로 선택
     useEffect(() => {
@@ -206,6 +236,16 @@ export default function BrandIndex() {
                     <p>{postList?.totalElements ?? 0}개의 글</p>
 
                     <div className="post_filter_wrap clear">
+                        { isAdmin &&
+                          <button onClick={() => setIsEditMode(!isEditMode)}>
+                              {isEditMode ? "편집모드ON" : "편집모드OFF"}
+                          </button>
+                        }
+                        <br/>
+                        { isEditMode && <button onClick={() => deleteArray()}>삭제</button> }
+                        <br/>
+                        { isEditMode && <button>공지사항관리</button> }
+
                         <select>
                             <option onClick={() =>handleSizeChange(10)}>10개씩</option>
                             <option onClick={() =>handleSizeChange(20)}>20개씩</option>
@@ -243,28 +283,14 @@ export default function BrandIndex() {
                         <NoticeList
                           noticeList={noticeList}
                         />
-                        {postList && postList.content.length > 0 ? (
-                            postList.content.map((item: any) => (
-                                <tr
-                                    key={item.postId}
-                                    onClick={() => navigate(`/recommend/${brand}/${item.postId}`)}
-                                >
-                                    <td className="txtc"><a href="#">{item.multiplexName}</a></td>
-                                    <td><a href="#" className="board_fix">{item.cinemaName}</a></td>
-                                    <td><a href="#">{item.title}</a></td>
-                                    <td className="txtc">{item.authorNickname}</td>
-                                    <td className="txtc">{item.createdAt}</td>
-                                    <td className="txtc">{item.views}회</td>
-                                    <td className="txtc">{item.commentCount}개</td>
-                                </tr>
-                            ))
-                                ) : (
-                                <tr>
-                                    <td colSpan={7} className="txtc">
-                                        추천 내용이 없습니다 🥲
-                                    </td>
-                                </tr>
-                            )}
+                        {postList && (
+                          <RecommendList
+                            postList={postList}
+                            isEditMode={isEditMode}
+                            selectedPostIds={selectedPostIds}
+                            onSelectPost={handleSelectPost}
+                          />
+                        )}
                     </tbody>
                 </table>
 

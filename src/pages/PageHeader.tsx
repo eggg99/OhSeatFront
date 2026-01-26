@@ -4,7 +4,7 @@ import Logo                     from '@/components/common/Logo';
 
 const Header = () => {
     const { userId, userNick, clearUser } = userStore();
-
+    const isAdmin = userStore((state) => state.isAdmin);
     const logout = () => {
         alert('로그아웃 되었습니다');
         clearUser();
@@ -39,7 +39,7 @@ const Header = () => {
                     <ul className='os_user_list clear'>
                         {userId ? (
                             <>
-                            <li><span className="os_nickname">{userNick}</span></li>
+                            <li><span className="os_nickname">{isAdmin ? '관리자' : userNick}</span></li>
                             <li><Link to="/user/mypage"  className="os_mypage_button">마이페이지</Link></li>
                             <li><a href="#" className="os_logout_button" onClick={logout}>로그아웃</a></li>
                             </>

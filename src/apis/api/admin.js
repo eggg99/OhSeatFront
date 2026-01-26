@@ -59,3 +59,13 @@ export const deleteNotice = async (id, param) => {
         console.error("공지사항 삭제 실패: ", error);
     }
 }
+
+// 게시글 여러개 삭제
+export const deleteAdminPost = async (param) => {
+    try{
+        const response = await axiosApi.delete(`/admin/posts/bulk`, {data: param})
+        return response.data;
+    } catch (error) {
+        console.error("공지사항 삭제 실패: ", error);
+    }
+}
