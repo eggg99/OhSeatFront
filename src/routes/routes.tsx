@@ -31,9 +31,7 @@ import CineSquareHotList from "../components/cinesquare/CineSquareHotList";
 import CineSquareDetail from "../components/cinesquare/CineSquareDetail";
 import CineSquareEdit from "../components/cinesquare/CineSqaureEdit";
 import CineSquareReg from "../components/cinesquare/CineSqaureReg";
-import CineSqaureAdminReg from "../components/cinesquare/CineSqaureAdminReg";
 import CineSqaureAdminDetail from "../components/cinesquare/CineSqaureAdminDetail";
-import CineSqaureAdminEdit from "../components/cinesquare/CineSqaureAdminEdit";
 import CinesquareSearch from "@/components/cinesquare/CineSquareSearch";
 
 // 이벤트 관련
@@ -83,9 +81,7 @@ function AppRoutes(){
                 <Route path=":postId" element={<CineSquareDetail/>}/>
                 <Route path="reg" element={<CineSquareReg/>}/>
                 <Route path="edit/:postId" element={<CineSquareEdit/>}/>
-                <Route path="admin/reg" element={<CineSqaureAdminReg/>}/>
                 <Route path="admin/:id" element={<CineSqaureAdminDetail/>}/>
-                <Route path="admin/edit/:id" element={<CineSqaureAdminEdit/>}/>
             </Route>
 
             {/* 이벤트 */}

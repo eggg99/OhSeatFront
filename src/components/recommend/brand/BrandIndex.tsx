@@ -13,6 +13,7 @@ import { Pagination } from "@/components/common/Pagination";
 import { NoticeList } from "@/components/common/list/NoticeList";
 import { NoticeData, NoticeListType } from "@/types/Notice";
 import { RecommendList } from "@/components/common/list/RecommendList";
+import NoticeModal from "@/components/common/admin/NoticeModal";
 
 const ALL_CINEMA = { cinemaId: 'all_c', cinemaName: '전체' };
 const ALL_SCREEN = { screenId: 'all_s', screenName: '전체' };
@@ -22,7 +23,8 @@ export default function BrandIndex() {
     
     const isLogin = userStore((state) => state.isLogin);
     const isAdmin = userStore((state) => state.isAdmin);
-    const [isEditMode, setIsEditMode] = useState(false);
+    const [isEditMode, setIsEditMode] = useState(false);        // 편집모드 상태
+    const [isModalOpen, setIsModalOpen] = useState(false);                // 모달 상태
     const [emblaRef2] = useEmblaCarousel({ loop: false });
     const [emblaRef3] = useEmblaCarousel({ loop: false });
     
@@ -244,7 +246,7 @@ export default function BrandIndex() {
                         <br/>
                         { isEditMode && <button onClick={() => deleteArray()}>삭제</button> }
                         <br/>
-                        { isEditMode && <button>공지사항관리</button> }
+                        { isEditMode && <button onClick={() => setIsModalOpen(true)}>공지사항관리</button> }
 
                         <select>
                             <option onClick={() =>handleSizeChange(10)}>10개씩</option>
@@ -298,7 +300,7 @@ export default function BrandIndex() {
                         <div className="left"></div>
 
                         <div className="right">
-                            {isLogin && !isAdmin && <Link to={`/recommend/${brand}/reg`} className="post_button write">글쓰기</Link>}
+                            {isLogin && <Link to={`/recommend/${brand}/reg`} className="post_button write">글쓰기</Link>}
                         </div>
                 </div>
                 {postList &&
@@ -309,6 +311,11 @@ export default function BrandIndex() {
                     />
                 }
             </section>
+
+            {/*관리자 공지사항 모달*/}
+            {isModalOpen &&
+                <NoticeModal onClose={() => setIsModalOpen(false)}></NoticeModal>
+            }
         </div>
     )
 };

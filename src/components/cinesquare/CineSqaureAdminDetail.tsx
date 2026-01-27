@@ -16,8 +16,8 @@ export default function CineSqaureAdminDetail(){
     const [isMenuOn, setMenuOn] = useState(false);
 
     // 목록으로
-    const list = () => {
-        navigate('/cinesquare/list'); // 목록 페이지
+    const goBack = () => {
+        navigate(-1);
     }
 
     useEffect(() => {
@@ -72,9 +72,9 @@ export default function CineSqaureAdminDetail(){
         <div className="os_sub_contents">
             <div className="os_freetalk_wrap clear">
                 <div className="os_freetalk_subtitle">
-                    <button onClick={list} className="go_before_button">목록으로 돌아가기</button>
+                    <button onClick={goBack} className="go_before_button">목록으로 돌아가기</button>
 
-                    <h3>씨네광장 소식</h3>
+                    <h3>공지사항</h3>
                 </div>
 
                 <div className="theater_detail_board_wrap2">
@@ -105,7 +105,7 @@ export default function CineSqaureAdminDetail(){
                                 {detailValue?.authorId == userId && isAdmin &&
                                     <ul className="post_setting_list">
                                         <li><a onClick={handleDelete} className="cursor-pointer">게시글 삭제</a></li>
-                                        <li><Link to={`/cinesquare/admin/edit/${id}`}>게시글 수정</Link></li>
+                                        {/*<li><Link to={`/cinesquare/admin/edit/${id}`}>게시글 수정</Link></li>*/}
                                     </ul>
                                 }
                             </div>

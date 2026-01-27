@@ -298,7 +298,7 @@ export default function CineSqaureList() {
                     <a href="#" className="os_freetalk_top_button"><i className="blind">위로</i></a>
                     {isLogin && (
                         <Link
-                            to={isAdmin ? "/cinesquare/admin/reg" : "/cinesquare/reg"}
+                            to="/cinesquare/reg"
                             className="os_freetalk_write_button"
                         >
                             <i className="blind">글쓰기</i>
