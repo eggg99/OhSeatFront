@@ -238,30 +238,42 @@ export default function BrandIndex() {
                     <p>{postList?.totalElements ?? 0}개의 글</p>
 
                     <div className="post_filter_wrap clear">
-                        { isAdmin &&
-                          <button onClick={() => setIsEditMode(!isEditMode)}>
-                              {isEditMode ? "편집모드ON" : "편집모드OFF"}
-                          </button>
-                        }
-                        <br/>
-                        { isEditMode && <button onClick={() => deleteArray()}>삭제</button> }
-                        <br/>
-                        { isEditMode && <button onClick={() => setIsModalOpen(true)}>공지사항관리</button> }
+                        <div className="post_edit_wrap clear">
+                            {isAdmin &&
+                              <button
+                                type="button"
+                                className={`edit_button ${isEditMode ? 'on' : ''}`}
+                                onClick={() => setIsEditMode(prev => !prev)}
+                              >
+                                편집 모드
+                              </button>
+                            }
+                            {isEditMode &&
+                              <button type="button" className="del_select_button" onClick={() => deleteArray()}>
+                                삭제
+                              </button>
+                            }
+                            {isEditMode &&
+                              <button type="button" className="notice_set_button" onClick={() => setIsModalOpen(true)}>
+                                공지사항관리
+                              </button>
+                            }
+                        </div>
 
                         <select>
-                            <option onClick={() =>handleSizeChange(10)}>10개씩</option>
-                            <option onClick={() =>handleSizeChange(20)}>20개씩</option>
+                            <option onClick={() => handleSizeChange(10)}>10개씩</option>
+                            <option onClick={() => handleSizeChange(20)}>20개씩</option>
                         </select>
                         {/* 정렬 UI */}
                         <select>
-                            <option onClick={() =>handleOrderChange('latest')}>최신순</option>
-                            <option onClick={() =>handleOrderChange('views')}>조회순</option>
-                            <option onClick={() =>handleOrderChange('comments')}>댓글순</option>
+                            <option onClick={() => handleOrderChange('latest')}>최신순</option>
+                            <option onClick={() => handleOrderChange('views')}>조회순</option>
+                            <option onClick={() => handleOrderChange('comments')}>댓글순</option>
                         </select>
                     </div>
                 </div>
-                
-                {/* 게시글 테이블 */}
+
+                    {/* 게시글 테이블 */}
                 <table className="basic_board1">
                     <colgroup>
                         <col style={{ width: '8%' }}/>
