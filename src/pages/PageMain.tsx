@@ -35,6 +35,7 @@ export default function PageMain(){
     const [recentPost, setRecentPost] = useState<any[]>([]);
     const [cineSquareList, setCineSquareList] = useState<CineSquareData[]>([]);
     const [movies, setMovies] = useState<Movie[]>([]);
+    const [active, setActive] = useState<'prev' | 'next' | null>('next')
     const [emblaRef] = useEmblaCarousel(
         { loop: true, align: 'start' },
         [
@@ -148,16 +149,17 @@ export default function PageMain(){
     // 씨네광장 이전/다음 버튼 클릭 함수
     const handlePrev = () => {
         if (!listWrapRef.current) return;
-
+        setActive('prev')
         listWrapRef.current.scrollBy({
             left: -350,
             behavior: 'smooth',
         });
+
     };
 
     const handleNext = () => {
         if (!listWrapRef.current) return;
-
+        setActive('next')
         listWrapRef.current.scrollBy({
             left: 350,
             behavior: 'smooth',
@@ -261,11 +263,15 @@ export default function PageMain(){
                         <i>지금 모두들 무슨 이야기를<br/>하고 있을까?</i>
 
                         <div className="square_button_wrap">
-                            <a href="#" className="square_before" onClick={(e) => {
+                            <a href="#"
+                               className={`square_before ${active === 'prev' ? 'on' : ''}`}
+                               onClick={(e) => {
                                 e.preventDefault();
                                 handlePrev();
                             }}><i className="blind">이전</i></a>
-                            <a href="#" className="square_after" onClick={(e) => {
+                            <a href="#"
+                               className={`square_after ${active === 'next' ? 'on' : ''}`}
+                               onClick={(e) => {
                                 e.preventDefault();
                                 handleNext();
                             }}><i className="blind">다음</i></a>
