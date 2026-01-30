@@ -5,7 +5,7 @@ import Location from "@/components/common/Location";
 import {FilePreview} from '@/components/common/file/FilePreview';
 import { userStore } from "@/store/userStore";
 import HotCard from './HotCard';
-import { getCinesquareNotice } from "@/apis/api/admin";
+import { deleteAdminPost } from "@/apis/api/admin";
 
 const PAGE_SIZE = 10;
 
@@ -13,11 +13,13 @@ export default function CineSqaureList() {
     const navigate = useNavigate();
     const isLogin = userStore((state) => state.isLogin);
     const isAdmin = userStore((state) => state.isAdmin);
+    const [isEditMode, setIsEditMode] = useState(false);        // 편집모드 상태
     const [cineSquareHotList, setCineSquareHotList] = useState<any[]>([]);
     const [cineSquareList, setCineSquareList] = useState<any[]>([]);
     const [categoryId, setCategoryId] = useState<number>(0);
     const [lastPostId, setLastPostId] = useState<number | null>(null);
     const [orderType, setOrderType] = useState<string>('');
+    const [selectedPostIds, setSelectedPostIds] = useState<number[]>([]);       // 관리자용 삭제할 게시글 배열
 
     const loaderRef = useRef<HTMLDivElement | null>(null);  // 무한스크롤의 관찰 대상 div를 가리키는 참조
     const [isLoading, setIsLoading] = useState(false);      // 로딩 중 여부
@@ -83,6 +85,52 @@ export default function CineSqaureList() {
     // 정렬 변경
     const handleOrderChange = (newOrder: string) => setOrderType(newOrder);
 
+    // 관리자용 체크박스 선택/해제 핸들러
+    const handleSelectPost = (postId: number) => {
+        setSelectedPostIds((prev) =>
+          prev.includes(postId)
+            ? prev.filter((id) => id !== postId) // 이미 있으면 제거
+            : [...prev, postId]                  // 없으면 추가
+        );
+    };
+
+    const toggleEditMode = () => {
+        setIsEditMode(prev => {
+            const next = !prev;
+
+            // edit mode 끄는 순간 → 선택 초기화
+            if (!next) {
+                setSelectedPostIds([]);
+            }
+
+            return next;
+        });
+    };
+
+    // 관리자용 체크박스 선택한 게시글 삭제
+    const deleteArray = async () => {
+        console.log(selectedPostIds);
+        return false;
+
+        if (selectedPostIds.length === 0) {
+            alert ('선택된 행이 없습니다');
+            return false;
+        }
+        try {
+            const param = {
+                boardType : 'CINESQUARE',
+                postIds : selectedPostIds,
+            }
+            await deleteAdminPost(param);
+            alert ('삭제되었습니다');
+
+            await getList();
+            setIsEditMode(false);
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     // 첫 진입 시, 리스트 불러오기
     useEffect(() => {
         setCineSquareList([]);
@@ -90,15 +138,7 @@ export default function CineSqaureList() {
         setHasMore(true);
         getList();
         getHotList();
-        getNoticeData();
     }, [categoryId, orderType]);
-
-    // 공지사항 조회 - 좌석추천
-    const getNoticeData = async () => {
-        const response = await getCinesquareNotice('CINESQUARE');
-        console.log(response);
-        setNoticeList(response);
-    }
 
     // Intersection Observer로 무한 스크롤 감지
     useEffect(() => {
@@ -159,8 +199,31 @@ export default function CineSqaureList() {
             <div className="os_freetalk_wrap clear">
                 <div className="os_timeline_wrap">
 
-                    <section className="location_wrap cursor-pointer" onClick={search}>
-                        <Location></Location>
+                    <section className="location_wrap clear">
+                        <Location onClick={search} />
+
+                        <div className="post_edit_wrap clear">
+                            {isAdmin && (
+                                <>
+                                <button
+                                  type="button"
+                                  className={`edit_button ${isEditMode ? 'on' : ''}`}
+                                  onClick={toggleEditMode}
+                                >
+                                    편집 모드
+                                </button>
+                                {isEditMode && (
+                                    <button
+                                        type="button"
+                                        className="del_select_button"
+                                        onClick={() => deleteArray()}
+                                    >
+                                        선택 게시글 삭제
+                                    </button>
+                                )}
+                                </>
+                            )}
+                        </div>
                     </section>
 
                     <section className="os_freetalk_tabmenu">
@@ -232,7 +295,15 @@ export default function CineSqaureList() {
                     )}
                     {cineSquareList && cineSquareList.length > 0 ? (
                         cineSquareList.map((item: any, index: number) => (
-                            <section className="os_freetalk_section" key={`cine-square-${index}`}>
+                            <section
+                              className={`
+                                os_freetalk_section 
+                                ${isEditMode ? 'edit_mode cursor-pointer' : ''}
+                                ${selectedPostIds.includes(item.postId) ? 'checked' : ''}
+                             `}
+                              key={`cine-square-${index}`}
+                              onClick={() => handleSelectPost(item.postId)}
+                            >
                                 <p className="category">{item.categoryName}</p>
                                 <h3 className="title">{item.title}</h3>
 
@@ -295,14 +366,37 @@ export default function CineSqaureList() {
                 <div className="os_ad_wrap"></div>
 
                 <div className="os_freetalk_floating">
+                    {isLogin && (
+                      <>
+                          <a
+                            href="#"
+                            className={`os_freetalk_edit_button ${isEditMode ? 'on' : ''}`}
+                            onClick={toggleEditMode}
+                          >
+                              <i className="blind">편집 모드</i>
+                          </a>
+                          {isEditMode && (
+                            <a
+                              href="#"
+                              className={`os_freetalk_del_button`}
+                              onClick={() => deleteArray()}
+                            >
+                                <i className="blind">삭제</i>
+                            </a>
+                          )}
+                      </>
+                    )}
+
                     <a href="#" className="os_freetalk_top_button"><i className="blind">위로</i></a>
                     {isLogin && (
+                      <>
                         <Link
                             to="/cinesquare/reg"
                             className="os_freetalk_write_button"
                         >
                             <i className="blind">글쓰기</i>
                         </Link>
+                      </>
                     )}
                 </div>
             </div>

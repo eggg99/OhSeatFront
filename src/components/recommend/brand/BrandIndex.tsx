@@ -24,7 +24,7 @@ export default function BrandIndex() {
     const isLogin = userStore((state) => state.isLogin);
     const isAdmin = userStore((state) => state.isAdmin);
     const [isEditMode, setIsEditMode] = useState(false);        // 편집모드 상태
-    const [isModalOpen, setIsModalOpen] = useState(false);                // 모달 상태
+    const [isModalOpen, setIsModalOpen] = useState(false);      // 모달 상태
     const [emblaRef2] = useEmblaCarousel({ loop: false });
     const [emblaRef3] = useEmblaCarousel({ loop: false });
     
@@ -93,6 +93,10 @@ export default function BrandIndex() {
 
     // 관리자용 체크박스 선택한 게시글 삭제
     const deleteArray = async () => {
+        if (selectedPostIds.length === 0) {
+            alert ('선택된 행이 없습니다');
+            return false;
+        }
         try {
             const param = {
                 boardType : 'RECOMMEND',
@@ -133,6 +137,19 @@ export default function BrandIndex() {
         const response = await getRecommendNotice('RECOMMEND');
         setNoticeList(response);
     }
+
+    const toggleEditMode = () => {
+        setIsEditMode(prev => {
+            const next = !prev;
+
+            // edit mode 끄는 순간 → 선택 초기화
+            if (!next) {
+                setSelectedPostIds([]);
+            }
+
+            return next;
+        });
+    };
 
     return (
         <div className="os_sub_contents">
@@ -239,36 +256,46 @@ export default function BrandIndex() {
 
                     <div className="post_filter_wrap clear">
                         <div className="post_edit_wrap clear">
-                            {isAdmin &&
-                              <button
-                                type="button"
-                                className={`edit_button ${isEditMode ? 'on' : ''}`}
-                                onClick={() => setIsEditMode(prev => !prev)}
-                              >
-                                편집 모드
-                              </button>
-                            }
-                            {isEditMode &&
-                              <button type="button" className="del_select_button" onClick={() => deleteArray()}>
-                                삭제
-                              </button>
-                            }
-                            {isEditMode &&
-                              <button type="button" className="notice_set_button" onClick={() => setIsModalOpen(true)}>
-                                공지사항관리
-                              </button>
-                            }
+                            {isAdmin && (
+                              <>
+                                <button
+                                  type="button"
+                                  className={`edit_button ${isEditMode ? 'on' : ''}`}
+                                  onClick={toggleEditMode}
+                                >
+                                    편집 모드
+                                </button>
+
+                              {isEditMode && (
+                                <>
+                                <button
+                                  type="button"
+                                  className="del_select_button"
+                                  onClick={() => deleteArray()}>
+                                    선택 게시글 삭제
+                                </button>
+
+                                <button
+                                  type="button"
+                                  className="notice_set_button"
+                                  onClick={() => setIsModalOpen(true)}>
+                                    공지글 관리
+                                </button>
+                                </>
+                                )}
+                              </>
+                            )}
                         </div>
 
-                        <select>
-                            <option onClick={() => handleSizeChange(10)}>10개씩</option>
-                            <option onClick={() => handleSizeChange(20)}>20개씩</option>
-                        </select>
                         {/* 정렬 UI */}
                         <select>
                             <option onClick={() => handleOrderChange('latest')}>최신순</option>
                             <option onClick={() => handleOrderChange('views')}>조회순</option>
                             <option onClick={() => handleOrderChange('comments')}>댓글순</option>
+                        </select>
+                        <select>
+                            <option onClick={() => handleSizeChange(10)}>10개씩</option>
+                            <option onClick={() => handleSizeChange(20)}>20개씩</option>
                         </select>
                     </div>
                 </div>

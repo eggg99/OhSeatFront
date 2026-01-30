@@ -34,18 +34,22 @@ export const RecommendList:React.FC<PostListProps> = ({
         // 1. 수정 모드일 때의 행 (체크박스 포함)
         if (isEditMode) {
           return (
-            <tr key={`edit-${item.postId}`} className="edit_row">
+            <tr key={`edit-${item.postId}`}>
               <td>
                 <input
+                  id={`post_cb_${item.postId}`}
                   type="checkbox"
                   checked={isSelected}
                   onChange={() => onSelectPost?.(item.postId)}
+                  className="post_cbx"
                 />
+                <label htmlFor={`post_cb_${item.postId}`}></label>
+                {item.multiplexName}
               </td>
-              <td className="txtc">{item.multiplexId}</td>
-              <td>{item.title} (수정중)</td>
+              <td className="txtc">{item.cinemaName}</td>
+              <td>{item.title} [편집모드]</td>
               <td className="txtc">{item.authorNickname}</td>
-              <td colSpan={3} className="txtc">수정 모드에서는 상세보기가 비활성화됩니다.</td>
+              <td colSpan={3} className="txtc">편집 모드에서는 상세보기가 비활성화됩니다.</td>
             </tr>
           );
         }
