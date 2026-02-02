@@ -6,6 +6,7 @@ import {FilePreview} from '@/components/common/file/FilePreview';
 import { userStore } from "@/store/userStore";
 import HotCard from './HotCard';
 import { deleteAdminPost } from "@/apis/api/admin";
+import { CATEGORY } from '@/constants/category_cine';
 
 const PAGE_SIZE = 10;
 
@@ -24,7 +25,6 @@ export default function CineSqaureList() {
     const loaderRef = useRef<HTMLDivElement | null>(null);  // 무한스크롤의 관찰 대상 div를 가리키는 참조
     const [isLoading, setIsLoading] = useState(false);      // 로딩 중 여부
     const [hasMore, setHasMore] = useState(true);           // 더 불러올 데이터가 있는지 여부
-    const [noticeList, setNoticeList] = useState<any[]>([]);
 
     const getList = async () => {
         // 로딩중 or 불러올 데이터 X
@@ -68,6 +68,33 @@ export default function CineSqaureList() {
         }
     }
 
+    // reset + 첫 fetch 전용 함수
+    const fetchFirstPage = async () => {
+        setIsLoading(true);
+
+        const param = {
+            categoryId,
+            orderType,
+            lastPostId: null,
+        };
+
+        try {
+            const response = await getCineSqaureList(param);
+
+            if (response && response.length > 0) {
+                setCineSquareList(response);
+                setLastPostId(response[response.length - 1].postId);
+                setHasMore(response.length >= PAGE_SIZE);
+            } else {
+                setCineSquareList([]);
+                setHasMore(false);
+            }
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+
     const getHotList = async () => {
         try {
             const response = await getCineSquareHotList();
@@ -109,11 +136,8 @@ export default function CineSqaureList() {
 
     // 관리자용 체크박스 선택한 게시글 삭제
     const deleteArray = async () => {
-        console.log(selectedPostIds);
-        return false;
-
         if (selectedPostIds.length === 0) {
-            alert ('선택된 행이 없습니다');
+            alert ('선택된 게시글이 없습니다');
             return false;
         }
         try {
@@ -124,19 +148,29 @@ export default function CineSqaureList() {
             await deleteAdminPost(param);
             alert ('삭제되었습니다');
 
-            await getList();
+            setSelectedPostIds([]);
             setIsEditMode(false);
+
+            // ✅ 리스트 완전 리프레시
+            await resetAndFetchList();
         } catch (error) {
             console.log(error);
         }
     }
 
-    // 첫 진입 시, 리스트 불러오기
-    useEffect(() => {
+    // 리스트 초기화 함수
+    const resetAndFetchList = async () => {
         setCineSquareList([]);
         setLastPostId(null);
         setHasMore(true);
-        getList();
+
+        await fetchFirstPage(); // 직접 첫 페이지 호출
+    }
+
+
+    // 첫 진입 시, 리스트 불러오기
+    useEffect(() => {
+        resetAndFetchList();
         getHotList();
     }, [categoryId, orderType]);
 
@@ -228,18 +262,19 @@ export default function CineSqaureList() {
 
                     <section className="os_freetalk_tabmenu">
                         <ul className="os_freetalk_list clear">
-                            <li className={categoryId === 0 ? 'on' : ''}>
-                                <a href="#" onClick={() => handleCategory(0)}>전체</a>
-                            </li>
-                            <li className={categoryId === 1 ? 'on' : ''}>
-                                <a href="#" onClick={() => handleCategory(1)}>공지사항</a>
-                            </li>
-                            <li className={categoryId === 2 ? 'on' : ''}>
-                                <a href="#" onClick={() => handleCategory(2)}>자유수다</a>
-                            </li>
-                            <li className={categoryId === 3 ? 'on' : ''}>
-                                <a href="#" onClick={() => handleCategory(3)}>구인구직</a>
-                            </li>
+                            {CATEGORY.map((category) => (
+                              <li
+                                key={category.id}
+                                className={categoryId === category.id ? 'on' : ''}
+                              >
+                                  <a
+                                    href="#"
+                                    onClick={() => handleCategory(category.id)}
+                                  >
+                                      {category.name}
+                                  </a>
+                              </li>
+                            ))}
                         </ul>
                         <div className="post_filter_wrap2 clear">
                                 <select 
@@ -276,23 +311,7 @@ export default function CineSqaureList() {
                             )}
                         </ul>
                     </section>
-                    {noticeList && noticeList.length > 0 && (
-                      noticeList.map((item:any) => (
-                        <section className="os_freetalk_section" key={`notice-${item.noticeId}`}>
-                            <p className="category">공지사항</p>
-                                <h3 className="title">{item.title}</h3>
-                                <ul className="post_info_list clear">
-                                    <li><i>{item.authorNickName}</i></li>
-                                    <li><span>{item.createdAt ? item.createdAt.split("T")[0].replace(/-/g, ".") : ""}</span></li>
-                                </ul>
-                            <Link to={`/cinesquare/admin/${item.noticeId}`}>
-                                <div className="freetalk_text_wrap">
-                                    <pre>내용이 들어갈 곳 {item.content}</pre>
-                                </div>
-                            </Link>
-                        </section>
-                      ))
-                    )}
+
                     {cineSquareList && cineSquareList.length > 0 ? (
                         cineSquareList.map((item: any, index: number) => (
                             <section
@@ -302,7 +321,11 @@ export default function CineSqaureList() {
                                 ${selectedPostIds.includes(item.postId) ? 'checked' : ''}
                              `}
                               key={`cine-square-${index}`}
-                              onClick={() => handleSelectPost(item.postId)}
+                              onClick={() => {
+                                  if (isEditMode) {
+                                      handleSelectPost(item.postId);
+                                  }
+                              }}
                             >
                                 <p className="category">{item.categoryName}</p>
                                 <h3 className="title">{item.title}</h3>
@@ -355,11 +378,6 @@ export default function CineSqaureList() {
                         </section>
                     )}
 
-                    <section>
-                        <div ref={loaderRef}>
-                            {isLoading ? "불러오는 중..." : hasMore ? "" : "-"}
-                        </div>
-                    </section>
                 </div>
 
                 {/*광고 영역*/}

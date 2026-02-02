@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import Location from "@/components/common/Location";
 import { locationStore } from "@/store/userLocation";
 import { FileUpload } from "@/components/common/file/FileUpload";
+import { POST_CATEGORY } from '@/constants/category_cine';
 
 export default function CineSquareReg() {
     const navigate = useNavigate();
@@ -147,8 +148,11 @@ export default function CineSquareReg() {
                                 <td>
                                     <select name="categoryId" onChange={handleInput} value={inputValue.categoryId}>
                                         <option value="">게시글 종류 선택</option>
-                                        <option value="2">자유수다</option>
-                                        <option value="3">구인구직</option>
+                                        {POST_CATEGORY.map((category) => (
+                                          <option key={category.id} value={category.id}>
+                                            {category.name}
+                                          </option>
+                                        ))}
                                     </select>
                                 </td>
                                 <td colSpan={3}>

@@ -4,7 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import Location from "@/components/common/Location";
 import { FileUpload } from "@/components/common/file/FileUpload";
 import { fileData } from "@/types/CineSquare";
-
+import { POST_CATEGORY } from '@/constants/category_cine';
 
 export default function CineSquareEdit() {
     const navigate = useNavigate();
@@ -131,9 +131,11 @@ export default function CineSquareEdit() {
                                 <td>
                                     <select name="categoryId" value={inputValue.categoryId} onChange={handleInput}>
                                         <option value="">게시글 종류 선택</option>
-                                        <option value="1">공지사항</option>
-                                        <option value="2">자유수다</option>
-                                        <option value="3">구인구직</option>
+                                        {POST_CATEGORY.map((category) => (
+                                          <option key={category.id} value={category.id}>
+                                              {category.name}
+                                          </option>
+                                        ))}
                                     </select>
                                 </td>
                                 <td colSpan={3}>
