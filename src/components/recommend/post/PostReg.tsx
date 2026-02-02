@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { getCinemaList, getScreenList, insertPost } from "@/apis/api/recommend";
 import { userStore } from "@/store/userStore";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { MULTIPLEX_LIST } from "@/constants/multiplex";
 
 const multiplexes = [
@@ -23,6 +23,8 @@ const areas = [
 
 export default function PostReg(){
     const navigate = useNavigate();
+    const location = useLocation();
+
     const [selectedMultiplex, setSelectedMultiplex] = useState("");
     const [selectedArea, setSelectedArea] = useState("");
     const [selectedCinema, setSelectedCinema] = useState("");
@@ -111,6 +113,14 @@ export default function PostReg(){
 
         navigate(`/recommend/${multiplexName}/${response}`);
     }
+
+    // 목록으로 보내기 : 현재 브랜드 리스트 페이지로 변환
+    const handleGoList = (e: React.MouseEvent) => {
+        e.preventDefault();
+
+        const path = location.pathname.replace(/\/reg$/, '');
+        navigate(path);
+    };
     
     return(
         <div className="os_sub_contents">
@@ -192,8 +202,7 @@ export default function PostReg(){
 
                 <div className="post_button_wrap clear">
                     <div className="left">
-                        {/*TODO : 어디로 보낼지 생각해보기*/}
-                        <a href="#" className="post_button">목록</a>
+                        <a href="#" className="post_button" onClick={handleGoList}>목록</a>
                     </div>
 
                     <div className="right">

@@ -161,7 +161,7 @@ export default function EventAnnouncementBrowse () {
                         >
                             <option value='latest'>최신순</option>
                             <option value='views'>조회순</option>
-                            <option value='recommend'>추천순</option>
+                            <option value='likes'>추천순</option>
                         </select>
                     </div>
                 </div>

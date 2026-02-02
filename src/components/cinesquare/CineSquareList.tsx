@@ -19,7 +19,7 @@ export default function CineSqaureList() {
     const [cineSquareList, setCineSquareList] = useState<any[]>([]);
     const [categoryId, setCategoryId] = useState<number>(0);
     const [lastPostId, setLastPostId] = useState<number | null>(null);
-    const [orderType, setOrderType] = useState<string>('');
+    const [orderType, setOrderType] = useState<string>('latest');
     const [selectedPostIds, setSelectedPostIds] = useState<number[]>([]);       // 관리자용 삭제할 게시글 배열
 
     const loaderRef = useRef<HTMLDivElement | null>(null);  // 무한스크롤의 관찰 대상 div를 가리키는 참조
@@ -167,7 +167,6 @@ export default function CineSqaureList() {
         await fetchFirstPage(); // 직접 첫 페이지 호출
     }
 
-
     // 첫 진입 시, 리스트 불러오기
     useEffect(() => {
         resetAndFetchList();
@@ -239,13 +238,6 @@ export default function CineSqaureList() {
                         <div className="post_edit_wrap clear">
                             {isAdmin && (
                                 <>
-                                <button
-                                  type="button"
-                                  className={`edit_button ${isEditMode ? 'on' : ''}`}
-                                  onClick={toggleEditMode}
-                                >
-                                    편집 모드
-                                </button>
                                 {isEditMode && (
                                     <button
                                         type="button"
@@ -255,6 +247,13 @@ export default function CineSqaureList() {
                                         선택 게시글 삭제
                                     </button>
                                 )}
+                                <button
+                                  type="button"
+                                  className={`edit_button ${isEditMode ? 'on' : ''}`}
+                                  onClick={toggleEditMode}
+                                >
+                                    편집 모드
+                                </button>
                                 </>
                             )}
                         </div>
@@ -277,16 +276,16 @@ export default function CineSqaureList() {
                             ))}
                         </ul>
                         <div className="post_filter_wrap2 clear">
-                                <select 
-                                    value={orderType}
-                                    onChange={(e) => handleOrderChange(e.target.value)}
-                                >
-                                    <option value={'latest'}>최신순</option>
-                                    <option value={'liked'}>추천순</option>
-                                    <option value={'views'}>조회순</option>
-                                    <option value={'comments'}>댓글순</option>
-                                </select>
-                            </div>
+                            <select
+                                value={orderType}
+                                onChange={(e) => handleOrderChange(e.target.value)}
+                            >
+                                <option value={'latest'}>최신순</option>
+                                <option value={'likes'}>추천순</option>
+                                <option value={'views'}>조회순</option>
+                                <option value={'comments'}>댓글순</option>
+                            </select>
+                        </div>
                     </section>
 
                     <section className="os_freetalk_hot">
@@ -336,7 +335,16 @@ export default function CineSqaureList() {
                                     <li><p>{item?.city} {item?.district}</p></li>
                                 </ul>
 
-                                <Link to={`/cinesquare/${item.postId}`} className="cursor-pointer">
+                                <Link
+                                  to={`/cinesquare/${item.postId}`}
+                                  className="cursor-pointer"
+                                  onClick={(e) => {
+                                      if (isEditMode) {
+                                          e.preventDefault();
+                                          e.stopPropagation();
+                                      }
+                                  }}
+                                >
                                     <div className="freetalk_text_wrap">
                                         <pre>{item.content}</pre>
                                     </div>
@@ -360,14 +368,32 @@ export default function CineSqaureList() {
                                                 checked={item.isLiked}
                                                 onChange={() => handleLike(item.postId)}
                                             />
-                                            <label htmlFor={`like-${item.postId}`} className="like-btn">
+                                            <label
+                                              htmlFor={`like-${item.postId}`}
+                                              className="like-btn"
+                                              onClick={(e) => {
+                                                if (isEditMode) {
+                                                    e.preventDefault();
+                                                    e.stopPropagation();
+                                                }
+                                            }}>
                                                 좋아요 <span>{item?.likeCount ?? 0}</span>
                                             </label>
                                         </div>
                                     </div>
                                     <div className="right">
-                                        <Link to={`/cinesquare/${item.postId}#comment`}
-                                           className="post_comment_button">댓글 <span>{item?.commentCount ?? 0}</span></Link>
+                                        <Link
+                                          to={`/cinesquare/${item.postId}#comment`}
+                                          className="post_comment_button"
+                                          onClick={(e) => {
+                                              if (isEditMode) {
+                                                  e.preventDefault();
+                                                  e.stopPropagation();
+                                              }
+                                          }}
+                                        >
+                                            댓글 <span>{item?.commentCount ?? 0}</span>
+                                        </Link>
                                     </div>
                                 </div>
                             </section>
@@ -386,26 +412,36 @@ export default function CineSqaureList() {
                 <div className="os_freetalk_floating">
                     {isLogin && (
                       <>
-                          <a
-                            href="#"
-                            className={`os_freetalk_edit_button ${isEditMode ? 'on' : ''}`}
-                            onClick={toggleEditMode}
-                          >
-                              <i className="blind">편집 모드</i>
-                          </a>
-                          {isEditMode && (
-                            <a
-                              href="#"
-                              className={`os_freetalk_del_button`}
-                              onClick={() => deleteArray()}
-                            >
-                                <i className="blind">삭제</i>
-                            </a>
-                          )}
+                      {isEditMode && (
+                        <a
+                          href="#"
+                          className={`os_freetalk_del_button`}
+                          onClick={() => deleteArray()}
+                        >
+                            <i className="blind">삭제</i>
+                        </a>
+                      )}
+                      <a
+                        href="#"
+                        className={`os_freetalk_edit_button ${isEditMode ? 'on' : ''}`}
+                        onClick={toggleEditMode}
+                      >
+                          <i className="blind">편집 모드</i>
+                      </a>
                       </>
                     )}
 
-                    <a href="#" className="os_freetalk_top_button"><i className="blind">위로</i></a>
+                    <a
+                      href="#"
+                      className="os_freetalk_top_button"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        window.scrollTo({
+                            top: 0,
+                            behavior: 'smooth',
+                        });
+                      }}
+                    ><i className="blind">위로</i></a>
                     {isLogin && (
                       <>
                         <Link

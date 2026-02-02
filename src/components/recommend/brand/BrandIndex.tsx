@@ -13,7 +13,7 @@ import { Pagination } from "@/components/common/Pagination";
 import { NoticeList } from "@/components/common/list/NoticeList";
 import { NoticeData, NoticeListType } from "@/types/Notice";
 import { RecommendList } from "@/components/common/list/RecommendList";
-import NoticeModal from "@/components/common/admin/NoticeModal";
+import NoticeListModal from "@/components/common/admin/NoticeListModal";
 
 const ALL_CINEMA = { cinemaId: 'all_c', cinemaName: '전체' };
 const ALL_SCREEN = { screenId: 'all_s', screenName: '전체' };
@@ -151,6 +151,15 @@ export default function BrandIndex() {
         });
     };
 
+    // 모달 열기
+    const openModal = () => {
+        setIsModalOpen(true);
+    }
+    // 모달 닫기
+    const closeModal = () => {
+        setIsModalOpen(false);
+    }
+
     return (
         <div className="os_sub_contents">
             <div className="os_sub_navigation clear">
@@ -258,14 +267,6 @@ export default function BrandIndex() {
                         <div className="post_edit_wrap clear">
                             {isAdmin && (
                               <>
-                                <button
-                                  type="button"
-                                  className={`edit_button ${isEditMode ? 'on' : ''}`}
-                                  onClick={toggleEditMode}
-                                >
-                                    편집 모드
-                                </button>
-
                               {isEditMode && (
                                 <>
                                 <button
@@ -278,11 +279,18 @@ export default function BrandIndex() {
                                 <button
                                   type="button"
                                   className="notice_set_button"
-                                  onClick={() => setIsModalOpen(true)}>
+                                  onClick={() => openModal()}>
                                     공지글 관리
                                 </button>
                                 </>
                                 )}
+                                <button
+                                  type="button"
+                                  className={`edit_button ${isEditMode ? 'on' : ''}`}
+                                  onClick={toggleEditMode}
+                                >
+                                편집 모드
+                                </button>
                               </>
                             )}
                         </div>
@@ -353,7 +361,7 @@ export default function BrandIndex() {
 
             {/*관리자 공지사항 모달*/}
             {isModalOpen &&
-                <NoticeModal onClose={() => setIsModalOpen(false)}></NoticeModal>
+                <NoticeListModal isOpen={isModalOpen} onClose={closeModal} />
             }
         </div>
     )

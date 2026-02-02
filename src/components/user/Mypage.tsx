@@ -5,7 +5,7 @@ import { userStore } from "@/store/userStore";
 
 export default function Mypage(){
   const navigate = useNavigate(); // 이동을 위한 훅
-  const { userId, clearUser } = userStore();
+  const { userId, clearUser, setUser } = userStore();
 
   const [inputValue, setInputValue] = useState({
     userId: userId,          // 유저 아이디
@@ -46,6 +46,14 @@ export default function Mypage(){
     if(!response){
       return;
     } else {
+      setUser({
+        'userId': inputValue.userId,
+        'userNick': inputValue.nickname,
+        'userEmail': inputValue.email,
+        'isAdmin' : inputValue?.role.toLowerCase() === 'admin',
+        'isLogin':true
+      })
+
       alert('회원정보 수정이 완료되었습니다');
     }
   }

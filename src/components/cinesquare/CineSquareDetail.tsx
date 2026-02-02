@@ -202,11 +202,13 @@ export default function CineSquareDetail(){
 
                     <h3>씨네광장 소식</h3>
                     {isLogin && isAdmin &&
-                        <a
+                      <div className="os_freetalk_right_wrap">
+                          <a
                             href="#"
                             className="post_button del"
                             onClick={() => handleDeleteAdmin()}
-                        >삭제</a>
+                          >삭제</a>
+                      </div>
                     }
                 </div>
 
@@ -233,17 +235,18 @@ export default function CineSquareDetail(){
                             </a>
 
                             {isLogin && detailValue?.authorId == userId && (
-                                <a href="#" className={`post_setting_button ${isMenuOn ? "on" : ""}`} onClick={handleInnerToggle}>
-                                    <span className="blind">더보기</span>
-                                </a>
+                              <a href="#" className={`post_setting_button ${isMenuOn ? "on" : ""}`}
+                                 onClick={handleInnerToggle}>
+                                  <span className="blind">더보기</span>
+                              </a>
                             )}
 
                             <div className="post_setting_wrap">
                                 {detailValue?.authorId == userId &&
-                                    <ul className="post_setting_list">
-                                        <li><a onClick={handleDelete} className="cursor-pointer">게시글 삭제</a></li>
-                                        <li><Link to={`/cinesquare/edit/${postId}`}>게시글 수정</Link></li>
-                                    </ul>
+                                  <ul className="post_setting_list">
+                                      <li><a onClick={handleDelete} className="cursor-pointer">게시글 삭제</a></li>
+                                      <li><Link to={`/cinesquare/edit/${postId}`}>게시글 수정</Link></li>
+                                  </ul>
                                 }
                             </div>
                         </div>
@@ -253,20 +256,20 @@ export default function CineSquareDetail(){
                         <pre>{detailValue?.content}</pre>
 
                         {detailValue?.files?.length ? (
-                            // 대표 이미지가 먼저 오도록 정렬
-                            [...detailValue.files]
-                                .sort((a, b) => {
-                                    if (a.isRepresentative === 'Y') return -1;
-                                    if (b.isRepresentative === 'Y') return 1;
-                                    return 0;
-                                })
-                                .map((file) => (
-                                    <FilePreview
-                                        key={file.fileId} // key 추가
-                                        file={file}
-                                        previewType="ALL"
-                                    />
-                                ))
+                          // 대표 이미지가 먼저 오도록 정렬
+                          [...detailValue.files]
+                            .sort((a, b) => {
+                                if (a.isRepresentative === 'Y') return -1;
+                                if (b.isRepresentative === 'Y') return 1;
+                                return 0;
+                            })
+                            .map((file) => (
+                              <FilePreview
+                                key={file.fileId} // key 추가
+                                file={file}
+                                previewType="ALL"
+                              />
+                            ))
                         ) : null}
                     </div>
 
@@ -274,11 +277,11 @@ export default function CineSquareDetail(){
                         <div className="post_reaction_wrap clear">
                             <div className="post_like_button">
                                 <input
-                                    type="checkbox"
-                                    id="like"
-                                    hidden
-                                    checked={detailValue?.isLiked}
-                                    onChange={handleLike}
+                                  type="checkbox"
+                                  id="like"
+                                  hidden
+                                  checked={detailValue?.isLiked}
+                                  onChange={handleLike}
                                 />
                                 <label htmlFor="like" className="like-btn">
                                     좋아요 <span>{detailValue?.likeCount ?? 0}</span>
@@ -290,97 +293,132 @@ export default function CineSquareDetail(){
 
                         <div className="post_comment_wrap" id="comment">
                             {commentList.length > 0 && (
-                                <ul className="post_comment_list">
-                                    {commentList.length > 0 && commentList.map((c) => {
-                                        const isEditing = editingCommentId === c.commentId;
-                                        return (
-                                            <li key={c.commentId}>
-                                                {isEditing ? (
-                                                    <>
-                                                        <h4>{c.authorNickname}</h4>
-                                                        <div className="comment_edit_wrap">
+                              <ul className="post_comment_list">
+                                  {commentList.length > 0 && commentList.map((c) => {
+                                      const isEditing = editingCommentId === c.commentId;
+                                      return (
+                                        <li key={c.commentId}>
+                                            {isEditing ? (
+                                              <>
+                                                  <h4>{c.authorNickname}</h4>
+                                                  <div className="comment_edit_wrap">
                                                         <textarea
-                                                            value={editContent}
-                                                            onChange={(e) => setEditContent(e.target.value)}
+                                                          value={editContent}
+                                                          onChange={(e) => setEditContent(e.target.value)}
                                                         ></textarea>
-                                                            <div className="comment_edit_button_wrap clear">
-                                                                <button
-                                                                    className="cancel"
-                                                                    onClick={() => setEditingCommentId(null)}
-                                                                >취소
-                                                                </button>
-                                                                <button
-                                                                    className="complete"
-                                                                    onClick={() => handleEditComplete(c.commentId)}
-                                                                >등록
-                                                                </button>
-                                                            </div>
-                                                        </div>
-                                                        <span>
-                                                            {c.createdAt 
-                                                                ? c.createdAt.replace("T", " ")
-                                                                             .substring(0, 16)
-                                                                             .replace(/-/g, ".")
-                                                                : ""
+                                                      <div className="comment_edit_button_wrap clear">
+                                                          <button
+                                                            className="cancel"
+                                                            onClick={() => setEditingCommentId(null)}
+                                                          >취소
+                                                          </button>
+                                                          <button
+                                                            className="complete"
+                                                            onClick={() => handleEditComplete(c.commentId)}
+                                                          >등록
+                                                          </button>
+                                                      </div>
+                                                  </div>
+                                                  <span>
+                                                            {c.createdAt
+                                                              ? c.createdAt.replace("T", " ")
+                                                                .substring(0, 16)
+                                                                .replace(/-/g, ".")
+                                                              : ""
                                                             }
-                                                            {c.updatedAt && <i>수정됨</i>}
+                                                      {c.updatedAt && <i>수정됨</i>}
                                                         </span>
-                                                        <div className="comment_control_wrap clear">
-                                                            <button disabled>수정</button>
-                                                            {c.commenterId == userId && (
-                                                                <button
-                                                                    onClick={() => handleDeleteComment(c.commentId)}>
-                                                                    삭제
-                                                                </button>
-                                                            )}
-                                                        </div>
-                                                    </>
-                                                ) : (
-                                                    <>
-                                                        <h4>{c.authorNickname}</h4>
-                                                        <p className='pre-line'>{c.content}</p>
-                                                        <span>
-                                                            {c.createdAt 
-                                                                ? c.createdAt.replace("T", " ")
-                                                                             .substring(0, 16)
-                                                                             .replace(/-/g, ".")
-                                                                : ""
+                                                  <div className="comment_control_wrap clear">
+                                                      <button disabled>수정</button>
+                                                      {c.commenterId == userId && (
+                                                        <button
+                                                          onClick={() => handleDeleteComment(c.commentId)}>
+                                                            삭제
+                                                        </button>
+                                                      )}
+                                                  </div>
+                                              </>
+                                            ) : (
+                                              <>
+                                                  <h4>{c.authorNickname}</h4>
+                                                  <p className='pre-line'>{c.content}</p>
+                                                  <span>
+                                                            {c.createdAt
+                                                              ? c.createdAt.replace("T", " ")
+                                                                .substring(0, 16)
+                                                                .replace(/-/g, ".")
+                                                              : ""
                                                             }
-                                                            {c.updatedAt && <i>수정됨</i>}
+                                                      {c.updatedAt && <i>수정됨</i>}
                                                         </span>
-                                                        <div className="comment_control_wrap clear">
-                                                            <button
-                                                                onClick={() => {
-                                                                    setEditingCommentId(c.commentId);
-                                                                    setEditContent(c.content);
-                                                                }}
-                                                            >수정
-                                                            </button>
-                                                            {c.commenterId == userId && (
-                                                                <button
-                                                                    onClick={() => handleDeleteComment(c.commentId)}
-                                                                >삭제</button>
-                                                            )}
-                                                        </div>
-                                                    </>
-                                                )}
-                                            </li>
-                                        );
-                                    })}
-                                </ul>
+                                                  <div className="comment_control_wrap clear">
+                                                      <button
+                                                        onClick={() => {
+                                                            setEditingCommentId(c.commentId);
+                                                            setEditContent(c.content);
+                                                        }}
+                                                      >수정
+                                                      </button>
+                                                      {c.commenterId == userId && (
+                                                        <button
+                                                          onClick={() => handleDeleteComment(c.commentId)}
+                                                        >삭제</button>
+                                                      )}
+                                                  </div>
+                                              </>
+                                            )}
+                                        </li>
+                                      );
+                                  })}
+                              </ul>
                             )}
 
                             <div className="comment_write_area">
                                 <textarea
-                                    id="user-comment"
-                                    placeholder="댓글을 남겨보세요"
-                                    value={comment}
-                                    onChange={handleChange}></textarea>
+                                  id="user-comment"
+                                  placeholder="댓글을 남겨보세요"
+                                  value={comment}
+                                  onChange={handleChange}></textarea>
                                 <div className="register_wrap clear">
                                     <a className="post_button comment" onClick={handleSubmit} href="#">등록</a>
                                 </div>
                             </div>
                         </div>
+                    </div>
+                </div>
+
+                <div className="post_button_wrap2 clear">
+                    <div className="left">
+                        <Link
+                          to="/cinesquare/reg"
+                          className="post_button write"
+                        >글쓰기</Link>
+                    </div>
+
+                    <div className="right">
+                        {isLogin && isAdmin &&
+                            <Link
+                              to="/cinesquare/reg"
+                              className="post_button del"
+                            >삭제</Link>
+                        }
+
+                        <Link
+                          to="/cinesquare/reg"
+                          className="post_button"
+                        >목록</Link>
+
+                        <a
+                          href="#"
+                          className="post_button top"
+                          onClick={(e) => {
+                              e.preventDefault();
+                              window.scrollTo({
+                                  top: 0,
+                                  behavior: 'smooth',
+                              });
+                          }}
+                        >TOP</a>
                     </div>
                 </div>
             </div>
