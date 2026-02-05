@@ -1,17 +1,35 @@
-import ModalLayout from "@/components/common/admin/ModalLayout"
-interface ModalLayoutProps {
-  isOpen: boolean;
-  onClose: () => void;
+
+interface NoticeDetailModalProps {
+  noticeId: number;
+  onBack: () => void;
+  onEdit: (noticeId: number) => void;
 }
-export default function NoticeDetailModal({ isOpen, onClose,}: ModalLayoutProps ){
+export default function NoticeDetailModal({
+                                          noticeId,
+                                          onBack,
+                                          onEdit,
+                                        }: NoticeDetailModalProps) {
 
   return (
-    <ModalLayout isOpen={isOpen} onClose={onClose}>
-      <h3>모달리스트</h3>
+    <>
+      {/* header */}
+      <div className="modal_header">
+        <h3 className="modal_title">공지 상세</h3>
+      </div>
+
+      <div>
+        <h3>제목</h3>
+        <div>내용</div>
+      </div>
 
       <div className="modal_button_group">
-        <button onClick={onClose}>취소</button>
+        <button className="btn btn_primary" onClick={() => onEdit(noticeId)}>
+          공지 수정
+        </button>
+        <button className="btn btn_primary" onClick={onBack}>
+          뒤로
+        </button>
       </div>
-    </ModalLayout>
+    </>
   );
 }

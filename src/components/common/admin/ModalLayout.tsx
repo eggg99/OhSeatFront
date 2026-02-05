@@ -1,3 +1,5 @@
+import './temp.scss'
+
 interface ModalProps {
   isOpen: boolean;
   onClose: () => void;

@@ -7,6 +7,7 @@ export interface  NoticeData {
   createdAt : string
   views : number
   isPinned : number
+  isActive: number
 }
 
 export interface NoticeListType {

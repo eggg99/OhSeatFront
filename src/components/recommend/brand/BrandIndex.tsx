@@ -10,10 +10,10 @@ import { MULTIPLEX_LIST } from "@/constants/multiplex";
 import { AREA_LIST } from "@/constants/area";
 import { userStore } from "@/store/userStore";
 import { Pagination } from "@/components/common/Pagination";
-import { NoticeList } from "@/components/common/list/NoticeList";
+
 import { NoticeData, NoticeListType } from "@/types/Notice";
 import { RecommendList } from "@/components/common/list/RecommendList";
-import NoticeListModal from "@/components/common/admin/NoticeListModal";
+import NoticeModal from "@/components/common/admin/NoticeModal";
 
 const ALL_CINEMA = { cinemaId: 'all_c', cinemaName: '전체' };
 const ALL_SCREEN = { screenId: 'all_s', screenName: '전체' };
@@ -23,7 +23,7 @@ export default function BrandIndex() {
     
     const isLogin = userStore((state) => state.isLogin);
     const isAdmin = userStore((state) => state.isAdmin);
-    const [isEditMode, setIsEditMode] = useState(false);        // 편집모드 상태
+    const [isEditMode, setIsEditMode] = useState<boolean>(false);        // 편집모드 상태
     const [isModalOpen, setIsModalOpen] = useState(false);      // 모달 상태
     const [emblaRef2] = useEmblaCarousel({ loop: false });
     const [emblaRef3] = useEmblaCarousel({ loop: false });
@@ -308,40 +308,16 @@ export default function BrandIndex() {
                     </div>
                 </div>
 
-                    {/* 게시글 테이블 */}
-                <table className="basic_board1">
-                    <colgroup>
-                        <col style={{ width: '8%' }}/>
-                        <col style={{ width: '8%' }}/>
-                        <col style={{ width: '47%' }}/>
-                        <col style={{ width: '8%' }}/>
-                        <col style={{ width: '8%' }}/>
-                        <col style={{ width: '8%' }}/>
-                        <col style={{ width: '8%' }}/>
-                    </colgroup>
-                    <thead>
-                        <tr>
-                            <th colSpan={3}>제목</th>
-                            <th>작성자</th>
-                            <th>작성일</th>
-                            <th>조회수</th>
-                            <th>좋아요</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <NoticeList
-                          noticeList={noticeList}
-                        />
-                        {postList && (
-                          <RecommendList
-                            postList={postList}
-                            isEditMode={isEditMode}
-                            selectedPostIds={selectedPostIds}
-                            onSelectPost={handleSelectPost}
-                          />
-                        )}
-                    </tbody>
-                </table>
+                {/* 게시글 테이블 */}
+                {postList && (
+                  <RecommendList
+                    noticeList={noticeList}
+                    postList={postList}
+                    isEditMode={isEditMode}
+                    selectedPostIds={selectedPostIds}
+                    onSelectPost={handleSelectPost}
+                  />
+                )}
 
                 <div className="post_button_wrap clear">
                         <div className="left"></div>
@@ -361,7 +337,7 @@ export default function BrandIndex() {
 
             {/*관리자 공지사항 모달*/}
             {isModalOpen &&
-                <NoticeListModal isOpen={isModalOpen} onClose={closeModal} />
+                <NoticeModal isOpen={isModalOpen} onClose={closeModal} />
             }
         </div>
     )

@@ -1,6 +1,6 @@
 import { axiosApi } from "@/apis/utils/instance";
 
-// 좌석추천 공지사항 조회
+// 공지사항 조회 - 좌석추천 - 유저용
 export const getRecommendNotice = async (targetBoard) => {
     try{
         const response = await axiosApi.get(`/notices/top`, {params: { targetBoard }})
@@ -10,10 +10,10 @@ export const getRecommendNotice = async (targetBoard) => {
     }
 }
 
-// 씨네광장 공지사항 조회
-export const getCinesquareNotice = async (targetBoard) => {
+// 공지사항 조회 - 좌석추천 - 관리자용
+export const getNoticeList = async (targetBoard) => {
     try{
-        const response = await axiosApi.get(`/notices`, {params: { targetBoard }})
+        const response = await axiosApi.get(`/admin/notices`, {params: { targetBoard }})
         return response.data;
     } catch (error) {
         console.error("씨네광장 공지사항 전체 조회 실패: ", error);
