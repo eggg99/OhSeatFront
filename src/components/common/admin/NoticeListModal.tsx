@@ -15,7 +15,7 @@ export default function NoticeListModal({
 
   const getList = async () => {
     const response = await getNoticeList('RECOMMEND')
-    setNoticeList(response);
+    // setNoticeList(response);
   }
 
   useEffect(() => {

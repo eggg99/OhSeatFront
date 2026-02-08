@@ -166,6 +166,37 @@ export default function PageMain(){
         });
     };
 
+    function formatNumberToK(
+      value: number | string,
+      fractionDigits = 1
+    ): string {
+        if (value === null || value === undefined || value === '') return '0';
+
+        const num = Number(value);
+        if (Number.isNaN(num)) return '0';
+
+        if (num < 1000) return `${num}`;
+
+        if (num < 1_000_000) {
+            return `${(num / 1000).toFixed(fractionDigits)}K`;
+        }
+
+        return `${(num / 1_000_000).toFixed(fractionDigits)}M`;
+    }
+
+    function formatNumberWithComma(
+      value: number | string,
+      unit = '명'
+    ): string {
+        if (value === null || value === undefined || value === '') return `0${unit}`;
+
+        const num = Number(value);
+        if (Number.isNaN(num)) return `0${unit}`;
+
+        return `${num.toLocaleString()} ${unit}`;
+    }
+
+
 
     return(
         <main className="os_main_contents">
@@ -242,10 +273,11 @@ export default function PageMain(){
                                         </span>
                                         <ul className="rate_list">
                                             <li><span>개봉일</span>{item.openDt}</li>
-                                            <li><span>누적율</span>{item.audiAcc}</li>
+                                            <li><span>누적관객수</span>{formatNumberWithComma(item.audiAcc)}</li>
+                                            <li><span>누적관객수</span>{formatNumberToK(item.audiAcc)}</li>
                                         </ul>
                                     </div>
-                                    <img src={item.posterUrl} />
+                                    <img src={item.posterUrl}  alt={item.movieNm}/>
                                 </li>
                             );
                         })
