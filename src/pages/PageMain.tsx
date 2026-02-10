@@ -10,6 +10,7 @@ import useEmblaCarousel from 'embla-carousel-react'
 import Autoplay from 'embla-carousel-autoplay'
 import { CRTF_MAP } from '@/constants/certifcate';
 import {CineSquareData} from "../types/CineSquare";
+import {formatNumberWithComma} from "../utils/format";
 
 interface Cinema {
     multiplexId: number;
@@ -242,7 +243,7 @@ export default function PageMain(){
                                         </span>
                                         <ul className="rate_list">
                                             <li><span>개봉일</span>{item.openDt}</li>
-                                            <li><span>누적율</span>{item.audiAcc}</li>
+                                            <li><span>누적관객수</span>{formatNumberWithComma(item.audiAcc)}</li>
                                         </ul>
                                     </div>
                                     <img src={item.posterUrl} />
