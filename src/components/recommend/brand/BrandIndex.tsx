@@ -10,7 +10,6 @@ import { MULTIPLEX_LIST } from "@/constants/multiplex";
 import { AREA_LIST } from "@/constants/area";
 import { userStore } from "@/store/userStore";
 import { Pagination } from "@/components/common/Pagination";
-
 import { NoticeData, NoticeListType } from "@/types/Notice";
 import { RecommendList } from "@/components/common/list/RecommendList";
 import NoticeModal from "@/components/common/admin/NoticeModal";
@@ -36,7 +35,6 @@ export default function BrandIndex() {
     const [selectedCinema, setSelectedCinema] = useState<any | null>(ALL_CINEMA);
     const [screenList, setScreenList] = useState<any[]>([]);
     const [selectedScreen, setSelectedScreen] = useState<any | null>(ALL_SCREEN);
-
     const [isInnerOn, setIsInnerOn] = useState(false);
 
     const [postList, setPostList] = useState<PostPage | null>(null);
@@ -53,6 +51,7 @@ export default function BrandIndex() {
         setCinemaList(response?.length ? [ALL_CINEMA, ...response] : [ALL_CINEMA]); // 영화관 리스트 설정
         setSelectedCinema(ALL_CINEMA);                                              // 영화관 '전체'로 설정
         setSelectedScreen(ALL_SCREEN);                                              // 상영관 '전체'로 설정
+        setIsInnerOn(false);                                                 // 영화관 전체보기 닫기
     };
 
     // 영화관 선택
@@ -61,11 +60,13 @@ export default function BrandIndex() {
         const response = await getScreenList(multiplexId, cinema.cinemaId);  // 상영관 리스트 조회 api
         setScreenList(response?.length ? [ALL_SCREEN, ...response] : [ALL_SCREEN])  // 상영관 리스트 설정
         setSelectedScreen(ALL_SCREEN);                                              // 상영관 '전체'로 설정
+        setIsInnerOn(false);                                                 // 영화관 전체보기 닫기
     };
 
     // 상영관 선택
     const handleScreenChange = async (screen: any) => {
         setSelectedScreen(screen);                                                  // 선택한 상영관 설정
+        setIsInnerOn(false);                                                 // 영화관 전체보기 닫기
     }
 
     // 게시글 리스트 조회
