@@ -192,36 +192,17 @@ export default function BrowseIndex() {
                         </select>
                     </div>
                 </div>
-                <table className="basic_board1">
-                    <colgroup>
-                        <col style={{ width: '8%' }}/>
-                        <col style={{ width: '8%' }}/>
-                        <col style={{ width: '47%' }}/>
-                        <col style={{ width: '8%' }}/>
-                        <col style={{ width: '8%' }}/>
-                        <col style={{ width: '8%' }}/>
-                        <col style={{ width: '8%' }}/>
-                    </colgroup>
-                    <thead>
-                        <tr>
-                            <th colSpan={3}>제목</th>
-                            <th>작성자</th>
-                            <th>작성일</th>
-                            <th>조회수</th>
-                            <th>좋아요</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <NoticeList
-                          noticeList={noticeList}
-                        />
-                        {postList && (
-                          <RecommendList
-                            postList={postList}
-                          />
-                        )}
-                    </tbody>
-                </table>
+
+                {/* 게시글 테이블 */}
+                {postList && (
+                  <RecommendList
+                    noticeList={noticeList}
+                    postList={postList}
+                    isEditMode={false}
+                  />
+                )}
+
+                {/*페이징처리*/}
                 {postList &&
                     <Pagination
                         currentPage={postList.number}
