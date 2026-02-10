@@ -52,6 +52,7 @@ export default function BrandIndex() {
         const response = await getCinemaList(multiplexId, areaId);           // 영화관 리스트 조회 api
         setCinemaList(response?.length ? [ALL_CINEMA, ...response] : [ALL_CINEMA]); // 영화관 리스트 설정
         setSelectedCinema(ALL_CINEMA);                                              // 영화관 '전체'로 설정
+        setSelectedScreen(ALL_SCREEN);                                              // 상영관 '전체'로 설정
     };
 
     // 영화관 선택
@@ -235,7 +236,8 @@ export default function BrandIndex() {
                     <div className="embla" ref={emblaRef3}>
                         <div className="embla__container">
                             <ul className="branch_screen_list clear flex flex-nowrap">
-                            {(selectedCinema.cinemaId !== 'all_c') && screenList.map((screen) => {
+                            {(selectedCinema.cinemaId !== 'all_c') &&
+                              screenList.map((screen) => {
                                 const isChecked = selectedScreen?.screenId === screen.screenId;
                                 return(
                                     <li key={screen.screenId} className={`embla__slide flex-none ${isChecked ? "on" : ""}`}>
