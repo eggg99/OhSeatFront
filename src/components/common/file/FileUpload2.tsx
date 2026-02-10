@@ -1,76 +1,57 @@
-import React, { useRef, useState, useEffect, ChangeEvent } from "react";
-
-type ExistingFile = {
-    fileId: number;
-    fileName: string;
-    fileUrl: string;
-    fileSize: number;
-    fileType: string;
-};
+import React, { useRef, ChangeEvent } from "react";
+import { fileData } from "@/types/CineSquare";
 
 interface FileUploadProps {
     mode: "create" | "edit";
 
-    file: File | null;              // 새로 선택한 파일
-    initialFile?: ExistingFile | null; // 수정 화면에서만 사용
+    /** 서버에 이미 존재하는 파일 (수정 화면용) */
+    existingFile?: fileData | null;
 
-    onFileChange: (file: File | null) => void;
+    /** 새로 선택한 파일 */
+    newFile?: File | null;
+
+    /** 새 파일 선택 / 삭제 시 호출 */
+    onChange: (file: File | null) => void;
+
+    /** 기존 파일 삭제 시 호출 */
     onDeleteExisting?: () => void;
 }
 
-
 export const FileUpload2: React.FC<FileUploadProps> = ({
-    mode = "create",
-    file = null,
-    initialFile = null,
-    onFileChange,
-    onDeleteExisting,
-}) => {
+                                                           mode,
+                                                           existingFile = null,
+                                                           newFile = null,
+                                                           onChange,
+                                                           onDeleteExisting,
+                                                       }) => {
     const fileInputRef = useRef<HTMLInputElement | null>(null);
-    const [existingFile, setExistingFile] = useState<FileUploadProps["initialFile"]>(null);
-    const [newFile, setNewFile] = useState<File | null>(null);
 
-    /* ------------------ 초기 파일 세팅 ------------------ */
-    useEffect(() => {
-        setExistingFile(initialFile ?? null);
-    }, [initialFile]);
+    const hasImage = !!existingFile || !!newFile;
 
-    /* ------------------ 파일 선택 ------------------ */
+    /* ---------- 파일 선택 ---------- */
     const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
         if (!e.target.files?.length) return;
 
         const file = e.target.files[0];
+        onChange(file);
 
-        // 기존 파일 있으면 삭제 처리
-        if (existingFile) {
-            onDeleteExisting?.();
-            setExistingFile(null);
-        }
-
-        setNewFile(file);
-        onFileChange(file);
-
+        // 동일 파일 재선택 가능하게
         e.target.value = "";
     };
 
-    /* ------------------ 기존 파일 삭제 ------------------ */
+    /* ---------- 기존 파일 삭제 ---------- */
     const handleDeleteExisting = () => {
-        if (!existingFile) return;
-
         onDeleteExisting?.();
-        setExistingFile(null);
     };
 
-    /* ------------------ 새 파일 삭제 ------------------ */
+    /* ---------- 새 파일 삭제 ---------- */
     const handleDeleteNew = () => {
-        setNewFile(null);
-        onFileChange(null);
+        onChange(null);
     };
-
-    const hasImage = !!existingFile || !!newFile;
 
     return (
       <div className="file_name_wrap clear">
+          {/* 아무 파일도 없을 때 */}
           {!hasImage && (
             <>
                 <p>등록 버튼을 눌러 이미지 파일을 첨부해주세요</p>
@@ -86,6 +67,7 @@ export const FileUpload2: React.FC<FileUploadProps> = ({
             </>
           )}
 
+          {/* 기존 파일 (서버 파일) */}
           {existingFile && (
             <>
                 <span>{existingFile.fileName}</span>
@@ -102,6 +84,7 @@ export const FileUpload2: React.FC<FileUploadProps> = ({
             </>
           )}
 
+          {/* 새로 선택한 파일 */}
           {newFile && (
             <>
                 <span>{newFile.name}</span>
@@ -121,8 +104,8 @@ export const FileUpload2: React.FC<FileUploadProps> = ({
           <input
             type="file"
             ref={fileInputRef}
-            onChange={handleFileChange}
             hidden
+            onChange={handleFileChange}
           />
       </div>
     );

@@ -10,8 +10,8 @@ export default function EventReg () {
     const navigate = useNavigate();
     const isLogin = userStore((state) => state.isLogin);
     const today = new Date();
-    const oneMonthAgo = new Date(today);
-    oneMonthAgo.setMonth(today.getMonth() - 1);
+    const oneMonthLater = new Date(today);
+    oneMonthLater.setMonth(today.getMonth() + 1);
 
     const [poster, setPoster] = useState<File | null>(null);
     const [thumbnail, setThumbnail] = useState<File | null>(null);
@@ -23,8 +23,8 @@ export default function EventReg () {
         categoryId : '',
         title : '',
         annCount: 0,
-        startDt : oneMonthAgo,
-        endDt : today
+        startDt : today,
+        endDt : oneMonthLater,
     });
 
     // 등록 내용
@@ -195,8 +195,8 @@ export default function EventReg () {
                                             <p><i>1</i>포스터 이미지 <span>(727*1036)</span></p>
                                             <FileUpload2
                                               mode="create"
-                                              file={poster}
-                                              onFileChange={setPoster}
+                                              newFile={poster}
+                                              onChange={setPoster}
                                             />
                                         </li>
                                         <li>
@@ -204,8 +204,8 @@ export default function EventReg () {
 
                                             <FileUpload2
                                               mode="create"
-                                              file={thumbnail}
-                                              onFileChange={setThumbnail}
+                                              newFile={thumbnail}
+                                              onChange={setThumbnail}
                                             />
                                         </li>
                                         <li>
@@ -213,8 +213,8 @@ export default function EventReg () {
 
                                             <FileUpload2
                                               mode="create"
-                                              file={banner}
-                                              onFileChange={setBanner}
+                                              newFile={banner}
+                                              onChange={setBanner}
                                             />
                                         </li>
                                         <li>
@@ -222,8 +222,8 @@ export default function EventReg () {
 
                                             <FileUpload2
                                               mode="create"
-                                              file={content}
-                                              onFileChange={setContent}
+                                              newFile={content}
+                                              onChange={setContent}
                                             />
                                         </li>
                                     </ul>
