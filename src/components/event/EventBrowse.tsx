@@ -21,6 +21,7 @@ export default function EventList () {
 
     const [eventList, setEventList] = useState<EventDataPage | null>(null);
     const [page, setPage] = useState<number>(0);
+    const size = 20;
     const [orderType, setOrderType] = useState<string>('');
     const [selectedPostIds, setSelectedPostIds] = useState<number[]>([]);       // 관리자용 삭제할 게시글 배열
 
@@ -53,9 +54,6 @@ export default function EventList () {
 
     const handleSearch = async () => {
         if (!searchValue.trim()) return; // 빈값 방지
-        // 실제 검색 로직 (API 호출 등)을 여기에 추가
-        console.log('검색 실행:', searchValue);
-
         await getList();
     };
 
@@ -68,7 +66,14 @@ export default function EventList () {
     // 게시글 리스트 조회
     const getList = async () => {
         try {
-            const param = { 'searchType' : searchType , 'searchValue' : searchValue}
+            const param = {
+                'categoryId' : category,
+                'searchType' : searchType ,
+                'searchValue' : searchValue,
+                'orderType' : orderType,
+                'page' : page,
+                'size' : size,
+            }
             const response = await getEventList(param);
             if(!response) {
                 console.error('게시글 조회 실패');
@@ -157,11 +162,14 @@ export default function EventList () {
             <section className="os_search_wrap">
                 <ul className="os_search_list">
                     <li>
-                        <select>
+                        <select
+                          value={searchType}
+                          onChange={(e) => setSearchType(e.target.value)}
+                        >
                             {EVENT_CATE.map((cate) => (
                               <option
                                 key={cate.id}
-                                onClick={() => setSearchType(cate.id)}
+                                value={cate.id}
                               >
                                   {cate.name}
                               </option>
