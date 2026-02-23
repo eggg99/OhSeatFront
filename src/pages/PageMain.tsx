@@ -11,6 +11,10 @@ import Autoplay from 'embla-carousel-autoplay'
 import { CRTF_MAP } from '@/constants/certifcate';
 import {CineSquareData} from "../types/CineSquare";
 import {formatNumberWithComma} from "../utils/format";
+import {getEventMain} from "@/apis/api/event";
+import {fileData} from "@/types/CineSquare";
+import {CATEGORY_LABEL} from "@/types/EventAnn";
+import { FilePreview } from "@/components/common/file/FilePreview";
 
 interface Cinema {
     multiplexId: number;
@@ -31,12 +35,35 @@ interface Movie {
     rank : number;
 }
 
+interface RawEvent {
+    annCount: number;
+    categoryId: number;
+    end: boolean;
+    endDt: string;
+    eventId: number;
+    startDt: string;
+    title: string;
+    files: fileData[]; // 배열 형태로 들어옴
+}
+
+interface Event {
+    annCount : number;
+    categoryId : number;
+    end : boolean;
+    endDt : string;
+    eventId : number;
+    startDt : string;
+    title : string;
+    file: fileData | null
+}
+
 export default function PageMain(){
     const [topCinemas, setTopCinemas] = useState<Cinema>();
     const [recentPost, setRecentPost] = useState<any[]>([]);
     const [cineSquareList, setCineSquareList] = useState<CineSquareData[]>([]);
     const [movies, setMovies] = useState<Movie[]>([]);
     const [active, setActive] = useState<'prev' | 'next' | null>('next')
+    const [event, setEvent] = useState<Event[]>();
     const [emblaRef] = useEmblaCarousel(
         { loop: true, align: 'start' },
         [
@@ -142,6 +169,7 @@ export default function PageMain(){
             await getTop3Post();
             await getMovieChart();
             await getRandomCineData();
+            await getMainEvents();
             setLoading(false);
         };
         fetchData();
@@ -167,6 +195,26 @@ export default function PageMain(){
         });
     };
 
+    const getMainEvents = async () => {
+        const response:RawEvent[] = await getEventMain({ count : 2 });
+        // 데이터 가공 (Mapping)
+        const events: Event[] = response.map((item) => {
+            // files 배열에서 POSTER 역할인 파일만 찾기
+            const posterFile = item.files.find(f => f.fileRole === "THUMB");
+
+            return {
+                eventId: item.eventId,
+                categoryId: item.categoryId,
+                title: item.title,
+                startDt: item.startDt,
+                endDt: item.endDt,
+                annCount: item.annCount,
+                end: item.end,
+                file: posterFile || null, // POSTER가 있으면 넣고, 없으면 null 처리
+            };
+        });
+        setEvent(events);
+    }
 
     return(
         <main className="os_main_contents">
@@ -315,28 +363,33 @@ export default function PageMain(){
                         </div>
 
                         <ul className="os_event_list clear">
-                            <li>
-                                <a href="#">
-                                    <img src="./img/20250820_1755670295287387288.png"/>
+                            {event && event.length > 0 ? (
+                              event.map((item:any, index:number) => (
+                                <li key={`event-${index}`}>
+                                    <Link to={`/event/${item.eventId}`}>
+                                        <FilePreview
+                                          key={item.file.fileId}
+                                          file={item.file}
+                                          previewType="ALL"
+                                        />
 
-                                    <div className="inner">
-                                        <i>예매권</i>
-                                        <p>영화 "컨저링: 마지막 의식" 예매권 증정 이벤트 3줄 이상 긴 제목 테스트</p>
-                                        <span>2025.08.20<br/>~ 2025.08.26</span>
-                                    </div>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#">
-                                    <img src="./img/20250801_1754015676706814821.png"/>
-
-                                    <div className="inner">
-                                        <i>예매권</i>
-                                        <p>영화 "컨저링: 마지막 의식" 예매권 증정 이벤트</p>
-                                        <span>2025.08.20<br/>~ 2025.08.26</span>
-                                    </div>
-                                </a>
-                            </li>
+                                        <div className="inner">
+                                            <i>{CATEGORY_LABEL[item.categoryId] ?? ''}</i>
+                                            <p>{item.title}</p>
+                                            <span>{item.startDt}<br/>~{item.endDt}</span>
+                                        </div>
+                                    </Link>
+                                </li>
+                              ))
+                            ) : (
+                              <li>
+                                  <a href="#">
+                                      <div className="inner">
+                                          <p>데이터가 없습니다.</p>
+                                      </div>
+                                  </a>
+                              </li>
+                            )}
                         </ul>
                     </div>                        
                 </div>

@@ -10,7 +10,7 @@ import { MULTIPLEX_LIST } from "@/constants/multiplex";
 import { AREA_LIST } from "@/constants/area";
 import { userStore } from "@/store/userStore";
 import { Pagination } from "@/components/common/Pagination";
-import { NoticeData, NoticeListType } from "@/types/Notice";
+import { NoticeData, NoticePage } from "@/types/Notice";
 import { RecommendList } from "@/components/common/list/RecommendList";
 import NoticeModal from "@/components/common/admin/NoticeModal";
 

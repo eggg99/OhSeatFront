@@ -10,6 +10,10 @@ import { NoticeList } from "@/components/common/list/NoticeList";
 import { RecommendList } from "@/components/common/list/RecommendList";
 import { NoticeData } from "@/types/Notice";
 import { userStore } from "@/store/userStore";
+import {getEventMain} from "@/apis/api/event";
+import {fileData} from "@/types/CineSquare";
+import {CATEGORY_LABEL} from "@/types/EventAnn";
+import { FilePreview } from "@/components/common/file/FilePreview";
 
 interface Cinema {
     multiplexId: number;
@@ -21,6 +25,17 @@ interface Cinema {
     totalLike: number;
 }
 
+interface Event {
+    annCount: number;
+    categoryId: number;
+    end: boolean;
+    endDt: string;
+    eventId: number;
+    startDt: string;
+    title: string;
+    files: fileData[]; // 배열 형태로 들어옴
+}
+
 export default function BrowseIndex() {
     const navigate = useNavigate();
     const [topCinemas, setTopCinemas] = useState<Cinema[]>([]);
@@ -29,6 +44,7 @@ export default function BrowseIndex() {
     const [orderType, setOrderType] = useState<string>("latest");
     const [size, setSize] = useState<number>(10);
     const [noticeList, setNoticeList] = useState<NoticeData[]>([]);
+    const [event, setEvent] = useState<Event[]>();
 
     // 언급량 top5 조회
     const getData = async () => {
@@ -53,9 +69,13 @@ export default function BrowseIndex() {
 
     // 마운트 될 때 데이터 가져오기
     useEffect(() => {
-        getData(); 
-        getPostData();
-        getNoticeData();
+        const fetchData = async () => {
+            await getData();
+            await getPostData();
+            await getNoticeData();
+            await getMainEvents();
+        };
+        fetchData();
     }, []);
 
     // 페이지/정렬 변경 시 데이터 재요청
@@ -75,6 +95,11 @@ export default function BrowseIndex() {
 
     // 사이즈 변경
     const handleSizeChange = (newSize: number) => setSize(newSize);
+
+    const getMainEvents = async () => {
+        const response:Event[] = await getEventMain({ count : 1 });
+        setEvent(response);
+    }
 
     return (
         <div className="os_sub_contents">
@@ -136,39 +161,57 @@ export default function BrowseIndex() {
                 <div className="banner_wrap">
                         <div className="inner">
                             <ul className="banner_event_list">
-                                <li className="n1 on">
-                                    <a href="#">
-                                        <div className="inner_info">
-                                            <span>시사회</span>
-                                            <h3>보스 룩 시사회 이벤트</h3>
-                                            <img src="./img/event_banner_1.png" className="poster_img"/>
-                                            <p>예고편을 감상하고 기대평을 남겨주세요!<br/>추첨을 통해 시사회에 초대합니다.</p>
-                                            <ul className="inner_info_list">
-                                                <li><b>이벤트 일정</b>9/8(월) ~ 9/21(일)</li>
-                                                <li><b>당첨 인원</b>30명 (1인 2석, 총 60석)</li>
-                                            </ul>
-                                        </div>
-                                        <img src="./img/event_banner_1_2.png" className="background_img"/>
-                                    </a>
-                                </li>
-                                <li className="n2">
-                                    <a href="#">
-                                        <div className="inner_info">
-                                            <span>예매권</span>
-                                            <h3>위키드: 포 굿 예매권 증정</h3>
-                                            <img src="./img/event_banner_2.png" className="poster_img"/>
-                                            <p>이벤트에 참여해주시는 분들 중<br/>추첨을 통해 예매권을 증정합니다.</p>
-                                            <ul className="inner_info_list">
-                                                <li><b>이벤트 일정</b>11/3(월) ~ 11/9(일)</li>
-                                                <li><b>당첨 인원</b>25명</li>
-                                            </ul>
-                                        </div>
+                                {event && event.length > 0 ? (
+                                  event.map((item: any, index: number) => {
+                                      // 1. 필요한 파일들을 미리 변수에 담아둡니다.
+                                      const posterFile = item.files?.find((f: any) => f.fileRole === "POSTER");
+                                      const bannerFile = item.files?.find((f: any) => f.fileRole === "BANNER");
 
-                                        <p>이벤트 바로가기</p>
-                                        
-                                        <img src="./img/event_banner_2_2.png" className="background_img"/>
-                                    </a>
-                                </li>
+                                      return (
+                                        <li key={`event-${index}`} className="n1 on">
+                                            <Link to={`/event/${item.eventId}`}>
+                                                <div className="inner_info">
+                                                    <span>{CATEGORY_LABEL[item.categoryId] ?? ''}</span>
+                                                    <h3>{item.title}</h3>
+
+                                                    {/* 이벤트 포스터이미지 (POSTER 찾기) */}
+                                                    {posterFile && (
+                                                      <FilePreview
+                                                        key={posterFile.fileId}
+                                                        file={posterFile}
+                                                        previewType="ALL"
+                                                        className="poster_img"
+                                                      />
+                                                    )}
+
+                                                    <ul className="inner_info_list">
+                                                        <li><b>이벤트 일정</b>{item.startDt}~{item.endDt}</li>
+                                                        <li><b>당첨 인원</b>{item.annCount}명</li>
+                                                    </ul>
+                                                </div>
+                                                <p>이벤트 바로가기</p>
+
+                                                {/* 이벤트 배너 배경 (BANNER 찾기) */}
+                                                {bannerFile && (
+                                                  <FilePreview
+                                                    key={bannerFile.fileId}
+                                                    file={bannerFile}
+                                                    previewType="ALL"
+                                                  />
+                                                )}
+                                            </Link>
+                                        </li>
+                                      );
+                                  })
+                                ) : (
+                                  <li>
+                                      <a href="#">
+                                          <div className="inner">
+                                              <p>데이터가 없습니다.</p>
+                                          </div>
+                                      </a>
+                                  </li>
+                                )}
                             </ul>
                         </div>
                     </div>
