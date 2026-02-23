@@ -9,3 +9,11 @@ export function formatNumberWithComma(
 
   return `${num.toLocaleString()} ${unit}`;
 }
+
+export const formatDateTime = (dateTime: string) => {
+  const [date, time] = dateTime.split("T");
+  return {
+    date,
+    time: time?.slice(0, 5) ?? "",
+  };
+};
