@@ -362,7 +362,7 @@ export default function PageMain(){
                             <i>오싵러들을 위해 준비한<br/>각종 이벤트들 지금 확인하세요!</i>
                         </div>
 
-                        <ul className="os_event_list clear">
+                        <ul className="os_m_event_list clear">
                             {event && event.length > 0 ? (
                               event.map((item:any, index:number) => (
                                 <li key={`event-${index}`}>

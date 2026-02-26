@@ -219,19 +219,19 @@ export default function BrowseIndex() {
 
             <section className="theater_total_board_wrap">
                 <h2>영화관 좌석 추천 전체글보기</h2>
-                
+
                 <div className="board_control_wrap clear">
                     <p>{postList?.totalElements ?? 0}개의 글</p>
-                    
+
                     <div className="post_filter_wrap clear">
                         <select>
-                            <option onClick={() =>handleSizeChange(10)}>10개씩</option>
-                            <option onClick={() =>handleSizeChange(20)}>20개씩</option>
+                            <option onClick={() => handleSizeChange(10)}>10개씩</option>
+                            <option onClick={() => handleSizeChange(20)}>20개씩</option>
                         </select>
                         <select>
-                            <option onClick={() =>handleOrderChange('latest')}>최신순</option>
-                            <option onClick={() =>handleOrderChange('views')}>조회순</option>
-                            <option onClick={() =>handleOrderChange('comments')}>댓글순</option>
+                            <option onClick={() => handleOrderChange('latest')}>최신순</option>
+                            <option onClick={() => handleOrderChange('views')}>조회순</option>
+                            <option onClick={() => handleOrderChange('comments')}>댓글순</option>
                         </select>
                     </div>
                 </div>
@@ -245,16 +245,20 @@ export default function BrowseIndex() {
                   />
                 )}
 
-                {/*페이징처리*/}
-                {postList &&
-                    <Pagination
-                        currentPage={postList.number}
-                        totalPages={postList.totalPages}
-                        onPageChange={handlePageChange}
-                    />
-                }
+                <div className="post_button_wrap clear">
+                    <div className="left">
+                        {/*페이징처리*/}
+                        {postList &&
+                          <Pagination
+                            currentPage={postList.number}
+                            totalPages={postList.totalPages}
+                            onPageChange={handlePageChange}
+                          />
+                        }
+                    </div>
+                </div>
             </section>
         </div>
-    )
+)
 }
 

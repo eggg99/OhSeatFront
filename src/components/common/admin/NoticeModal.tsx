@@ -29,31 +29,57 @@ export default function NoticeModal({ isOpen, onClose }: ModalLayoutProps) {
   return (
     <ModalLayout isOpen={isOpen} onClose={onClose}>
       {view === 'list' && (
-        <NoticeListModal
-          onSelect={goDetail}
-          onCreate={goCreate}
-        />
+        <div className="modal_inner">
+          <div className="modal_top clear">
+            <p>공지사항 관리<span>공지사항 목록</span></p>
+            <button className="modalClose" onClick={() => onClose()}></button>
+          </div>
+          <div className="modal_contents">
+            <NoticeListModal
+              onSelect={goDetail}
+              onCreate={goCreate}
+            />
+          </div>
+        </div>
       )}
 
       {view === 'detail' && noticeId && (
-        <NoticeDetailModal
-          noticeId={noticeId}
-          onBack={goList}
-          onEdit={goEdit}
-        />
+        <div className="modal_inner write">
+          <div className="modal_top clear">
+            <p>공지사항 관리<span>공지사항 글보기</span></p>
+            <button className="modalClose" onClick={() => onClose()}></button>
+          </div>
+          <NoticeDetailModal
+            noticeId={noticeId}
+            onBack={goList}
+            onEdit={goEdit}
+          />
+        </div>
       )}
 
       {view === 'edit' && noticeId && (
-        <NoticeEditModal
-          noticeId={noticeId}
-          onBack={goDetail}
-        />
+        <div className="modal_inner write">
+          <div className="modal_top clear">
+            <p>공지사항 관리<span>공지사항 글수정</span></p>
+            <button className="modalClose" onClick={() => onClose()}></button>
+          </div>
+          <NoticeEditModal
+            noticeId={noticeId}
+            onBack={goDetail}
+          />
+        </div>
       )}
 
       {view === 'create' && (
-        <NoticeCreateModal
-          onBack={goList}
-        />
+        <div className="modal_inner write">
+          <div className="modal_top clear">
+            <p>공지사항 관리<span>공지사항 글쓰기</span></p>
+            <button className="modalClose" onClick={() => onClose()}></button>
+          </div>
+          <NoticeCreateModal
+            onBack={goList}
+          />
+        </div>
       )}
     </ModalLayout>
   );

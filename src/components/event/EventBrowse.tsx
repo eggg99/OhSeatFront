@@ -242,13 +242,18 @@ export default function EventList () {
                     </div>
                 </div>
 
-                {eventList &&
-                  <Pagination
-                    currentPage={eventList.number}
-                    totalPages={eventList.totalPages}
-                    onPageChange={handlePageChange}
-                  />
-                }
+                <div className="post_button_wrap clear">
+                    <div className="left">
+                        {eventList &&
+                          <Pagination
+                            currentPage={eventList.number}
+                            totalPages={eventList.totalPages}
+                            onPageChange={handlePageChange}
+                          />
+                        }
+                    </div>
+                </div>
+
             </section>
         </div>
     )

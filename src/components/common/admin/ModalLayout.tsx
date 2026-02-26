@@ -1,4 +1,5 @@
 import './temp.scss'
+import React from "react";
 
 interface ModalProps {
   isOpen: boolean;
@@ -10,13 +11,8 @@ export default function ModalLayout({ isOpen, onClose, children }: ModalProps) {
   if (!isOpen) return null;
 
   return (
-    <div className="modal_overlay" onClick={onClose}>
-      <div
-        className="modal_container"
-        onClick={(e) => e.stopPropagation()}
-      >
+    <div id="os_modal_wrap" onClick={(e) => e.stopPropagation()}>
         {children}
-      </div>
     </div>
   );
 }

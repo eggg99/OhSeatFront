@@ -39,7 +39,6 @@ export default function NoticeEditModal({
     }
   }
 
-
   const edit = async () => {
     if (!inputValue.title) {alert('제목을 입력해주세요'); return;}
     else if(!inputValue.content){alert('내용을 입력해주세요'); return;}
@@ -50,43 +49,54 @@ export default function NoticeEditModal({
     onBack(noticeId);
   }
 
-
   return (
     <>
-      {/* header */}
-      <div className="modal_header">
-        <h3 className="modal_title">공지 수정</h3>
-      </div>
-      <div>
-        <div>
-          <input
-            type="text"
-            name="title"
-            value={inputValue.title}
-            onChange={handleInput}
-            placeholder="제목을 입력해 주세요."
-            className="post_title_input"
-            required
-          />
-        </div>
-        <div>
-          <textarea
-            name="content"
-            placeholder="내용을 입력하세요"
-            value={inputValue.content}
-            onChange={handleInput}
-            required
-          />
-        </div>
-      </div>
+      <div className="modal_contents">
+        <table className="basic_board2">
+          <colgroup>
+            <col style={{width: '25%'}}/>
+            <col style={{width: '25%'}}/>
+            <col style={{width: '25%'}}/>
+            <col style={{width: '25%'}}/>
+          </colgroup>
+          <tbody>
+          <tr>
+            <td colSpan={3}>
+              <input
+                type="text"
+                name="title"
+                value={inputValue.title}
+                onChange={handleInput}
+                placeholder="제목을 입력해 주세요."
+                className="post_title_input"
+                required
+              />
+            </td>
+          </tr>
+          <tr>
+            <td colSpan={4}>
+              <div className="post_textarea_wrap">
+                <textarea
+                  name="content"
+                  placeholder="내용을 입력하세요"
+                  value={inputValue.content}
+                  onChange={handleInput}
+                  required
+                />
+              </div>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+        <div className="post_button_wrap clear">
+          <div className="left">
+            <a href="#" className="post_button" onClick={() => onBack(noticeId)}>뒤로가기</a>
+          </div>
 
-      <div className="modal_button_group">
-        <button className="btn btn_primary" onClick={() => edit()}>
-          공지 수정하기
-        </button>
-        <button className="btn btn_primary" onClick={() => onBack(noticeId)}>
-          뒤로
-        </button>
+          <div className="right">
+            <a href="#" className="post_button write" onClick={() => edit()}>수정</a>
+          </div>
+        </div>
       </div>
     </>
   );

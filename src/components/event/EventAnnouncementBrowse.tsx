@@ -221,13 +221,17 @@ export default function EventAnnouncementBrowse () {
                     </div>
                 </div>
 
-                {announcementList &&
-                    <Pagination
-                        currentPage={announcementList.number}
-                        totalPages={announcementList.totalPages}
-                        onPageChange={handlePageChange}
-                    />
-                }
+                <div className="post_button_wrap clear">
+                    <div className="left">
+                        {announcementList &&
+                            <Pagination
+                                currentPage={announcementList.number}
+                                totalPages={announcementList.totalPages}
+                                onPageChange={handlePageChange}
+                            />
+                        }
+                    </div>
+                </div>
             </section>
         </div>
     )

@@ -34,40 +34,53 @@ export default function NoticeCreateModal({
 
   return (
     <>
-      {/* header */}
-      <div className="modal_header">
-        <h3 className="modal_title">공지 등록</h3>
-      </div>
-      <div>
-        <div>
-          <input
-            type="text"
-            name="title"
-            value={inputValue.title}
-            onChange={handleInput}
-            placeholder="제목을 입력해 주세요."
-            className="post_title_input"
-            required
-          />
-        </div>
-        <div>
-          <textarea
-            name="content"
-            placeholder="내용을 입력하세요"
-            value={inputValue.content}
-            onChange={handleInput}
-            required
-          />
-        </div>
-      </div>
+      <div className="modal_contents">
+        <table className="basic_board2">
+          <colgroup>
+            <col style={{width: '25%'}}/>
+            <col style={{width: '25%'}}/>
+            <col style={{width: '25%'}}/>
+            <col style={{width: '25%'}}/>
+          </colgroup>
+          <tbody>
+          <tr>
+            <td colSpan={4}>
+              <input
+                type="text"
+                name="title"
+                value={inputValue.title}
+                onChange={handleInput}
+                placeholder="제목을 입력해 주세요."
+                className="post_title_input"
+                required
+              />
+            </td>
+          </tr>
+          <tr>
+            <td colSpan={4}>
+              <div className="post_textarea_wrap">
+                <textarea
+                  name="content"
+                  placeholder="내용을 입력하세요"
+                  value={inputValue.content}
+                  onChange={handleInput}
+                  required
+                />
+              </div>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+        <div className="post_button_wrap clear">
+          <div className="left">
+            <a href="#" className="post_button" onClick={onBack}>목록</a>
+          </div>
 
-      <div className="modal_button_group">
-        <button className="btn btn_primary" onClick={() => create()}>
-          공지 등록하기
-        </button>
-        <button className="btn btn_primary" onClick={onBack}>
-          뒤로
-        </button>
+          <div className="right">
+            <a href="#" className="post_button write" onClick={() => create()}>등록</a>
+          </div>
+        </div>
+
       </div>
     </>
   );

@@ -23,9 +23,9 @@ export default function NoticeDetailModal({
     createdAt:'-' ,
     views:0 ,
   });
+  const [isMenuOn, setMenuOn] = useState(false);
 
   useEffect(() => {
-    console.log('여기로오나요?')
     if (!noticeId) return;
     getData();
   }, [noticeId]);
@@ -58,32 +58,55 @@ export default function NoticeDetailModal({
     }
   }
 
+  // 수정 / 삭제 메뉴 버튼 클릭
+  const handleInnerToggle = () => {
+    setMenuOn((prev) => !prev);
+  };
+
   return (
     <>
-      {/* header */}
-      <div className="modal_header">
-        <h3 className="modal_title">공지 상세: {noticeId}번 게시글</h3>
-      </div>
+      <div className="modal_contents">
+        <div className="theater_detail_board_wrap">
+          <div className="detail_header">
+            <h3>{detailValue?.title}</h3>
+            <div className="post_user_wrap">
+              <p>{detailValue?.authorNickName}</p>
+              <span>{detailValue?.createdAtDate} <i>{detailValue?.createdAtTime}</i></span>
+            </div>
+            <div className="post_control_wrap clear">
+              <a href="#" className="post_hits_button">조회수
+                <span>{detailValue?.views ?? 0}</span>
+              </a>
 
-      <div>
-        <h3>제목 : {detailValue?.title}</h3>
-        <div>내용 : {detailValue?.content}</div>
-        <div>작성자 : {detailValue?.authorNickName}</div>
-        <div>조회수 : {detailValue?.views}</div>
-        <div>작성일 : {detailValue?.createdAtDate}</div>
-        <div>작성시간 : {detailValue?.createdAtTime}</div>
-      </div>
+              <a href="#" className={`post_setting_button ${isMenuOn ? "on" : ""}`} onClick={handleInnerToggle}>
+                <span className="blind">더보기</span>
+              </a>
 
-      <div className="modal_button_group">
-        <button className="btn btn_primary" onClick={() => onEdit(noticeId)}>
-          공지 수정
-        </button>
-        <button className="btn btn_primary" onClick={() => onDelete(noticeId)}>
-          공지 삭제
-        </button>
-        <button className="btn btn_primary" onClick={onBack}>
-          뒤로
-        </button>
+              <div className="post_setting_wrap">
+                <ul className="post_setting_list">
+                  <li><a href="#" onClick={() => onDelete(noticeId)}>게시글 삭제</a></li>
+                  <li><a href="#" onClick={() => onEdit(noticeId)}>게시글 수정</a></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div className="detail_contents">
+            <pre>{detailValue?.content}</pre>
+          </div>
+
+          <div className="detail_footer">
+            <div className="post_reaction_wrap clear">
+              <a href="#" className="post_hits_button">조회수
+                <span>{detailValue?.views ?? 0}</span>
+              </a>
+            </div>
+          </div>
+        </div>
+        <div className="post_button_wrap clear">
+          <div className="left">
+            <a href="#" className="post_button" onClick={onBack}>목록</a>
+          </div>
+        </div>
       </div>
     </>
   );

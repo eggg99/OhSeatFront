@@ -283,7 +283,7 @@ export default function BrandIndex() {
                                   type="button"
                                   className="notice_set_button"
                                   onClick={() => openModal()}>
-                                    공지글 관리
+                                    공지사항 관리
                                 </button>
                                 </>
                                 )}
@@ -329,13 +329,17 @@ export default function BrandIndex() {
                             {isLogin && <Link to={`/recommend/${brand}/reg`} className="post_button write">글쓰기</Link>}
                         </div>
                 </div>
-                {postList &&
-                    <Pagination
-                        currentPage={postList.number}
-                        totalPages={postList.totalPages}
-                        onPageChange={handlePageChange}
-                    />
-                }
+                <div className="post_button_wrap clear">
+                    <div className="left">
+                        {postList &&
+                            <Pagination
+                                currentPage={postList.number}
+                                totalPages={postList.totalPages}
+                                onPageChange={handlePageChange}
+                            />
+                        }
+                    </div>
+                </div>
             </section>
 
             {/*관리자 공지사항 모달*/}
