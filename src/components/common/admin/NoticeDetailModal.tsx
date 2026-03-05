@@ -1,4 +1,4 @@
-import {getNotice, deleteNotice} from "@/apis/api/admin";
+import {getNoticeDetail, deleteNotice} from "@/apis/api/admin";
 import { useEffect, useState } from "react";
 import { NoticeDetailData } from "@/types/Notice";
 import {formatDateTime} from "@/utils/format";
@@ -32,7 +32,7 @@ export default function NoticeDetailModal({
 
   const getData = async () => {
     try{
-      const response = await getNotice(noticeId, {});
+      const response = await getNoticeDetail(noticeId);
       const { date, time } = formatDateTime(response.createdAt);
       setDetailValue({
         ...response,

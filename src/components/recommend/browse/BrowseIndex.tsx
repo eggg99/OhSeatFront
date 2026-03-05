@@ -84,7 +84,7 @@ export default function BrowseIndex() {
     }, [page, orderType, size]);
 
     // 1위 영화관
-    const firstCinema = topCinemas[0];
+    const firstCinema = topCinemas?.[0];
 
     // 페이지 변경
     const handlePageChange = (newPage: number) => {
@@ -142,7 +142,7 @@ export default function BrowseIndex() {
                         </div>
 
                         <ul className="rank5_list">
-                            {topCinemas.map((cinema, idx) => (
+                            {topCinemas?.map((cinema, idx) => (
                                 <li key={cinema.cinemaId}>
                                     <Link to={`/recommend/${getMultiplexBrand(cinema.multiplexId)}`} >
                                         <span className="number">{idx + 1}</span>

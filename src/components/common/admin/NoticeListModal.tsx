@@ -1,6 +1,6 @@
 import { NoticePage } from "@/types/Notice";
 import { useEffect, useState } from "react";
-import { getNoticeList } from "@/apis/api/admin";
+import { getNoticeList,updatePinned, updateActive } from "@/apis/api/admin";
 import {Pagination} from "@/components/common/Pagination";
 
 interface NoticeListModalProps {
@@ -26,6 +26,102 @@ export default function NoticeListModal({
   useEffect(() => {
     getList();
   }, [page]);
+
+  // 고정여부
+  const handlePinnedChange = async (
+    id: number,
+    currentPinned: number,
+    currentActive: number
+  ) => {
+    if (currentActive !== 1) {
+      alert("비활성 공지는 고정할 수 없습니다.");
+      return;
+    }
+
+    const nextPinned = currentPinned === 1 ? 0 : 1;
+
+    // 1. UI 먼저 반영 (optimistic update)
+    setNoticeList(prev => {
+      if (!prev) return prev;
+
+      return {
+        ...prev,
+        content: prev.content.map(item => item.noticeId === id ? { ...item, isPinned: nextPinned } : item)
+      };
+    });
+
+    // 🔹 2. 서버 반영
+    try {
+      await updatePinned(id);
+    } catch (e) {
+      console.error(e);
+
+      // 🔹 3. 실패 시 롤백
+      setNoticeList(prev => {
+        if (!prev) return prev;
+
+        return {
+          ...prev,
+          content: prev.content.map(item => item.noticeId === id ? { ...item, isPinned: currentPinned } : item)
+        };
+      });
+
+      alert("고정 변경 실패");
+    }
+  }
+
+  const handleActiveChange = async (id: number, currentActive: number) => {
+    const nextActive = currentActive === 1 ? 0 : 1;
+
+    // 🔹 1. UI 먼저 반영
+    setNoticeList(prev => {
+      if (!prev) return prev;
+
+      return {
+        ...prev,
+        content: prev.content.map(item =>
+          item.noticeId === id
+            ? {
+              ...item,
+              isActive: nextActive,
+              isPinned: nextActive === 0 ? 0 : item.isPinned // 🔥 핵심
+            }
+            : item
+        )
+      };
+    });
+
+    // 🔹 2. 서버 반영
+    try {
+      await updateActive(id, {
+        isActive: nextActive === 1
+      });
+      // 🔹 3. 비활성으로 바뀐 경우, 서버에도 고정 해제 반영 필요하면
+      if (nextActive === 0) {
+        await updatePinned(id);
+        // ⚠️ updatePinned가 toggle 방식이면 이게 맞고,
+        // 명시적으로 pin 해제 API면 그에 맞게 수정
+      }
+    } catch (e) {
+      console.error(e);
+
+      // 🔹 3. 실패 시 롤백
+      setNoticeList(prev => {
+        if (!prev) return prev;
+
+        return {
+          ...prev,
+          content: prev.content.map(item =>
+            item.noticeId === id
+              ? { ...item, isActive: currentActive }
+              : item
+          )
+        };
+      });
+
+      alert("활성화 변경 실패");
+    }
+  };
 
   return (
     <>
@@ -64,8 +160,10 @@ export default function NoticeListModal({
                       className="modal_num1"
                       id={`modal_check_${item.noticeId}`}
                       checked={item.isPinned === 1}
+                      disabled={item.isActive !== 1}
+                      onChange={() => handlePinnedChange(item.noticeId, item.isPinned, item.isActive)}
                     />
-                    <label htmlFor={`modal_check_${item.noticeId}`}>고정</label>
+                    <label htmlFor={`modal_check_${item.noticeId}`} style={{ color: item.isActive !== 1 ? "#a1a1a1" : "" }}>고정</label>
                   </td>
                   <td><a href="#" onClick={() => onSelect(item.noticeId)}>{item.title}</a></td>
                   <td className="txtc">
@@ -74,7 +172,7 @@ export default function NoticeListModal({
                       className="modal_toggle"
                       id={`modal_toggle_${item.noticeId}`}
                       checked={item.isActive === 1}
-                      readOnly
+                      onChange={() => handleActiveChange(item.noticeId, item.isActive)}
                     />
                     <label htmlFor={`modal_toggle_${item.noticeId}`}>
                       <span className="mt_off">OFF</span>

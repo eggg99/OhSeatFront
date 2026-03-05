@@ -1,6 +1,6 @@
 import { axiosApi } from "@/apis/utils/instance";
 
-// 공지사항 조회 - 좌석추천 - 유저용
+// 공지사항 리스트 조회 - 좌석추천 - 유저용
 export const getRecommendNotice = async (targetBoard) => {
     try{
         const response = await axiosApi.get(`/notices/top`, {params: { targetBoard }})
@@ -20,10 +20,20 @@ export const getNoticeList = async (targetBoard) => {
     }
 }
 
-// 공지사항 상세
+// 공지사항 리스트 상세 - 유저용
 export const getNotice = async (id, param) => {
     try{
         const response = await axiosApi.get(`/notices/${id}`, param)
+        return response.data;
+    } catch (error) {
+        console.error("공지사항 상세 조회 실패: ", error);
+    }
+}
+
+// 공지사항 리스트 상세 - 관리자용
+export const getNoticeDetail = async (id) => {
+    try{
+        const response = await axiosApi.get(`/admin/notices/${id}`, {})
         return response.data;
     } catch (error) {
         console.error("공지사항 상세 조회 실패: ", error);
@@ -67,5 +77,25 @@ export const deleteAdminPost = async (param) => {
         return response.data;
     } catch (error) {
         console.error("공지사항 삭제 실패: ", error);
+    }
+}
+
+// 고정 여부 변경
+export const updatePinned = async(id, param) => {
+    try{
+        const response = await axiosApi.patch(`/admin/notices/${id}/pin`, param)
+        return response.data;
+    } catch (error) {
+        console.error("게시글 삭제 실패: ", error);
+    }
+}
+
+// 활성화 여부 변경
+export const updateActive = async(id, param) => {
+    try{
+        const response = await axiosApi.patch(`/admin/notices/${id}/active`, param)
+        return response.data;
+    } catch (error) {
+        console.error("게시글 삭제 실패: ", error);
     }
 }

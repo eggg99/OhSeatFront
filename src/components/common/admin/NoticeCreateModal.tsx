@@ -2,11 +2,13 @@ import {insertNotice} from "@/apis/api/admin";
 import { useState } from "react";
 
 interface NoticeCreateModalProps {
+  onSelect: (noticeId: number) => void;
   onBack: () => void;
 }
 export default function NoticeCreateModal({
-                                          onBack,
-                                        }: NoticeCreateModalProps) {
+  onSelect,
+  onBack,
+}: NoticeCreateModalProps) {
 
   const [inputValue, setInputValue] = useState({
     targetBoard:'recommend',
@@ -22,14 +24,21 @@ export default function NoticeCreateModal({
     });
   };
 
-  const create = () => {
+  const create = async () => {
     if (!inputValue.title) {alert('제목을 입력해주세요'); return;}
     else if(!inputValue.content){alert('내용을 입력해주세요'); return;}
-    const param = {'targetBoard':inputValue.targetBoard, 'title':inputValue.title, 'content':inputValue.content};
-    const res = insertNotice(param);
+    try {
+      const param = {'targetBoard':inputValue.targetBoard, 'title':inputValue.title, 'content':inputValue.content};
+      const res = await insertNotice(param);
 
-    alert ('등록되었습니다');
-    onBack();
+      if (res) {
+        alert (res?.message);
+        onSelect(res?.noticeId);
+      }
+    } catch (error) {
+      alert('등록에 실패했습니다.')
+      console.error(error);
+    }
   }
 
   return (
@@ -75,7 +84,6 @@ export default function NoticeCreateModal({
           <div className="left">
             <a href="#" className="post_button" onClick={onBack}>목록</a>
           </div>
-
           <div className="right">
             <a href="#" className="post_button write" onClick={() => create()}>등록</a>
           </div>

@@ -78,6 +78,7 @@ export default function NoticeModal({ isOpen, onClose }: ModalLayoutProps) {
           </div>
           <NoticeCreateModal
             onBack={goList}
+            onSelect={goDetail}
           />
         </div>
       )}

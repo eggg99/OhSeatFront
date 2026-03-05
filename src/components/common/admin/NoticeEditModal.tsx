@@ -42,11 +42,18 @@ export default function NoticeEditModal({
   const edit = async () => {
     if (!inputValue.title) {alert('제목을 입력해주세요'); return;}
     else if(!inputValue.content){alert('내용을 입력해주세요'); return;}
-    const param = {'targetBoard':inputValue.targetBoard, 'title':inputValue.title, 'content':inputValue.content};
-    const res = await updateNotice(noticeId, param);
+    try {
+      const param = {'targetBoard': inputValue.targetBoard, 'title': inputValue.title, 'content': inputValue.content};
+      const res = await updateNotice(noticeId, param);
 
-    alert ('수정되었습니다');
-    onBack(noticeId);
+      if (res) {
+        alert('수정되었습니다');
+        onBack(noticeId);
+      }
+    } catch (error) {
+      alert('수정에 실패했습니다.')
+      console.error(error);
+    }
   }
 
   return (
