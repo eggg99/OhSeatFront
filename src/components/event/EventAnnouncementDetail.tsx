@@ -21,7 +21,7 @@ export default function EventAnnouncementDetail () {
         createdAtTime: '', // 시간
         content : '',
         likeCount:0,
-        isLiked : false,
+        liked : false,
         prevSeq : 0,
         nextSeq : 0,
         views : 0
@@ -74,14 +74,14 @@ export default function EventAnnouncementDetail () {
                 const res = await postEventAnnouncementLike(eventId)
                 setDetailValue((prev) => ({
                     ...prev,
-                    isLiked: isChecked,
+                    liked: isChecked,
                     likeCount: prev.likeCount + 1,
                 }));
             } else {
                 const res = await deleteEventAnnouncementLike(eventId)
                 setDetailValue((prev) => ({
                     ...prev,
-                    isLiked: isChecked,
+                    liked: isChecked,
                     likeCount: Math.max(prev.likeCount - 1, 0),
                 }));
             }
@@ -188,7 +188,7 @@ export default function EventAnnouncementDetail () {
                                       type="checkbox"
                                       id="like"
                                       hidden
-                                      checked={detailValue.isLiked}
+                                      checked={detailValue.liked}
                                       onChange={handleLike}
                                     />
                                     <label htmlFor="like" className="like-btn">
