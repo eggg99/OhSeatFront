@@ -58,14 +58,16 @@ export default function Join(){
   }
 
   const duplicateNick = async () => {
-    const param = {}
+    const param = {nickname : inputValue.nickname};
     try{
       const response = await duplicateNickname(param);
       if (response) {
-        alert('사용할 수 있습니다.');
-        inputValue.validDuplicate = true;
+        if (!response.duplicated) {
+          alert('사용가능한 닉네임입니다');
+          inputValue.validDuplicate = true;
+        }
       } else {
-        alert('사용할 수 없습니다.')
+        alert('중복된 닉네임입니다')
         inputValue.validDuplicate = false;
       }
     } catch (error) {
@@ -161,7 +163,7 @@ export default function Join(){
               value={inputValue.phoneNumber}
               onChange={handleInput}
               required
-              maxLength={12}/>
+              maxLength={11}/>
           </li>
           <li>
             <span>닉네임<i>글자 수 15자 제한</i></span>
