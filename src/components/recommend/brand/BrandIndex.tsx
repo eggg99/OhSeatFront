@@ -10,8 +10,7 @@ import { MULTIPLEX_LIST } from "@/constants/multiplex";
 import { AREA_LIST } from "@/constants/area";
 import { userStore } from "@/store/userStore";
 import { Pagination } from "@/components/common/Pagination";
-
-import { NoticeData, NoticeListType } from "@/types/Notice";
+import { NoticeData, NoticePage } from "@/types/Notice";
 import { RecommendList } from "@/components/common/list/RecommendList";
 import NoticeModal from "@/components/common/admin/NoticeModal";
 
@@ -36,7 +35,6 @@ export default function BrandIndex() {
     const [selectedCinema, setSelectedCinema] = useState<any | null>(ALL_CINEMA);
     const [screenList, setScreenList] = useState<any[]>([]);
     const [selectedScreen, setSelectedScreen] = useState<any | null>(ALL_SCREEN);
-
     const [isInnerOn, setIsInnerOn] = useState(false);
 
     const [postList, setPostList] = useState<PostPage | null>(null);
@@ -52,6 +50,8 @@ export default function BrandIndex() {
         const response = await getCinemaList(multiplexId, areaId);           // 영화관 리스트 조회 api
         setCinemaList(response?.length ? [ALL_CINEMA, ...response] : [ALL_CINEMA]); // 영화관 리스트 설정
         setSelectedCinema(ALL_CINEMA);                                              // 영화관 '전체'로 설정
+        setSelectedScreen(ALL_SCREEN);                                              // 상영관 '전체'로 설정
+        setIsInnerOn(false);                                                 // 영화관 전체보기 닫기
     };
 
     // 영화관 선택
@@ -60,11 +60,13 @@ export default function BrandIndex() {
         const response = await getScreenList(multiplexId, cinema.cinemaId);  // 상영관 리스트 조회 api
         setScreenList(response?.length ? [ALL_SCREEN, ...response] : [ALL_SCREEN])  // 상영관 리스트 설정
         setSelectedScreen(ALL_SCREEN);                                              // 상영관 '전체'로 설정
+        setIsInnerOn(false);                                                 // 영화관 전체보기 닫기
     };
 
     // 상영관 선택
     const handleScreenChange = async (screen: any) => {
         setSelectedScreen(screen);                                                  // 선택한 상영관 설정
+        setIsInnerOn(false);                                                 // 영화관 전체보기 닫기
     }
 
     // 게시글 리스트 조회
@@ -235,7 +237,8 @@ export default function BrandIndex() {
                     <div className="embla" ref={emblaRef3}>
                         <div className="embla__container">
                             <ul className="branch_screen_list clear flex flex-nowrap">
-                            {(selectedCinema.cinemaId !== 'all_c') && screenList.map((screen) => {
+                            {(selectedCinema.cinemaId !== 'all_c') &&
+                              screenList.map((screen) => {
                                 const isChecked = selectedScreen?.screenId === screen.screenId;
                                 return(
                                     <li key={screen.screenId} className={`embla__slide flex-none ${isChecked ? "on" : ""}`}>
@@ -280,7 +283,7 @@ export default function BrandIndex() {
                                   type="button"
                                   className="notice_set_button"
                                   onClick={() => openModal()}>
-                                    공지글 관리
+                                    공지사항 관리
                                 </button>
                                 </>
                                 )}
@@ -326,13 +329,17 @@ export default function BrandIndex() {
                             {isLogin && <Link to={`/recommend/${brand}/reg`} className="post_button write">글쓰기</Link>}
                         </div>
                 </div>
-                {postList &&
-                    <Pagination
-                        currentPage={postList.number}
-                        totalPages={postList.totalPages}
-                        onPageChange={handlePageChange}
-                    />
-                }
+                <div className="post_button_wrap clear">
+                    <div className="left">
+                        {postList &&
+                            <Pagination
+                                currentPage={postList.number}
+                                totalPages={postList.totalPages}
+                                onPageChange={handlePageChange}
+                            />
+                        }
+                    </div>
+                </div>
             </section>
 
             {/*관리자 공지사항 모달*/}

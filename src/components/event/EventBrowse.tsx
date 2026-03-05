@@ -1,32 +1,13 @@
-import { getEventList } from "@/apis/api/event";
 import { useEffect, useState } from "react"
 import { Link, useNavigate } from "react-router-dom";
 import { Pagination } from "@/components/common/Pagination";
 import { userStore } from "@/store/userStore";
 import { useSearchParams } from 'react-router-dom';
 import { EVENT_CATE } from '@/constants/category_event';
+import { getEventList } from "@/apis/api/event";
 import { deleteAdminPost } from "@/apis/api/admin";
-
-import sampleImg from '@/styles/img/20251114_1763095341305333606.png';
-
-interface EventData {
-    id : number;            // 시퀀스
-    category : string;      // 카테고리
-    title : string;         // 제목
-    startDt : Date;         // 시작기간
-    endDt : Date;           // 종료기간
-    isEnd : Boolean;        // 종료여부
-    imgUrl : string;        // 이미지url
-}
-
-interface EventDataPage {
-    content : EventData[];
-    totalPages : number;
-    totalElements : number;
-    number: number;
-    first : boolean;
-    last : boolean;
-}
+import { EventItem } from "@/components/common/item/EventItem";
+import type  {EventDataPage, EventData} from "@/types/Event";
 
 export default function EventList () {
     const navigate = useNavigate();
@@ -40,6 +21,7 @@ export default function EventList () {
 
     const [eventList, setEventList] = useState<EventDataPage | null>(null);
     const [page, setPage] = useState<number>(0);
+    const size = 20;
     const [orderType, setOrderType] = useState<string>('');
     const [selectedPostIds, setSelectedPostIds] = useState<number[]>([]);       // 관리자용 삭제할 게시글 배열
 
@@ -48,7 +30,7 @@ export default function EventList () {
             await getList();
         }
         fetchData();
-    }, [category, orderType]);
+    }, [category, orderType, page]);
 
     // 페이지 로드 시 URL에 있는 쿼리로 초기화
     useEffect(() => {
@@ -72,9 +54,6 @@ export default function EventList () {
 
     const handleSearch = async () => {
         if (!searchValue.trim()) return; // 빈값 방지
-        // 실제 검색 로직 (API 호출 등)을 여기에 추가
-        console.log('검색 실행:', searchValue);
-
         await getList();
     };
 
@@ -87,13 +66,19 @@ export default function EventList () {
     // 게시글 리스트 조회
     const getList = async () => {
         try {
-            const param = { 'searchType' : searchType , 'searchValue' : searchValue}
+            const param = {
+                'categoryId' : category,
+                'searchType' : searchType ,
+                'searchValue' : searchValue,
+                'orderType' : orderType,
+                'page' : page,
+                'size' : size,
+            }
             const response = await getEventList(param);
             if(!response) {
-                console.log('게시글 조회 실패');
+                console.error('게시글 조회 실패');
             }
-            // console.log('게시글 조회 완료');
-            // setEventList(response);
+            setEventList(response);
         } catch (error) {
             console.error('게시글 조회 실패' , error);
         }
@@ -103,10 +88,13 @@ export default function EventList () {
     const handlePageChange = (newPage: number) => setPage(newPage);
 
     // 정렬 변경
-    const handleOrderChange = (newOrder: string) => setOrderType(newOrder);
+    const handleOrderChange = (newOrder: string) => {
+        setOrderType(newOrder);
+        setPage(0);
+    };
 
     // 편집모드 변경
-    const toggleEditMode = () => {
+    const handleSelectPost = () => {
         setIsEditMode(prev => {
             const next = !prev;
 
@@ -127,7 +115,7 @@ export default function EventList () {
         }
         try {
             const param = {
-                boardType : 'CINESQUARE',
+                boardType : 'EVENT',
                 postIds : selectedPostIds,
             }
             await deleteAdminPost(param);
@@ -139,7 +127,7 @@ export default function EventList () {
             // list 불러오기
             await getList();
         } catch (error) {
-            console.log(error);
+            console.error(error);
         }
     }
     return (
@@ -177,11 +165,14 @@ export default function EventList () {
             <section className="os_search_wrap">
                 <ul className="os_search_list">
                     <li>
-                        <select>
+                        <select
+                          value={searchType}
+                          onChange={(e) => setSearchType(e.target.value)}
+                        >
                             {EVENT_CATE.map((cate) => (
                               <option
                                 key={cate.id}
-                                onClick={() => setSearchType(cate.id)}
+                                value={cate.id}
                               >
                                   {cate.name}
                               </option>
@@ -220,55 +211,34 @@ export default function EventList () {
                                 <button
                                   type="button"
                                   className={`edit_button ${isEditMode ? 'on' : ''}`}
-                                  onClick={toggleEditMode}
+                                  onClick={handleSelectPost}
                                 >편집 모드</button>
                               </>
                             )}
                         </div>
-                        <select>
-                            <option onClick={() =>handleOrderChange('latest')}>최신순</option>
-                            <option onClick={() =>handleOrderChange('views')}>조회순</option>
-                            <option onClick={() =>handleOrderChange('likes')}>추천순</option>
+                        <select
+                          value={orderType}
+                          onChange={(e) => handleOrderChange(e.target.value)}
+                        >
+                            <option value="latest">최신순</option>
+                            <option value="views">조회순</option>
+                            <option value="likes">추천순</option>
                         </select>
                     </div>
                 </div>
 
                 <div className="basic_board3_wrap">
                     <ul className="os_event_list">
-                        {eventList && eventList.content.length > 0 ? (
-                          eventList.content.map((item, index) => (
-                            <li
-                              key={item?.id}
-                              onClick={() => {
-                                  if (isEditMode) {
-                                      handleSelectPost(item.postId);
-                                  } else {
-                                      navigate(`/event/${item?.id}`)
-                                  }
-                              }}
-                            >
-                                <a
-                                  href="#"
-                                  className={`
-                                    event_post_wrap 
-                                    ${isEditMode ? 'edit_mode' : ''}
-                                    ${selectedPostIds.includes(item.postId) ? 'checked' : ''}
-                                  `}>
-                                    <div className="event_category">
-                                        <i>{item?.category}</i>
-                                        {item.isEnd && <i className="end">종료</i>}
-                                    </div>
-                                    <img src={item?.imgUrl} alt={item?.title}/>
-                                    <p>{item?.title}</p>
-                                    <span>
-                                        {item.startDt.toLocaleDateString()} ~ {item.endDt.toLocaleDateString()}
-                                    </span>
-                                </a>
-                            </li>
-                          ))
-                        ) : (
-                          <li><a href="#" className="event_post_wrap">이벤트가 없습니다 🥲</a></li>
-                        )}
+                        {eventList &&
+                          <>
+                            <EventItem
+                              eventList = {eventList.content}
+                              isEdit = {isEditMode}
+                              selectedIds = {selectedPostIds}
+                              onSelectEvent = {handleSelectPost}
+                            />
+                          </>
+                        }
                     </ul>
                 </div>
 
@@ -278,13 +248,18 @@ export default function EventList () {
                     </div>
                 </div>
 
-                {eventList &&
-                  <Pagination
-                    currentPage={eventList.number}
-                    totalPages={eventList.totalPages}
-                    onPageChange={handlePageChange}
-                  />
-                }
+                <div className="post_button_wrap clear">
+                    <div className="left">
+                        {eventList &&
+                          <Pagination
+                            currentPage={eventList.number}
+                            totalPages={eventList.totalPages}
+                            onPageChange={handlePageChange}
+                          />
+                        }
+                    </div>
+                </div>
+
             </section>
         </div>
     )

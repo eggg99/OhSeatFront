@@ -1,3 +1,5 @@
+import {updateNotice, getNotice} from "@/apis/api/admin";
+import {useEffect, useState } from "react";
 
 interface NoticeEditModalProps {
   noticeId: number;
@@ -8,29 +10,100 @@ export default function NoticeEditModal({
                                           onBack,
                                         }: NoticeEditModalProps) {
 
-  const edit = () => {
-    alert ('등록되었습니다');
-    onBack(noticeId);
+  useEffect(() => {
+    if(noticeId) getData();
+  }, [noticeId]);
+
+  const [inputValue, setInputValue] = useState({
+    targetBoard:'recommend',
+    title:'',
+    content:''
+  })
+
+  const handleInput = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setInputValue({
+      ...inputValue,
+      [name]: value
+    });
+  };
+
+  const getData = async () => {
+    try{
+      const response = await getNotice(noticeId, {});
+      setInputValue({
+        ...response,
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  const edit = async () => {
+    if (!inputValue.title) {alert('제목을 입력해주세요'); return;}
+    else if(!inputValue.content){alert('내용을 입력해주세요'); return;}
+    try {
+      const param = {'targetBoard': inputValue.targetBoard, 'title': inputValue.title, 'content': inputValue.content};
+      const res = await updateNotice(noticeId, param);
+
+      if (res) {
+        alert('수정되었습니다');
+        onBack(noticeId);
+      }
+    } catch (error) {
+      alert('수정에 실패했습니다.')
+      console.error(error);
+    }
   }
 
   return (
     <>
-      {/* header */}
-      <div className="modal_header">
-        <h3 className="modal_title">공지 수정</h3>
-      </div>
-      <div>
-        <div>제목 수정하는 곳</div>
-        <div>내용 수정하는 곳</div>
-      </div>
+      <div className="modal_contents">
+        <table className="basic_board2">
+          <colgroup>
+            <col style={{width: '25%'}}/>
+            <col style={{width: '25%'}}/>
+            <col style={{width: '25%'}}/>
+            <col style={{width: '25%'}}/>
+          </colgroup>
+          <tbody>
+          <tr>
+            <td colSpan={3}>
+              <input
+                type="text"
+                name="title"
+                value={inputValue.title}
+                onChange={handleInput}
+                placeholder="제목을 입력해 주세요."
+                className="post_title_input"
+                required
+              />
+            </td>
+          </tr>
+          <tr>
+            <td colSpan={4}>
+              <div className="post_textarea_wrap">
+                <textarea
+                  name="content"
+                  placeholder="내용을 입력하세요"
+                  value={inputValue.content}
+                  onChange={handleInput}
+                  required
+                />
+              </div>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+        <div className="post_button_wrap clear">
+          <div className="left">
+            <a href="#" className="post_button" onClick={() => onBack(noticeId)}>뒤로가기</a>
+          </div>
 
-      <div className="modal_button_group">
-        <button className="btn btn_primary" onClick={() => edit()}>
-          공지 수정하기
-        </button>
-        <button className="btn btn_primary" onClick={() => onBack(noticeId)}>
-          뒤로
-        </button>
+          <div className="right">
+            <a href="#" className="post_button write" onClick={() => edit()}>수정</a>
+          </div>
+        </div>
       </div>
     </>
   );

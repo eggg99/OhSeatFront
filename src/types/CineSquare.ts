@@ -27,6 +27,7 @@ export interface fileData {
   fileSize : number;
   fileType : string;
   isRepresentative :"Y" | "N";
+  fileRole? : string;
 }
 
 export interface CineSquarePage {

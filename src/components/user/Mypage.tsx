@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { getUser, updateUser, deleteUser } from "@/apis/api/user"
+import {getUser, updateUser, deleteUser, duplicateNickname} from "@/apis/api/user"
 import { Link, useNavigate } from 'react-router-dom';
 import { userStore } from "@/store/userStore";
 
@@ -13,6 +13,7 @@ export default function Mypage(){
     email: '',              // 이메일
     nickname: '',           // 닉네임
     phoneNumber: '',        // 핸드폰번호
+    validDuplicate : false, // 닉네임 중복여부
   });
 
   useEffect(() => {
@@ -43,6 +44,7 @@ export default function Mypage(){
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const response = await updateUser(inputValue);
+
     if(!response){
       return;
     } else {
@@ -50,7 +52,6 @@ export default function Mypage(){
         'userId': inputValue.userId,
         'userNick': inputValue.nickname,
         'userEmail': inputValue.email,
-        'isAdmin' : inputValue?.role.toLowerCase() === 'admin',
         'isLogin':true
       })
 
@@ -70,6 +71,26 @@ export default function Mypage(){
       alert("탈퇴가 처리되었습니다.");
       clearUser();
       navigate('/');
+    }
+  }
+
+  // 닉네임 중복확인
+  const duplicateNick = async () => {
+    const param = {nickname : inputValue.nickname};
+    try{
+      const response = await duplicateNickname(param);
+      if (response) {
+        if (!response.duplicated) {
+          alert('사용가능한 닉네임입니다');
+          inputValue.validDuplicate = true;
+        }
+      } else {
+        alert('중복된 닉네임입니다')
+        inputValue.validDuplicate = false;
+      }
+    } catch (error) {
+      alert('에러 발생')
+      console.log(error);
     }
   }
 
@@ -116,8 +137,14 @@ export default function Mypage(){
                   name="nickname"
                   value={inputValue.nickname}
                   onChange={handleInput}
-                  maxLength={15}/>
-                <button type="button">중복확인</button>
+                  maxLength={15}
+                  disabled={inputValue.validDuplicate}
+                />
+                <button
+                  type="button"
+                  onClick={() => duplicateNick()}
+                  disabled={inputValue.validDuplicate}
+                >중복확인</button>
               </div>
             </li>
             <li>

@@ -253,24 +253,26 @@ export default function CineSquareDetail(){
                     </div>
 
                     <div className="detail_contents">
-                        <pre>{detailValue?.content}</pre>
+                        <pre>
+                            {detailValue?.content}
 
-                        {detailValue?.files?.length ? (
-                          // 대표 이미지가 먼저 오도록 정렬
-                          [...detailValue.files]
-                            .sort((a, b) => {
-                                if (a.isRepresentative === 'Y') return -1;
-                                if (b.isRepresentative === 'Y') return 1;
-                                return 0;
-                            })
-                            .map((file) => (
-                              <FilePreview
-                                key={file.fileId} // key 추가
-                                file={file}
-                                previewType="ALL"
-                              />
-                            ))
-                        ) : null}
+                            {detailValue?.files?.length ? (
+                              // 대표 이미지가 먼저 오도록 정렬
+                              [...detailValue.files]
+                                .sort((a, b) => {
+                                    if (a.isRepresentative === 'Y') return -1;
+                                    if (b.isRepresentative === 'Y') return 1;
+                                    return 0;
+                                })
+                                .map((file) => (
+                                  <FilePreview
+                                    key={file.fileId} // key 추가
+                                    file={file}
+                                    previewType="ALL"
+                                  />
+                                ))
+                            ) : null}
+                        </pre>
                     </div>
 
                     <div className="detail_footer">
