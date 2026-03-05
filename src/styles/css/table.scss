@@ -424,6 +424,7 @@ button.os_file_upload {
 		z-index: 10;
 		>i {
 			display: inline-block;
+			width: max-content;
 			padding: 0 8px;
 			font-style: normal;
 			font-size: 14px;
@@ -431,15 +432,23 @@ button.os_file_upload {
 			color: $color_2;
 			background-color: $background-color_10;
 			border-radius: 3px;
+			+ {
+				i {
+					margin-left: 2px;
+				}
+			}
 		}
 		>i.end {
 			background-color: $background-color_7;
 		}
 	}
 	>img {
+		display: block;
 		width: 100%;
-		height: auto;
+		height: 290px;
 		border-radius: 6px;
+		object-fit: cover;
+		object-position: center;
 	}
 	>p {
 		min-height: 52px;

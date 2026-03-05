@@ -14,6 +14,7 @@ $background-color_6: #5b5b5b;
 
 @charset "UTF-8";
 /*헤더*/
+/*푸터*/
 .os_header {
 	position: fixed;
 	top: 0;
@@ -141,10 +142,31 @@ $background-color_6: #5b5b5b;
 }
 .os_gnb {
 	>li.two_depth {
+		padding-bottom: 50px;
 		&:hover {
 			height: 87px;
 			>.os_gnb2 {
 				display: block;
+			}
+		}
+		&:focus-within {
+			>.os_gnb2 {
+				display: block;
+			}
+		}
+	}
+	>li {
+		>.os_gnb2 {
+			opacity: 0;
+			visibility: hidden;
+			transform: translateY(10px);
+			transition: 0.2s ease;
+		}
+		&:hover {
+			>.os_gnb2 {
+				opacity: 1;
+				visibility: visible;
+				transform: translateY(0);
 			}
 		}
 	}
@@ -202,8 +224,6 @@ $background-color_6: #5b5b5b;
 		}
 	}
 }
-
-/*푸터*/
 .os_footer {
 	background-color: $background-color_5;
 }

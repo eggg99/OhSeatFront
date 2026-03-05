@@ -1970,8 +1970,8 @@ $background-color_22: #eeeeee;
 		top: 50%;
 		left: 50%;
 		width: 900px;
-		height: 524px;
-		margin-top: -262px;
+		height: 598px;
+		margin-top: -299px;
 		margin-left: -450px;
 		background: white;
 		border-radius: 10px;
@@ -1981,6 +1981,9 @@ $background-color_22: #eeeeee;
 		width: 900px;
 		height: 758px;
 		margin-top: -379px;
+		>.modal_contents {
+			height: 687px;
+		}
 	}
 }
 .modal_top {
@@ -2018,9 +2021,11 @@ $background-color_22: #eeeeee;
 }
 .modal_contents {
 	position: relative;
-	height: 687px;
 	padding: 30px;
 	box-sizing: border-box;
+	.post_textarea_wrap {
+		height: 497px;
+	}
 	>.post_button_wrap {
 		position: absolute;
 		right: 30px;
@@ -2040,7 +2045,12 @@ $background-color_22: #eeeeee;
 }
 .modal_table_wrap {
 	position: relative;
+	height: 467px;
 	>.post_button_wrap {
+		position: absolute;
+		right: 0;
+		bottom: 0;
+		left: 0;
 		width: auto;
 	}
 }
