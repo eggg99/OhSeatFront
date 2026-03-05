@@ -30,7 +30,7 @@ export default function EventList () {
             await getList();
         }
         fetchData();
-    }, [category, orderType]);
+    }, [category, orderType, page]);
 
     // 페이지 로드 시 URL에 있는 쿼리로 초기화
     useEffect(() => {
@@ -88,7 +88,10 @@ export default function EventList () {
     const handlePageChange = (newPage: number) => setPage(newPage);
 
     // 정렬 변경
-    const handleOrderChange = (newOrder: string) => setOrderType(newOrder);
+    const handleOrderChange = (newOrder: string) => {
+        setOrderType(newOrder);
+        setPage(0);
+    };
 
     // 편집모드 변경
     const handleSelectPost = () => {
@@ -213,10 +216,13 @@ export default function EventList () {
                               </>
                             )}
                         </div>
-                        <select>
-                            <option onClick={() =>handleOrderChange('latest')}>최신순</option>
-                            <option onClick={() =>handleOrderChange('views')}>조회순</option>
-                            <option onClick={() =>handleOrderChange('likes')}>추천순</option>
+                        <select
+                          value={orderType}
+                          onChange={(e) => handleOrderChange(e.target.value)}
+                        >
+                            <option value="latest">최신순</option>
+                            <option value="views">조회순</option>
+                            <option value="likes">추천순</option>
                         </select>
                     </div>
                 </div>
