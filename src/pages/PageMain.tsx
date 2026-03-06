@@ -3,7 +3,7 @@ import { MULTIPLEX_LIST } from "@/constants/multiplex";
 import { getTrendingCinema, top3Post } from "@/apis/api/recommend";
 import { getCineSquareRandom } from "@/apis/api/cinesquare";
 import { useEffect, useState, useRef } from 'react';
-import { Link } from 'react-router-dom';
+import {Link, useNavigate} from 'react-router-dom';
 import WeekString from '@/components/common/WeekString';
 import { getBoxoffice } from '@/apis/api/movie';
 import useEmblaCarousel from 'embla-carousel-react'
@@ -15,6 +15,7 @@ import {getEventMain} from "@/apis/api/event";
 import {fileData} from "@/types/CineSquare";
 import {CATEGORY_LABEL} from "@/types/EventAnn";
 import { FilePreview } from "@/components/common/file/FilePreview";
+import {userStore} from "@/store/userStore";
 
 interface Cinema {
     multiplexId: number;
@@ -58,6 +59,8 @@ interface Event {
 }
 
 export default function PageMain(){
+    const isLogin = userStore((state) => state.isLogin);
+    const navigate = useNavigate();
     const [topCinemas, setTopCinemas] = useState<Cinema>();
     const [recentPost, setRecentPost] = useState<any[]>([]);
     const [cineSquareList, setCineSquareList] = useState<CineSquareData[]>([]);
@@ -216,6 +219,17 @@ export default function PageMain(){
         setEvent(events);
     }
 
+
+    const handleRecommendClick = () => {
+        if (!isLogin) {
+            alert("로그인 후 이용해주세요 🙂");
+            navigate("user/login");
+            return;
+        }
+
+        navigate("/recommend/cgv/reg");
+    };
+
     return(
         <main className="os_main_contents">
             <div className="os_main_visual">
@@ -251,8 +265,12 @@ export default function PageMain(){
                                 </li>
                             ))
                             ) : (
-                                <li>
-                                    데이터가 없습니다.
+                                <li onClick={handleRecommendClick}>
+                                    <a href="#">
+                                        <p>🥺</p>
+                                        <p>추천이 아직 비어있어요!</p>
+                                        <p>첫 번째 추천을 남겨주세요 👉👈</p>
+                                    </a>
                                 </li>
                             )}
                     </ul>
@@ -271,7 +289,9 @@ export default function PageMain(){
                 <div className="mp_list_wrap embla__viewport" ref={emblaRef}>
                     <ul className="mp_list clear embla__container" style={{ display: 'flex', padding: 0, margin: 0 }}>
                     {loading ? (
-                        <li>로딩중...</li>
+                          <li className={`embla__slide rank`}>
+                              <div className="inner"><p>로딩중입니다</p></div>
+                          </li>
                     ) : movies && movies.length > 0 ? (
                         movies.map((item: any) => {
                             const gradeItem =
