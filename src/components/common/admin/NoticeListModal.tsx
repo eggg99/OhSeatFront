@@ -13,7 +13,7 @@ export default function NoticeListModal({
   onCreate,
 }: NoticeListModalProps) {
   const [noticeList, setNoticeList] = useState<NoticePage>();
-  const [page, setPage] = useState<number>(1);
+  const [modalPage, setModalPage] = useState<number>(1);
 
   const getList = async () => {
     const response = await getNoticeList('RECOMMEND')
@@ -21,11 +21,11 @@ export default function NoticeListModal({
   }
 
   // 페이지 변경
-  const handlePageChange = (newPage: number) => {setPage(newPage);}
+  const handlePageChange = (newPage: number) => {setModalPage(newPage);}
 
   useEffect(() => {
     getList();
-  }, [page]);
+  }, [modalPage]);
 
   // 고정여부
   const handlePinnedChange = async (
@@ -40,33 +40,45 @@ export default function NoticeListModal({
 
     const nextPinned = currentPinned === 1 ? 0 : 1;
 
-    // 1. UI 먼저 반영 (optimistic update)
+    // 이미 다른 공지가 pinned 되어 있는지 체크
+    const alreadyPinned = noticeList?.content.find(
+      item => item.isPinned === 1 && item.noticeId !== id
+    );
+
+    if (nextPinned === 1 && alreadyPinned) {
+      const confirmResult = window.confirm(
+        `'${alreadyPinned.title}' 공지가 이미 고정되어 있습니다.\n다른 공지로 바꾸시겠습니까?`
+      );
+
+      if (!confirmResult) return; // 취소하면 아무 동작 안함
+    }
+
+    // UI 먼저 반영 (optimistic update)
     setNoticeList(prev => {
       if (!prev) return prev;
 
       return {
         ...prev,
-        content: prev.content.map(item => item.noticeId === id ? { ...item, isPinned: nextPinned } : item)
+        content: prev.content.map(item => {
+          if (item.noticeId === id) {
+            return { ...item, isPinned: nextPinned };
+          }
+
+          // 다른 공지들은 자동 해제
+          return nextPinned === 1
+            ? { ...item, isPinned: 0 }
+            : item;
+        })
       };
     });
 
-    // 🔹 2. 서버 반영
+    // 2. 서버 반영
     try {
-      await updatePinned(id);
+      await updatePinned(id, {});
     } catch (e) {
       console.error(e);
-
-      // 🔹 3. 실패 시 롤백
-      setNoticeList(prev => {
-        if (!prev) return prev;
-
-        return {
-          ...prev,
-          content: prev.content.map(item => item.noticeId === id ? { ...item, isPinned: currentPinned } : item)
-        };
-      });
-
       alert("고정 변경 실패");
+      await getList();
     }
   }
 
@@ -130,14 +142,12 @@ export default function NoticeListModal({
         <table className="modal_table1">
           <colgroup>
             <col style={{width: '13%'}}/>
-            <col style={{width: '10%'}}/>
-            <col style={{width: '55%'}}/>
-            <col style={{width: '10%'}}/>
-            <col style={{width: '12%'}}/>
+            <col style={{width: '59%'}}/>
+            <col style={{width: '13%'}}/>
+            <col style={{width: '15%'}}/>
           </colgroup>
           <thead>
           <tr>
-            <th>게시판</th>
             <th>고정 여부</th>
             <th>제목</th>
             <th>활성화</th>
@@ -153,7 +163,6 @@ export default function NoticeListModal({
                   key={item.noticeId}
                   className="notice_row"
                 >
-                  <td>씨네광장</td>
                   <td className="txtc">
                     <input
                       type="checkbox"
@@ -184,7 +193,7 @@ export default function NoticeListModal({
               ))
             ) : (
               // noticeList는 있지만 content가 비었을 때
-              <tr className="notice_row"><td colSpan={5}>공지 내역이 없습니다.</td></tr>
+              <tr className="notice_row"><td className={'txtc'} colSpan={5}>공지 내역이 없습니다.</td></tr>
             )
           ) : (
             // 데이터 로딩 중이거나 noticeList가 없을 때

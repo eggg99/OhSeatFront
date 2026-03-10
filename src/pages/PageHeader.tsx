@@ -1,13 +1,15 @@
 import { userStore }            from '@/store/userStore';
-import { Link }                 from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import Logo                     from '@/components/common/Logo';
 
 const Header = () => {
+    const navigate = useNavigate(); // 이동을 위한 훅
     const { userId, userNick, clearUser } = userStore();
     const isAdmin = userStore((state) => state.isAdmin);
     const logout = () => {
         alert('로그아웃 되었습니다');
         clearUser();
+        navigate('/');
     }
 
     return (

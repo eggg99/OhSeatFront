@@ -30,7 +30,12 @@ export default function Join(){
   const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     // 이벤트가 발생한 <input>요소의 name, value를 꺼내기
     const { name } = e.target;
-    const value = e.target.value.replace(/ /g,"") // 공백 제거된 값
+    let value = e.target.value.replace(/ /g, ""); // 공백 제거
+
+    // 휴대전화 입력이면 숫자만 허용
+    if (name === "phoneNumber") {
+      value = value.replace(/[^0-9]/g, "");
+    }
 
     setInputValue({
       ...inputValue,                      // 기존 값을 그대로 복사하여 바꾸려는 필드만 덮어씌우도록함
@@ -49,30 +54,32 @@ export default function Join(){
           ...prev,
           password: isValid ? "" : "숫자+영문자+특수문자 조합으로 8자리 이상 입력",
         }));
+        break;
       case "password2" :
         setErrorMessages(prev => ({
           ...prev,
           password2: inputValue.password !== value ? "비밀번호와 비밀번호확인이 같지 않아요" : "",
         }));
+        break;
     }
   }
 
   const duplicateNick = async () => {
-    const param = {nickname : inputValue.nickname};
-    try{
-      const response = await duplicateNickname(param);
-      if (response) {
-        if (!response.duplicated) {
-          alert('사용가능한 닉네임입니다');
-          inputValue.validDuplicate = true;
-        }
-      } else {
-        alert('중복된 닉네임입니다')
-        inputValue.validDuplicate = false;
-      }
+    try {
+      const { duplicated, message } = await duplicateNickname({
+        nickname: inputValue.nickname,
+      });
+
+      setInputValue(prev => ({
+        ...prev,
+        validDuplicate: !duplicated,
+      }));
+
+      alert(message);
+
     } catch (error) {
-      alert('에러 발생')
-      console.log(error);
+      console.error(error);
+      alert("에러 발생");
     }
   }
 
@@ -127,7 +134,7 @@ export default function Join(){
               onChange={handleInput}
               required/>
             {errorMessages.password &&
-                <p className="alert">{errorMessages.password}</p>
+              <p className="alert">{errorMessages.password}</p>
             }
           </li>
           <li>
@@ -176,12 +183,10 @@ export default function Join(){
                 onChange={handleInput}
                 required
                 maxLength={15}
-                disabled={inputValue.validDuplicate}
               />
               <button
                 type="button"
                 onClick={() => duplicateNick()}
-                disabled={inputValue.validDuplicate}
               >중복확인</button>
             </div>
           </li>
