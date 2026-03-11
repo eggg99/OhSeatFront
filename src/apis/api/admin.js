@@ -11,9 +11,9 @@ export const getRecommendNotice = async (targetBoard) => {
 }
 
 // 공지사항 조회 - 좌석추천 - 관리자용
-export const getNoticeList = async (targetBoard) => {
+export const getNoticeList = async (targetBoard, page) => {
     try{
-        const response = await axiosApi.get(`/admin/notices`, {params: { targetBoard }})
+        const response = await axiosApi.get(`/admin/notices`, {params: { targetBoard, page }})
         return response.data;
     } catch (error) {
         console.error("씨네광장 공지사항 전체 조회 실패: ", error);

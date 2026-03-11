@@ -1,5 +1,6 @@
 import { NoticePage } from "@/types/Notice";
 import { useEffect, useState } from "react";
+
 import { getNoticeList,updatePinned, updateActive } from "@/apis/api/admin";
 import {Pagination} from "@/components/common/Pagination";
 
@@ -15,8 +16,8 @@ export default function NoticeListModal({
   const [noticeList, setNoticeList] = useState<NoticePage>();
   const [modalPage, setModalPage] = useState<number>(1);
 
-  const getList = async () => {
-    const response = await getNoticeList('RECOMMEND')
+  const getList = async () => {    
+    const response = await getNoticeList('RECOMMEND', modalPage)
     setNoticeList(response);
   }
 
