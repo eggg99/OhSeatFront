@@ -1,10 +1,11 @@
-import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { loginUser } from "@/apis/api/user";
 import { userStore } from "@/store/userStore";
 
 export default function Login(){
   const navigate = useNavigate();
+  const location = useLocation();
   const { setUser } = userStore();
 
   const [inputValue, setInputValue] = useState({
@@ -36,9 +37,22 @@ export default function Login(){
         'isAdmin' : response?.role.toLowerCase() === 'admin',
         'isLogin':true
       })
-      navigate('/');
+      const params = new URLSearchParams(location.search);
+      const redirectPath = params.get('redirect');
+      navigate(redirectPath || '/');
     }
   }
+
+  useEffect(() => {
+    const expiredMessage = sessionStorage.getItem('auth-expired-message');
+
+    if (!expiredMessage) {
+      return;
+    }
+
+    alert(expiredMessage);
+    sessionStorage.removeItem('auth-expired-message');
+  }, []);
 
   return (
     <div className="os_login_form_wrap">
