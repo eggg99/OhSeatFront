@@ -16,6 +16,7 @@ import {fileData} from "@/types/CineSquare";
 import {CATEGORY_LABEL} from "@/types/EventAnn";
 import { FilePreview } from "@/components/common/file/FilePreview";
 import {userStore} from "@/store/userStore";
+import { getMultiplexBrand, getMultiplexBrandSafe } from "@/utils/recommend";
 
 interface Cinema {
     multiplexId: number;
@@ -95,10 +96,6 @@ export default function PageMain(){
     const getTop3Post = async () => {
         try {
             const response = await top3Post(); // 최신 3개
-            if(response){
-                getMultiplexBrand(response.multiplexId);
-                
-            }
             setRecentPost(response);
         } catch (error) {
             console.error(error);
@@ -159,10 +156,6 @@ export default function PageMain(){
     // ✅ multiplexId를 label로 변환
     const getMultiplexLabel = (multiplexId: number) =>
         MULTIPLEX_LIST.find(m => m.id === multiplexId)?.label || "Unknown";
-
-        // ✅ multiplexId를 브랜드로 변환
-    const getMultiplexBrand = (multiplexId: number) =>
-        MULTIPLEX_LIST.find(m => m.id === multiplexId)?.brand || "Unknown";
 
     // 마운트 될 때 데이터 가져오기
     useEffect(() => {
@@ -257,7 +250,7 @@ export default function PageMain(){
                         {recentPost && recentPost.length > 0 ? (
                             recentPost.map((item: any) => (
                                 <li key={item.postId}>
-                                    <Link to={`/recommend/${getMultiplexBrand(item.multiplexId)}/${item.postId}`}>
+                                    <Link to={`/recommend/${getMultiplexBrandSafe(item.multiplexId, item.multiplexName)}/${item.postId}`}>
                                         <span>{item.screenName}</span>
                                         <p>{item.multiplexName} {item.cinemaName}</p>
                                         <i>{item.content}</i>

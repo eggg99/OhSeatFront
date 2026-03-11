@@ -224,14 +224,20 @@ export default function BrowseIndex() {
                     <p>{postList?.totalElements ?? 0}개의 글</p>
 
                     <div className="post_filter_wrap clear">
-                        <select>
-                            <option onClick={() => handleSizeChange(10)}>10개씩</option>
-                            <option onClick={() => handleSizeChange(20)}>20개씩</option>
+                        <select
+                          value={orderType}
+                          onChange={(e) => handleOrderChange(e.target.value)}
+                        >
+                            <option value={'latest'}>최신순</option>
+                            <option value={'views'}>조회순</option>
+                            <option value={'comments'}>댓글순</option>
                         </select>
-                        <select>
-                            <option onClick={() => handleOrderChange('latest')}>최신순</option>
-                            <option onClick={() => handleOrderChange('views')}>조회순</option>
-                            <option onClick={() => handleOrderChange('comments')}>댓글순</option>
+                        <select
+                          value={orderType}
+                          onChange={(e) => handleSizeChange(Number(e.target.value))}
+                        >
+                            <option value={'10'}>10개씩</option>
+                            <option value={'20'}>20개씩</option>
                         </select>
                     </div>
                 </div>

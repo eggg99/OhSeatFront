@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { getCinemaList, getScreenList, insertPost } from "@/apis/api/recommend";
 import { userStore } from "@/store/userStore";
-import { useLocation, useNavigate } from "react-router-dom";
+import {Link, useLocation, useNavigate, useParams} from "react-router-dom";
 import { MULTIPLEX_LIST } from "@/constants/multiplex";
 
 const multiplexes = [
@@ -24,6 +24,7 @@ const areas = [
 export default function PostReg(){
     const navigate = useNavigate();
     const location = useLocation();
+    const { brand } = useParams();
 
     const [selectedMultiplex, setSelectedMultiplex] = useState("");
     const [selectedArea, setSelectedArea] = useState("");
@@ -37,6 +38,22 @@ export default function PostReg(){
         title:'',
         content:''
     });
+
+    useEffect(() => {
+        const matchedMultiplex = MULTIPLEX_LIST.find((item) => item.brand === brand);
+
+        if (!matchedMultiplex) {
+            setSelectedMultiplex("");
+            return;
+        }
+
+        setSelectedMultiplex(String(matchedMultiplex.id));
+        setSelectedArea("");
+        setSelectedCinema("");
+        setSelectedScreen("");
+        setCinemas([]);
+        setScreens([]);
+    }, [brand]);
 
     const handleInput = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
@@ -114,14 +131,6 @@ export default function PostReg(){
         navigate(`/recommend/${multiplexName}/${response}`);
     }
 
-    // 목록으로 보내기 : 현재 브랜드 리스트 페이지로 변환
-    const handleGoList = (e: React.MouseEvent) => {
-        e.preventDefault();
-
-        const path = location.pathname.replace(/\/reg$/, '');
-        navigate(path);
-    };
-    
     return(
         <div className="os_sub_contents">
             <div className="theater_total_board_wrap">
@@ -143,7 +152,8 @@ export default function PostReg(){
                         <tr>
                             <td>
                                 <select value={selectedMultiplex}
-                                        onChange={(e) => handleMultiplexChange(e.target.value)}>
+                                        onChange={(e) => handleMultiplexChange(e.target.value)}
+                                        disabled>
                                     <option value="" disabled hidden>멀티플렉스를 선택하세요</option>
                                     {multiplexes.map(m => <option key={m.value} value={m.value}>{m.label}</option>)}
                                 </select>
@@ -202,7 +212,7 @@ export default function PostReg(){
 
                 <div className="post_button_wrap clear">
                     <div className="left">
-                        <a href="#" className="post_button" onClick={handleGoList}>목록</a>
+                        <Link to={`/recommend/${brand}`} className="post_button" >목록</Link>
                     </div>
 
                     <div className="right">
