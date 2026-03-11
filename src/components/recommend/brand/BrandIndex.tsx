@@ -2,9 +2,7 @@ import { useEffect, useState, useCallback } from "react";
 import { getCinemaList, getPostList, getScreenList } from "@/apis/api/recommend";
 import useEmblaCarousel from "embla-carousel-react";
 import { getRecommendNotice, deleteAdminPost } from "@/apis/api/admin";
-import { useParams } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
-import { Link } from "react-router-dom";
+import { useParams, useNavigate, Link, useSearchParams } from "react-router-dom";
 import { PostPage } from "@/types/Post";
 import { MULTIPLEX_LIST } from "@/constants/multiplex";
 import { AREA_LIST } from "@/constants/area";
@@ -28,6 +26,7 @@ export default function BrandIndex() {
     const [emblaRef3] = useEmblaCarousel({ loop: false });
     
     const { brand } = useParams<{ brand: string }>();
+    const [searchParams] = useSearchParams();
     const multiplexId = MULTIPLEX_LIST.find((m) => m.brand === brand)?.id;
     const multiplexName = MULTIPLEX_LIST.find((m) => m.brand === brand)?.label;
     const [selectedAreaId, setSelectedAreaId] = useState<string>("00");
@@ -43,6 +42,8 @@ export default function BrandIndex() {
     const [size, setSize] = useState<number>(10);
     const [noticeList, setNoticeList] = useState<NoticeData[]>([]);
     const [selectedPostIds, setSelectedPostIds] = useState<number[]>([]);       // 관리자용 삭제할 게시글 배열
+    const initialAreaId = searchParams.get("areaId") ?? "00";
+    const initialCinemaId = searchParams.get("cinemaId");
 
     // 지역 선택
     const handleAreaChange = async (areaId: string) => {
@@ -104,22 +105,64 @@ export default function BrandIndex() {
                 boardType : 'RECOMMEND',
                 postIds : selectedPostIds,
             }
-            await deleteAdminPost(param);
-            alert ('삭제되었습니다');
+            const response = await deleteAdminPost(param);
+            if (response) {
+                await handleAreaChange("00");
+                await handlePostList();
+                setIsEditMode(false);
+                alert ('삭제되었습니다');
+            } else {
+                alert ('삭제에 실패햇습니다.')
+            }
 
-            await handleAreaChange("00");
-            await handlePostList();
-            setIsEditMode(false);
+
         } catch (error) {
             console.log(error);
         }
     }
 
-    // 첫 진입 시, 지역 전체로 선택
     useEffect(() => {
-        handleAreaChange("00");
+        const initializeFilters = async () => {
+            if (!multiplexId) {
+                return;
+            }
+
+            setPage(0);
+            setSelectedAreaId(initialAreaId);
+
+            const response = await getCinemaList(multiplexId, initialAreaId);
+            const nextCinemaList = response?.length ? [ALL_CINEMA, ...response] : [ALL_CINEMA];
+            setCinemaList(nextCinemaList);
+
+            if (!initialCinemaId) {
+                setSelectedCinema(ALL_CINEMA);
+                setScreenList([]);
+                setSelectedScreen(ALL_SCREEN);
+                setIsInnerOn(false);
+                return;
+            }
+
+            const matchedCinema = nextCinemaList.find((cinema) => cinema.cinemaId === initialCinemaId);
+
+            if (!matchedCinema) {
+                setSelectedCinema(ALL_CINEMA);
+                setScreenList([]);
+                setSelectedScreen(ALL_SCREEN);
+                setIsInnerOn(false);
+                return;
+            }
+
+            setSelectedCinema(matchedCinema);
+
+            const screens = await getScreenList(multiplexId, matchedCinema.cinemaId);
+            setScreenList(screens?.length ? [ALL_SCREEN, ...screens] : [ALL_SCREEN]);
+            setSelectedScreen(ALL_SCREEN);
+            setIsInnerOn(false);
+        };
+
+        initializeFilters();
         getNoticeData();
-    }, [brand]);
+    }, [brand, multiplexId, initialAreaId, initialCinemaId]);
 
      // 페이지/정렬 변경 시 데이터 재요청
     useEffect(() => {
@@ -308,7 +351,7 @@ export default function BrandIndex() {
                             <option value={'comments'}>댓글순</option>
                         </select>
                         <select
-                          value={orderType}
+                          value={size}
                           onChange={(e) => handleSizeChange(Number(e.target.value))}
                         >
                             <option value={'10'}>10개씩</option>

@@ -3,7 +3,7 @@ import { MULTIPLEX_LIST } from "@/constants/multiplex";
 import { getTrendingCinema, top3Post } from "@/apis/api/recommend";
 import { getCineSquareRandom } from "@/apis/api/cinesquare";
 import { useEffect, useState, useRef } from 'react';
-import {Link, useNavigate} from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import WeekString from '@/components/common/WeekString';
 import { getBoxoffice } from '@/apis/api/movie';
 import useEmblaCarousel from 'embla-carousel-react'
@@ -234,7 +234,13 @@ export default function PageMain(){
 
                 <div className={`os_weekly_best_theater theater${topCinemas?.multiplexId}`}>
                     {topCinemas && (
-                    <Link to={`/recommend/${getMultiplexBrand(topCinemas.multiplexId)}`}  className="weekly_best">
+                    <Link
+                        to={{
+                            pathname: `/recommend/${getMultiplexBrand(topCinemas.multiplexId)}`,
+                            search: `?areaId=${topCinemas.areaId}&cinemaId=${topCinemas.cinemaId}`,
+                        }}
+                        className="weekly_best"
+                    >
                         <div className="text_wrap">
                             <div className="inner clear">
                                 <span>HOT</span>
