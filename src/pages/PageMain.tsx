@@ -3,7 +3,7 @@ import { MULTIPLEX_LIST } from "@/constants/multiplex";
 import { getTrendingCinema, top3Post } from "@/apis/api/recommend";
 import { getCineSquareRandom } from "@/apis/api/cinesquare";
 import { useEffect, useState, useRef } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import WeekString from '@/components/common/WeekString';
 import { getBoxoffice } from '@/apis/api/movie';
 import useEmblaCarousel from 'embla-carousel-react'
@@ -15,6 +15,8 @@ import {getEventMain} from "@/apis/api/event";
 import {fileData} from "@/types/CineSquare";
 import {CATEGORY_LABEL} from "@/types/EventAnn";
 import { FilePreview } from "@/components/common/file/FilePreview";
+import {userStore} from "@/store/userStore";
+import { getMultiplexBrand, getMultiplexBrandSafe } from "@/utils/recommend";
 
 interface Cinema {
     multiplexId: number;
@@ -58,6 +60,8 @@ interface Event {
 }
 
 export default function PageMain(){
+    const isLogin = userStore((state) => state.isLogin);
+    const navigate = useNavigate();
     const [topCinemas, setTopCinemas] = useState<Cinema>();
     const [recentPost, setRecentPost] = useState<any[]>([]);
     const [cineSquareList, setCineSquareList] = useState<CineSquareData[]>([]);
@@ -92,10 +96,6 @@ export default function PageMain(){
     const getTop3Post = async () => {
         try {
             const response = await top3Post(); // 최신 3개
-            if(response){
-                getMultiplexBrand(response.multiplexId);
-                
-            }
             setRecentPost(response);
         } catch (error) {
             console.error(error);
@@ -157,10 +157,6 @@ export default function PageMain(){
     const getMultiplexLabel = (multiplexId: number) =>
         MULTIPLEX_LIST.find(m => m.id === multiplexId)?.label || "Unknown";
 
-        // ✅ multiplexId를 브랜드로 변환
-    const getMultiplexBrand = (multiplexId: number) =>
-        MULTIPLEX_LIST.find(m => m.id === multiplexId)?.brand || "Unknown";
-
     // 마운트 될 때 데이터 가져오기
     useEffect(() => {
         const fetchData = async () => {
@@ -216,6 +212,17 @@ export default function PageMain(){
         setEvent(events);
     }
 
+
+    const handleRecommendClick = () => {
+        if (!isLogin) {
+            alert("로그인 후 이용해주세요 🙂");
+            navigate("user/login");
+            return;
+        }
+
+        navigate("/recommend/cgv/reg");
+    };
+
     return(
         <main className="os_main_contents">
             <div className="os_main_visual">
@@ -227,7 +234,13 @@ export default function PageMain(){
 
                 <div className={`os_weekly_best_theater theater${topCinemas?.multiplexId}`}>
                     {topCinemas && (
-                    <Link to={`/recommend/${getMultiplexBrand(topCinemas.multiplexId)}`}  className="weekly_best">
+                    <Link
+                        to={{
+                            pathname: `/recommend/${getMultiplexBrand(topCinemas.multiplexId)}`,
+                            search: `?areaId=${topCinemas.areaId}&cinemaId=${topCinemas.cinemaId}`,
+                        }}
+                        className="weekly_best"
+                    >
                         <div className="text_wrap">
                             <div className="inner clear">
                                 <span>HOT</span>
@@ -243,7 +256,7 @@ export default function PageMain(){
                         {recentPost && recentPost.length > 0 ? (
                             recentPost.map((item: any) => (
                                 <li key={item.postId}>
-                                    <Link to={`/recommend/${getMultiplexBrand(item.multiplexId)}/${item.postId}`}>
+                                    <Link to={`/recommend/${getMultiplexBrandSafe(item.multiplexId, item.multiplexName)}/${item.postId}`}>
                                         <span>{item.screenName}</span>
                                         <p>{item.multiplexName} {item.cinemaName}</p>
                                         <i>{item.content}</i>
@@ -251,8 +264,12 @@ export default function PageMain(){
                                 </li>
                             ))
                             ) : (
-                                <li>
-                                    데이터가 없습니다.
+                                <li onClick={handleRecommendClick}>
+                                    <a href="#">
+                                        <p>🥺</p>
+                                        <p>추천이 아직 비어있어요!</p>
+                                        <p>첫 번째 추천을 남겨주세요 👉👈</p>
+                                    </a>
                                 </li>
                             )}
                     </ul>
@@ -271,7 +288,9 @@ export default function PageMain(){
                 <div className="mp_list_wrap embla__viewport" ref={emblaRef}>
                     <ul className="mp_list clear embla__container" style={{ display: 'flex', padding: 0, margin: 0 }}>
                     {loading ? (
-                        <li>로딩중...</li>
+                          <li className={`embla__slide rank`}>
+                              <div className="inner"><p>로딩중입니다</p></div>
+                          </li>
                     ) : movies && movies.length > 0 ? (
                         movies.map((item: any) => {
                             const gradeItem =

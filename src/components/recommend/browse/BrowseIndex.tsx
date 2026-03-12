@@ -105,7 +105,12 @@ export default function BrowseIndex() {
         <div className="os_sub_contents">
             <section className="hot_theater_weekly">
                 {firstCinema && (
-                <Link to={`/recommend/${getMultiplexBrand(firstCinema.multiplexId)}`} className={`theater${firstCinema.multiplexId}`}>
+                <Link
+                  to={{
+                      pathname: `/recommend/${getMultiplexBrand(firstCinema.multiplexId)}`,
+                      search: `?areaId=${firstCinema.areaId}&cinemaId=${firstCinema.cinemaId}`,
+                  }}
+                  className={`theater${firstCinema.multiplexId}`}>
                     <span>최근 언급 많이 되는 영화관은?</span>
                     <h1>{getMultiplexLabel(firstCinema.multiplexId)} {firstCinema?.cinemaName}점</h1>
                     <i>{firstCinema?.cinemaAddr}</i>
@@ -144,7 +149,12 @@ export default function BrowseIndex() {
                         <ul className="rank5_list">
                             {topCinemas?.map((cinema, idx) => (
                                 <li key={cinema.cinemaId}>
-                                    <Link to={`/recommend/${getMultiplexBrand(cinema.multiplexId)}`} >
+                                    <Link
+                                      to={{
+                                          pathname: `/recommend/${getMultiplexBrand(cinema.multiplexId)}`,
+                                          search: `?areaId=${cinema.areaId}&cinemaId=${cinema.cinemaId}`,
+                                      }}
+                                    >
                                         <span className="number">{idx + 1}</span>
 
                                         <p>{getMultiplexLabel(cinema.multiplexId)} {cinema.cinemaName}점</p>
@@ -224,14 +234,20 @@ export default function BrowseIndex() {
                     <p>{postList?.totalElements ?? 0}개의 글</p>
 
                     <div className="post_filter_wrap clear">
-                        <select>
-                            <option onClick={() => handleSizeChange(10)}>10개씩</option>
-                            <option onClick={() => handleSizeChange(20)}>20개씩</option>
+                        <select
+                          value={orderType}
+                          onChange={(e) => handleOrderChange(e.target.value)}
+                        >
+                            <option value={'latest'}>최신순</option>
+                            <option value={'views'}>조회순</option>
+                            <option value={'comments'}>댓글순</option>
                         </select>
-                        <select>
-                            <option onClick={() => handleOrderChange('latest')}>최신순</option>
-                            <option onClick={() => handleOrderChange('views')}>조회순</option>
-                            <option onClick={() => handleOrderChange('comments')}>댓글순</option>
+                        <select
+                          value={size}
+                          onChange={(e) => handleSizeChange(Number(e.target.value))}
+                        >
+                            <option value={'10'}>10개씩</option>
+                            <option value={'20'}>20개씩</option>
                         </select>
                     </div>
                 </div>

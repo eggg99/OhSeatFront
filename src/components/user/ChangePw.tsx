@@ -88,8 +88,9 @@ export default function ChangePw(){
               value={inputValue.password}
               onChange={handleInput}
             />
-            <div className="text-red-500">{errorMessages.password &&
-                <div className="error-msg">{errorMessages.password}</div>}</div>
+            {errorMessages.password &&
+              <p className="alert">{errorMessages.password}</p>
+            }
           </li>
           <li>
             <span>새로운 비밀번호 확인</span>
@@ -100,8 +101,9 @@ export default function ChangePw(){
               value={inputValue.password2}
               onChange={handleInput}
             />
-            <div className="text-red-500">{errorMessages.password2 &&
-                <div className="error-msg">{errorMessages.password2}</div>}</div>
+            {errorMessages.password2 &&
+                <p className="alert">{errorMessages.password2}</p>
+            }
           </li>
 
           <li>

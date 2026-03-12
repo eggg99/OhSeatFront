@@ -94,7 +94,7 @@ export default function EventList () {
     };
 
     // 편집모드 변경
-    const handleSelectPost = () => {
+    const toggleEditMode = () => {
         setIsEditMode(prev => {
             const next = !prev;
 
@@ -105,6 +105,15 @@ export default function EventList () {
 
             return next;
         });
+    };
+
+    // 관리자용 체크박스 선택/해제 핸들러
+    const handleSelectPost = (postId: number) => {
+        setSelectedPostIds((prev) =>
+          prev.includes(postId)
+            ? prev.filter((id) => id !== postId) // 이미 있으면 제거
+            : [...prev, postId]                  // 없으면 추가
+        );
     };
 
     // 관리자용 체크박스 선택한 게시글 삭제
@@ -211,7 +220,7 @@ export default function EventList () {
                                 <button
                                   type="button"
                                   className={`edit_button ${isEditMode ? 'on' : ''}`}
-                                  onClick={handleSelectPost}
+                                  onClick={toggleEditMode}
                                 >편집 모드</button>
                               </>
                             )}

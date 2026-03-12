@@ -1,6 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 import { PostData, PostPage } from "@/types/Post";
-import { getMultiplexBrand } from "@/utils/recommend";
+import { getMultiplexBrandSafe } from "@/utils/recommend";
 import { NoticeData } from "@/types/Notice";
 import { NoticeList } from "@/components/common/list/NoticeList";
 
@@ -86,7 +86,7 @@ export const RecommendList:React.FC<PostListProps> = ({
             return (
               <tr
                 key={`view-${item.postId}`}
-                onClick={() => navigate(`/recommend/${getMultiplexBrand(item.multiplexId)}/${item.postId}`)}
+                onClick={() => navigate(`/recommend/${getMultiplexBrandSafe(item.multiplexId, item.multiplexName)}/${item.postId}`)}
                 style={{ cursor: 'pointer' }}
               >
                 <td className="txtc">{item.multiplexName}</td>

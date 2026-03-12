@@ -1,4 +1,4 @@
-import { useOutletContext, useNavigate, useParams } from "react-router-dom";
+import {useOutletContext, useNavigate, useParams, Link} from "react-router-dom";
 import { userStore } from "@/store/userStore";
 import { useEffect, useState } from "react";
 import { getPostDetail, getCinemaList, getScreenList, updatePost } from "@/apis/api/recommend";
@@ -160,7 +160,7 @@ export default function PostUpdate() {
                             <tr>
                                 <td>
                                     <select value={selectedMultiplex}
-                                            onChange={(e) => handleMultiplexChange(e.target.value)}>
+                                            onChange={(e) => handleMultiplexChange(e.target.value)} disabled>
                                         <option value="" disabled hidden>멀티플렉스를 선택하세요</option>
                                         {multiplexes.map(m => <option key={m.value} value={m.value}>{m.label}</option>)}
                                     </select>
@@ -218,8 +218,7 @@ export default function PostUpdate() {
                 </div>
                 <div className="post_button_wrap clear">
                     <div className="left">
-                        {/*TODO : 어디로 보낼지 생각해보기*/}
-                        <a href="#" className="post_button">목록</a>
+                        <Link to={`/recommend/${brand}`} className="post_button" >목록</Link>
                     </div>
 
                     <div className="right">
