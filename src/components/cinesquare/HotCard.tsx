@@ -21,15 +21,17 @@ export default function HotCard({ title, location, file, onClick }: CardProps) {
     return (
         <li onClick={onClick}>
             <a className="cursor-pointer">
-                <h4>{title}</h4>
-                <i>{location}</i>
+                <div className="hot_text_wrap">
+                    <h4>{title}</h4>
+                    <i>{location}</i>
+                </div>
 
                 {file && (
-                    <div className="img_thumbnail_wrap">
-                        <FilePreview file={file ?? []} previewType={"THUMBNAIL"}/>
-                    </div>
+                  <div className="img_thumbnail_wrap">
+                      <FilePreview file={file ?? []} previewType={"THUMBNAIL"}/>
+                  </div>
                 )}
             </a>
         </li>
-    )
+)
 }

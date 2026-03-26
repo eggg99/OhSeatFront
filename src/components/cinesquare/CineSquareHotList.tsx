@@ -29,14 +29,14 @@ export default function CineSquareHotList(){
     <div className="os_sub_contents">
         <div className="os_freetalk_wrap clear">
             <div className="os_freetalk_subtitle">
-                <button onClick={list} className="go_before_button">목록으로 돌아가기</button>
-
+                <a onClick={list} className="go_before_button cursor-pointer">목록으로 돌아가기</a>
                 <h3>인기글</h3>
+                <div className="os_freetalk_right_wrap"></div>
             </div>
 
             <div className="os_freetalk_hot2">
                 <ul className="os_freetalk_hot_list">
-                    {cineSquareHotList.length > 0 ? (
+                {cineSquareHotList.length > 0 ? (
                         cineSquareHotList.map((item, idx) => (
                             <HotCard
                                 key={`hotcard-${idx}`}

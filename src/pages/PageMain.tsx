@@ -226,12 +226,6 @@ export default function PageMain(){
     return(
         <main className="os_main_contents">
             <div className="os_main_visual">
-                <div className="mv_title">
-                    <h1>지금 오싵에서 주목하는 영화관 좌석은?</h1>
-                    <p>모두들 모여서 이야기하고 있는 좌석은 무슨 좌석일지 확인하기</p>
-                    <Link to="/recommend/browse">더보기</Link>
-                </div>
-
                 <div className={`os_weekly_best_theater theater${topCinemas?.multiplexId}`}>
                     {topCinemas && (
                     <Link
@@ -241,12 +235,18 @@ export default function PageMain(){
                         }}
                         className="weekly_best"
                     >
+                        <div className="mv_title">
+                            <h1>지금 오싵에서 가장 많이 언급되는 좌석은?</h1>
+
+                            <p>사람들이 주목하는 그 자리, 지금 바로 확인해보세요</p>
+                        </div>
+
                         <div className="text_wrap">
                             <div className="inner clear">
                                 <span>HOT</span>
                                 <p>{getMultiplexLabel(topCinemas.multiplexId)} {topCinemas?.cinemaName}점</p>
                                 <i>{topCinemas?.cinemaAddr}</i>
-                            </div>                                
+                            </div>
                         </div>
                     </Link>
                     )}
@@ -281,7 +281,7 @@ export default function PageMain(){
                     <WeekString/>
                     <h2>오늘의 무비픽</h2>
                     <p>Today’s Movie Pick</p>
-                    <i>오늘의 여러 극장가 예매 순위들을<br/>바로 이곳에서 한눈에 확인가능!</i>
+                    <i>오늘의 극장가 예매 순위를<br/>한눈에 확인해보세요</i>
                     <b>영화진흥위원회의 총 합산 순위로 알려드립니다</b>
                 </div>
 
@@ -304,16 +304,20 @@ export default function PageMain(){
                                 >
                                     <div className="inner">
                                         <i>{item.rank}</i>
-                                        <p>{item.movieNm}</p>
-                                        <span className={gradeItem.gradeClass}>
-                                             {gradeItem.name}
-                                        </span>
-                                        <ul className="rate_list">
-                                            <li><span>개봉일</span>{item.openDt}</li>
-                                            <li><span>누적관객수</span>{formatNumberWithComma(item.audiAcc)}</li>
-                                        </ul>
+                                        <div className="info_box">
+                                            <p>{item.movieNm}</p>
+
+                                            <div className="meta_row">
+                                                <ul className="rate_list">
+                                                    <li><span>개봉일</span>{item.openDt}</li>
+                                                    <li><span>누적관객수</span>{formatNumberWithComma(item.audiAcc)}</li>
+                                                </ul>
+                                                
+                                                <span className={gradeItem.gradeClass}>{gradeItem.name}</span>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <img src={item.posterUrl} />
+                                    <img src={item.posterUrl}  alt={item.movieNm}/>
                                 </li>
                             );
                         })
@@ -323,12 +327,13 @@ export default function PageMain(){
                     </ul>
                 </div>
             </div>
-            <div className="os_square_event_wrap">                    
+
+            <div className="os_square_event_wrap">
                 <div className="os_cine_square">
                     <div className="square_title">
                         <h2>씨네광장</h2>
-                        <p>Today’s Movie Pick</p>
-                        <i>지금 모두들 무슨 이야기를<br/>하고 있을까?</i>
+                        <p>Cine Square</p>
+                        <i>지금, 다들 무슨 이야기를 하고 있을까?<br/>실시간 인기 글을 확인해보세요</i>
 
                         <div className="square_button_wrap">
                             <a href="#"
@@ -345,6 +350,7 @@ export default function PageMain(){
                             }}><i className="blind">다음</i></a>
                         </div>
                     </div>
+
                     <div className="square_latest_list_wrap" ref={listWrapRef}>
                         <ul className="square_latest_list clear">
                             {cineSquareList && cineSquareList.length > 0 ? (
@@ -369,16 +375,16 @@ export default function PageMain(){
                                 </li>
                             )}
                         </ul>
-                    </div>   
+                    </div>
                 </div>
-                
+
 
                 <div className="os_event">
                     <div className="inner">
                         <div className="event_title">
                             <h2>이벤트</h2>
                             <p>Event</p>
-                            <i>오싵러들을 위해 준비한<br/>각종 이벤트들 지금 확인하세요!</i>
+                            <i>오싵러들을 위해 준비한 다양한 이벤트<br/>지금 바로 확인해보세요</i>
                         </div>
 
                         <ul className="os_m_event_list clear">
@@ -410,7 +416,7 @@ export default function PageMain(){
                               </li>
                             )}
                         </ul>
-                    </div>                        
+                    </div>
                 </div>
             </div>
         </main>

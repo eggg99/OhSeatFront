@@ -299,8 +299,6 @@ export default function BrandIndex() {
                     </div>
                 </div>
             </section>
-                
-                
 
             {/* 게시글 리스트 */}
             <section className="theater_total_board_wrap">

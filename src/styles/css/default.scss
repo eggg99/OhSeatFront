@@ -89,6 +89,13 @@ $background-color_3: #f2f2f2;
 }
 * {
 	font-family: $font-family_1;
+	box-sizing: border-box;
+	&::before {
+		box-sizing: border-box;
+	}
+	&::after {
+		box-sizing: border-box;
+	}
 }
 body {
 	margin: 0;
@@ -181,7 +188,6 @@ input {
 	vertical-align: top;
 	letter-spacing: -0.2px;
 	border: 1px solid #ddd;
-	box-sizing: border-box;
 	width: 100%;
 	line-height: inherit;
 	vertical-align: top;
@@ -197,7 +203,6 @@ textarea {
 	letter-spacing: -0.2px;
 	width: 100%;
 	padding: 0;
-	box-sizing: border-box;
 	font-size: 17px;
 	border: 1px solid #ddd;
 	border-radius: 3px;
@@ -212,7 +217,6 @@ select {
 	vertical-align: top;
 	letter-spacing: -0.2px;
 	width: 100%;
-	box-sizing: border-box;
 	padding: 0 5px;
 	border: 1px solid #ddd;
 	background: url(../img/select_option.png) no-repeat right 12px center;
@@ -256,13 +260,6 @@ input[type="text"] {
 	margin: -1px;
 	overflow: hidden;
 	clip: rect(0 0 0 0);
-}
-.clear {
-	&::after {
-		content: '';
-		display: block;
-		clear: both;
-	}
 }
 caption {
 	display: none;

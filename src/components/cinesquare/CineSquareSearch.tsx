@@ -51,15 +51,16 @@ return (
 <div className="os_sub_contents">
     <div className="os_freetalk_wrap clear">
         <div className="os_freetalk_subtitle">
-            <button onClick={list} className="go_before_button">목록으로 돌아가기</button>
+            <a onClick={list} className="go_before_button cursor-pointer">목록으로 돌아가기</a>
 
             <h3>지역 검색</h3>
+            <div className="os_freetalk_right_wrap"></div>
         </div>
 
         <div className="location_search_wrap">
             <input
-                type="text"
-                placeholder="도/시 단위로 입력하세요"
+              type="text"
+              placeholder="도/시 단위로 입력하세요"
                 value={inputValue}
                 onChange={handleInput}
                 onKeyDown={handleInputSearch}

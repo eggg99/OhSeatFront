@@ -111,26 +111,26 @@ export default function BrowseIndex() {
                       search: `?areaId=${firstCinema.areaId}&cinemaId=${firstCinema.cinemaId}`,
                   }}
                   className={`theater${firstCinema.multiplexId}`}>
-                    <span>최근 언급 많이 되는 영화관은?</span>
-                    <h1>{getMultiplexLabel(firstCinema.multiplexId)} {firstCinema?.cinemaName}점</h1>
-                    <i>{firstCinema?.cinemaAddr}</i>
+                    <h1>요즘 가장 많이 언급되는 영화관은?</h1>
+                    <p>지금 사람들이 주목하는 지점을 확인해보세요</p>
+
                     <div className="post_like_wrap">
                         <ul className="post_like_list clear">
+                            <li className="point"><p>{getMultiplexLabel(firstCinema.multiplexId)} {firstCinema?.cinemaName}점</p></li>
+                            <li className="addr">
+                                <p>{firstCinema?.cinemaAddr}</p>
+                            </li>
                             <li className="post">
-                                <span>주간 게시글</span>
-                                <i>{firstCinema?.postCount}개</i>
+                                <i>{firstCinema?.postCount}</i>
                             </li>
                             <li className="like">
-                                <span>게시글 통합 좋아요</span>
-                                <i>{firstCinema?.totalLike}개</i>
+                                <i>{firstCinema?.totalLike}</i>
                             </li>
                         </ul>
                     </div>
                 </Link>
                 )}
-            </section>
 
-            <section className="sub_quick_menu">
                 <ul className="sub_quick_menu_list">
                     <li className="sub1"><Link to={`/recommend/cgv`}>CGV</Link></li>
                     <li className="sub2"><Link to={`/recommend/megabox`}>메가박스</Link></li>
@@ -138,10 +138,10 @@ export default function BrowseIndex() {
                 </ul>
             </section>
 
-            <section className="rank_banner_wrap clear">
+            <section className="rank_banner_wrap">
                 <div className="rank5_wrap">
                     <div className="inner">
-                        <div className="rank5_title clear">
+                        <div className="rank5_title">
                             <h2>영화관 언급량 TOP5</h2>
                             <i><WeekString/></i> 
                         </div>
@@ -157,74 +157,76 @@ export default function BrowseIndex() {
                                     >
                                         <span className="number">{idx + 1}</span>
 
-                                        <p>{getMultiplexLabel(cinema.multiplexId)} {cinema.cinemaName}점</p>
-
-                                        <i>{cinema.cinemaAddr}</i>
+                                        <div className="rank_text">
+                                            <p>{getMultiplexLabel(cinema.multiplexId)} {cinema.cinemaName}점</p>
+                                            <i>{cinema.cinemaAddr}</i>
+                                        </div>
 
                                         <span className="total_post">게시글<b>{cinema.postCount}</b></span>
-                                    </Link>                                    
+                                    </Link>
                                 </li>
                             ))}
                         </ul>
                     </div>
                 </div>
+
                 <div className="banner_wrap">
-                        <div className="inner">
-                            <ul className="banner_event_list">
-                                {event && event.length > 0 ? (
-                                  event.map((item: any, index: number) => {
-                                      // 1. 필요한 파일들을 미리 변수에 담아둡니다.
-                                      const posterFile = item.files?.find((f: any) => f.fileRole === "POSTER");
-                                      const bannerFile = item.files?.find((f: any) => f.fileRole === "BANNER");
+                    <div className="inner">
+                        <ul className="banner_event_list">
+                            {event && event.length > 0 ? (
+                              event.map((item: any, index: number) => {
+                                  // 1. 필요한 파일들을 미리 변수에 담아둡니다.
+                                  const posterFile = item.files?.find((f: any) => f.fileRole === "POSTER");
+                                  const bannerFile = item.files?.find((f: any) => f.fileRole === "BANNER");
 
-                                      return (
-                                        <li key={`event-${index}`} className="n1 on">
-                                            <Link to={`/event/${item.eventId}`}>
-                                                <div className="inner_info">
-                                                    <span>{CATEGORY_LABEL[item.categoryId] ?? ''}</span>
-                                                    <h3>{item.title}</h3>
+                                  return (
+                                    <li key={`event-${index}`} className="n1 on">
+                                        <Link to={`/event/${item.eventId}`}>
+                                            <div className="inner_info">
+                                                <span>{CATEGORY_LABEL[item.categoryId] ?? ''}</span>
+                                                <h3>{item.title}</h3>
 
-                                                    {/* 이벤트 포스터이미지 (POSTER 찾기) */}
-                                                    {posterFile && (
-                                                      <FilePreview
-                                                        key={posterFile.fileId}
-                                                        file={posterFile}
-                                                        previewType="ALL"
-                                                        className="poster_img"
-                                                      />
-                                                    )}
-
-                                                    <ul className="inner_info_list">
-                                                        <li><b>이벤트 일정</b>{item.startDt}~{item.endDt}</li>
-                                                        <li><b>당첨 인원</b>{item.annCount}명</li>
-                                                    </ul>
-                                                </div>
-                                                <p>이벤트 바로가기</p>
-
-                                                {/* 이벤트 배너 배경 (BANNER 찾기) */}
-                                                {bannerFile && (
+                                                {/* 이벤트 포스터이미지 (POSTER 찾기) */}
+                                                {posterFile && (
                                                   <FilePreview
-                                                    key={bannerFile.fileId}
-                                                    file={bannerFile}
+                                                    key={posterFile.fileId}
+                                                    file={posterFile}
                                                     previewType="ALL"
+                                                    className="poster_img"
                                                   />
                                                 )}
-                                            </Link>
-                                        </li>
-                                      );
-                                  })
-                                ) : (
-                                  <li>
-                                      <a href="#">
-                                          <div className="inner">
-                                              <p>데이터가 없습니다.</p>
-                                          </div>
-                                      </a>
-                                  </li>
-                                )}
-                            </ul>
-                        </div>
+
+                                                <ul className="inner_info_list">
+                                                    <li><b>이벤트 일정</b>{item.startDt}~{item.endDt}</li>
+                                                    <li><b>당첨 인원</b>{item.annCount}명</li>
+                                                </ul>
+                                            </div>
+                                            <p>이벤트 바로가기</p>
+
+                                            {/* 이벤트 배너 배경 (BANNER 찾기) */}
+                                            {bannerFile && (
+                                              <FilePreview
+                                                key={bannerFile.fileId}
+                                                file={bannerFile}
+                                                previewType="ALL"
+                                              />
+                                            )}
+                                        </Link>
+                                    </li>
+                                  );
+                              })
+                            ) : (
+                              <li>
+                                  <a href="#">
+                                      <div className="inner">
+                                          <p>데이터가 없습니다.</p>
+                                      </div>
+                                  </a>
+                              </li>
+                            )}
+                        </ul>
                     </div>
+                </div>
             </section>
 
             <section className="theater_total_board_wrap">

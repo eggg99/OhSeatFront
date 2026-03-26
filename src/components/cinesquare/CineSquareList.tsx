@@ -230,180 +230,180 @@ export default function CineSqaureList() {
     return (
         <div className="os_sub_contents">
             <div className="os_freetalk_wrap clear">
-                <div className="os_timeline_wrap">
-
-                    <section className="location_wrap clear">
-                        <Location onClick={search} />
-
-                        <div className="post_edit_wrap clear">
-                            {isAdmin && (
-                                <>
-                                {isEditMode && (
+                <div className="inner">
+                    <div className="os_timeline_wrap">
+                        <section className="location_wrap clear">
+                            <Location onClick={search} />
+                            <div className="post_edit_wrap clear">
+                                {isAdmin && (
+                                    <>
+                                    {isEditMode && (
+                                        <button
+                                            type="button"
+                                            className="del_select_button"
+                                            onClick={() => deleteArray()}
+                                        >
+                                            선택 게시글 삭제
+                                        </button>
+                                    )}
                                     <button
-                                        type="button"
-                                        className="del_select_button"
-                                        onClick={() => deleteArray()}
+                                      type="button"
+                                      className={`edit_button ${isEditMode ? 'on' : ''}`}
+                                      onClick={toggleEditMode}
                                     >
-                                        선택 게시글 삭제
+                                        편집 모드
                                     </button>
+                                    </>
                                 )}
-                                <button
-                                  type="button"
-                                  className={`edit_button ${isEditMode ? 'on' : ''}`}
-                                  onClick={toggleEditMode}
-                                >
-                                    편집 모드
-                                </button>
-                                </>
-                            )}
-                        </div>
-                    </section>
+                            </div>
+                        </section>
 
-                    <section className="os_freetalk_tabmenu">
-                        <ul className="os_freetalk_list clear">
-                            {CATEGORY.map((category) => (
-                              <li
-                                key={category.id}
-                                className={categoryId === category.id ? 'on' : ''}
-                              >
-                                  <a
-                                    href="#"
-                                    onClick={() => handleCategory(category.id)}
+                        <section className="os_freetalk_tabmenu">
+                            <ul className="os_freetalk_list clear">
+                                {CATEGORY.map((category) => (
+                                  <li
+                                    key={category.id}
+                                    className={categoryId === category.id ? 'on' : ''}
                                   >
-                                      {category.name}
-                                  </a>
-                              </li>
-                            ))}
-                        </ul>
-                        <div className="post_filter_wrap2 clear">
-                            <select
-                                value={orderType}
-                                onChange={(e) => handleOrderChange(e.target.value)}
-                            >
-                                <option value={'latest'}>최신순</option>
-                                <option value={'likes'}>추천순</option>
-                                <option value={'views'}>조회순</option>
-                                <option value={'comments'}>댓글순</option>
-                            </select>
-                        </div>
-                    </section>
+                                      <a
+                                        href="#"
+                                        onClick={() => handleCategory(category.id)}
+                                      >
+                                          {category.name}
+                                      </a>
+                                  </li>
+                                ))}
+                            </ul>
+                            <div className="post_filter_wrap2 clear">
+                                <select
+                                    value={orderType}
+                                    onChange={(e) => handleOrderChange(e.target.value)}
+                                >
+                                    <option value={'latest'}>최신순</option>
+                                    <option value={'likes'}>추천순</option>
+                                    <option value={'views'}>조회순</option>
+                                    <option value={'comments'}>댓글순</option>
+                                </select>
+                            </div>
+                        </section>
 
-                    <section className="os_freetalk_hot">
-                        <h3>씨네광장 인기글</h3>
+                        <section className="os_freetalk_hot">
+                            <h3>씨네광장 인기글</h3>
 
-                        {/*인기글만 모아보는 화면 생성 필요*/}
-                        <Link to={"/cinesquare/hot"} className="freetalk_hot_button">더보기</Link>
+                            {/*인기글만 모아보는 화면 생성 필요*/}
+                            <Link to={"/cinesquare/hot"} className="freetalk_hot_button">더보기</Link>
 
-                        <ul className="os_freetalk_hot_list">
-                            {cineSquareHotList.length > 0 ? (
-                                cineSquareHotList.map((item, idx) => (
-                                    <HotCard
-                                        key={`hotcard-${idx}`}
-                                        title={item.title}
-                                        location={`${item.city} ${item.district}`}
-                                        file={item.representativeFile}
-                                        onClick={() => navigate(`/cinesquare/${item.postId}`)}
-                                    />
-                                ))
-                            ) : (
-                                <li>인기글이 없습니다</li>
-                            )}
-                        </ul>
-                    </section>
+                            <ul className="os_freetalk_hot_list">
+                                {cineSquareHotList.length > 0 ? (
+                                    cineSquareHotList.map((item, idx) => (
+                                        <HotCard
+                                            key={`hotcard-${idx}`}
+                                            title={item.title}
+                                            location={`${item.city} ${item.district}`}
+                                            file={item.representativeFile}
+                                            onClick={() => navigate(`/cinesquare/${item.postId}`)}
+                                        />
+                                    ))
+                                ) : (
+                                    <li>인기글이 없습니다</li>
+                                )}
+                            </ul>
+                        </section>
 
-                    {cineSquareList && cineSquareList.length > 0 ? (
-                        cineSquareList.map((item: any, index: number) => (
-                            <section
-                              className={`
-                                os_freetalk_section 
-                                ${isEditMode ? 'edit_mode cursor-pointer' : ''}
-                                ${selectedPostIds.includes(item.postId) ? 'checked' : ''}
-                             `}
-                              key={`cine-square-${index}`}
-                              onClick={() => {
-                                  if (isEditMode) {
-                                      handleSelectPost(item.postId);
-                                  }
-                              }}
-                            >
-                                <p className="category">{item.categoryName}</p>
-                                <h3 className="title">{item.title}</h3>
-
-                                <ul className="post_info_list clear">
-                                    <li><i>{item.authorNickname}</i></li>
-                                    <li><span>{item.createdAt ? item.createdAt.split("T")[0].replace(/-/g, ".") : ""}</span></li>
-                                    <li><p>{item?.city} {item?.district}</p></li>
-                                </ul>
-
-                                <Link
-                                  to={`/cinesquare/${item.postId}`}
-                                  className="cursor-pointer"
-                                  onClick={(e) => {
+                        {cineSquareList && cineSquareList.length > 0 ? (
+                            cineSquareList.map((item: any, index: number) => (
+                                <section
+                                  className={`
+                                    os_freetalk_section 
+                                    ${isEditMode ? 'edit_mode cursor-pointer' : ''}
+                                    ${selectedPostIds.includes(item.postId) ? 'checked' : ''}
+                                 `}
+                                  key={`cine-square-${index}`}
+                                  onClick={() => {
                                       if (isEditMode) {
-                                          e.preventDefault();
-                                          e.stopPropagation();
+                                          handleSelectPost(item.postId);
                                       }
                                   }}
                                 >
-                                    <div className="freetalk_text_wrap">
-                                        <pre>{item.content}</pre>
-                                    </div>
-                                    {item?.representativeFile && (
-                                        <div className="freetalk_img_wrap">
-                                            <FilePreview file={item?.representativeFile ?? []} previewType={"THUMBNAIL"}/>
-                                            {item.totalFiles > 1 && (
-                                                <span>{item.totalFiles - 1}개 이미지 더보기</span>
-                                            )}
-                                        </div>
-                                    )}
-                                </Link>
+                                    <p className="category">{item.categoryName}</p>
+                                    <h3 className="title">{item.title}</h3>
 
-                                <div className="freetalk_like_comment clear">
-                                    <div className="left">
-                                        <div className="post_like_button">
-                                            <input
-                                                type="checkbox"
-                                                id={`like-${item.postId}`}
-                                                hidden
-                                                checked={item.isLiked}
-                                                onChange={() => handleLike(item.postId)}
-                                            />
-                                            <label
-                                              htmlFor={`like-${item.postId}`}
-                                              className="like-btn"
+                                    <ul className="post_info_list clear">
+                                        <li><i>{item.authorNickname}</i></li>
+                                        <li><span>{item.createdAt ? item.createdAt.split("T")[0].replace(/-/g, ".") : ""}</span></li>
+                                        <li><p>{item?.city} {item?.district}</p></li>
+                                    </ul>
+
+                                    <Link
+                                      to={`/cinesquare/${item.postId}`}
+                                      className="cursor-pointer"
+                                      onClick={(e) => {
+                                          if (isEditMode) {
+                                              e.preventDefault();
+                                              e.stopPropagation();
+                                          }
+                                      }}
+                                    >
+                                        <div className="freetalk_text_wrap">
+                                            <pre>{item.content}</pre>
+                                        </div>
+                                        {item?.representativeFile && (
+                                            <div className="freetalk_img_wrap">
+                                                <FilePreview file={item?.representativeFile ?? []} previewType={"THUMBNAIL"}/>
+                                                {item.totalFiles > 1 && (
+                                                    <span>{item.totalFiles - 1}개 이미지 더보기</span>
+                                                )}
+                                            </div>
+                                        )}
+                                    </Link>
+
+                                    <div className="freetalk_like_comment clear">
+                                        <div className="left">
+                                            <div className="post_like_button">
+                                                <input
+                                                    type="checkbox"
+                                                    id={`like-${item.postId}`}
+                                                    hidden
+                                                    checked={item.isLiked}
+                                                    onChange={() => handleLike(item.postId)}
+                                                />
+                                                <label
+                                                  htmlFor={`like-${item.postId}`}
+                                                  className="like-btn"
+                                                  onClick={(e) => {
+                                                    if (isEditMode) {
+                                                        e.preventDefault();
+                                                        e.stopPropagation();
+                                                    }
+                                                }}>
+                                                    좋아요 <span>{item?.likeCount ?? 0}</span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div className="right">
+                                            <Link
+                                              to={`/cinesquare/${item.postId}#comment`}
+                                              className="post_comment_button"
                                               onClick={(e) => {
-                                                if (isEditMode) {
-                                                    e.preventDefault();
-                                                    e.stopPropagation();
-                                                }
-                                            }}>
-                                                좋아요 <span>{item?.likeCount ?? 0}</span>
-                                            </label>
+                                                  if (isEditMode) {
+                                                      e.preventDefault();
+                                                      e.stopPropagation();
+                                                  }
+                                              }}
+                                            >
+                                                댓글 <span>{item?.commentCount ?? 0}</span>
+                                            </Link>
                                         </div>
                                     </div>
-                                    <div className="right">
-                                        <Link
-                                          to={`/cinesquare/${item.postId}#comment`}
-                                          className="post_comment_button"
-                                          onClick={(e) => {
-                                              if (isEditMode) {
-                                                  e.preventDefault();
-                                                  e.stopPropagation();
-                                              }
-                                          }}
-                                        >
-                                            댓글 <span>{item?.commentCount ?? 0}</span>
-                                        </Link>
-                                    </div>
-                                </div>
+                                </section>
+                            ))
+                        ) : (
+                            <section className="os_freetalk_section">
+                                <p>게시글이 없습니다</p>
                             </section>
-                        ))
-                    ) : (
-                        <section className="os_freetalk_section">
-                            <p>게시글이 없습니다</p>
-                        </section>
-                    )}
+                        )}
 
+                    </div>
                 </div>
 
                 {/*광고 영역*/}

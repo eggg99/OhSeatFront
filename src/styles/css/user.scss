@@ -14,9 +14,14 @@ $background-color_8: #121212;
 
 @charset "UTF-8";
 .os_user_contents {
-	padding: 50px 0;
-	margin-top: 90px;
+	padding: 48px 0;
+	margin-top: 72px;
 	background-color: $background-color_1;
+	+ {
+		.os_footer {
+			margin-top: 0;
+		}
+	}
 }
 .os_login_form_wrap {
 	position: relative;
@@ -35,8 +40,7 @@ $background-color_8: #121212;
 	margin-left: -200px;
 	background-color: $background-color_2;
 	border: 1px solid #ededed;
-	border-radius: 30px;
-	box-sizing: border-box;
+	border-radius: 16px;
 	>h3 {
 		margin-bottom: 30px;
 		font-size: 22px;
@@ -171,8 +175,7 @@ $background-color_8: #121212;
 	margin: 0 auto;
 	background-color: $background-color_2;
 	border: 1px solid #ededed;
-	border-radius: 30px;
-	box-sizing: border-box;
+	border-radius: 16px;
 	>h3 {
 		margin-bottom: 30px;
 		font-size: 22px;
@@ -288,8 +291,7 @@ $background-color_8: #121212;
 	margin: 0 auto;
 	background-color: $background-color_2;
 	border: 1px solid #ededed;
-	border-radius: 30px;
-	box-sizing: border-box;
+	border-radius: 16px;
 	>h3 {
 		margin-bottom: 30px;
 		font-size: 22px;
@@ -327,8 +329,7 @@ $background-color_8: #121212;
 	margin: 0 auto;
 	background-color: $background-color_2;
 	border: 1px solid #ededed;
-	border-radius: 30px;
-	box-sizing: border-box;
+	border-radius: 16px;
 	>h3 {
 		margin-top: 10px;
 		margin-bottom: 30px;

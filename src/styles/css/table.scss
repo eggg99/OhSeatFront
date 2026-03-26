@@ -4,22 +4,25 @@ $color_3: #c3c3c3;
 $color_4: #121212;
 $color_5: #747474;
 $color_6: #599c3e;
-$color_7: #a7a7a7;
+$color_7: #8a8a8a;
 $background-color_1: #f4f4f4;
-$background-color_2: #FFCDCD;
-$background-color_3: #f1f1f1;
+$background-color_2: #ae0200;
+$background-color_3: #f7f7f7;
 $background-color_4: #f9f9f9;
 $background-color_5: #599c3e;
 $background-color_6: #fff;
 $background-color_7: #747474;
 $background-color_8: #121212;
-$background-color_9: transparent;
-$background-color_10: #AE0200;
+$background-color_9: #f1f1f1;
+$background-color_10: transparent;
+$background-color_11: #AE0200;
+$background-color_12: rgba(0, 0, 0, 0.45);
 
 @charset "UTF-8";
 /*기본 테이블1*/
 /*기본 테이블2 - 게시글 작성 테이블*/
 /*기본 테이블3 - 이벤트 게시판 목록*/
+/*기본 테이블3 - 이벤트 게시판 목록 수정모드*/
 .txtl {
 	text-align: left;
 }
@@ -35,13 +38,12 @@ $background-color_10: #AE0200;
 	white-space: nowrap;
 	word-wrap: normal;
 	overflow: hidden;
-	box-sizing: border-box;
 }
 .basic_board1 {
 	.board_fix {
-		top: 7.5px;
-		left: 0;
-		right: 0;
+		top: 11px;
+		left: 16px;
+		right: 16px;
 	}
 	font-size: 13px;
 	border-top: 1px solid #121212;
@@ -50,7 +52,9 @@ $background-color_10: #AE0200;
 		>tr {
 			>th {
 				padding: 14px 0;
-				line-height: 16px;
+				font-size: 13px;
+				line-height: 19px;
+				font-weight: 600;
 			}
 		}
 	}
@@ -59,16 +63,19 @@ $background-color_10: #AE0200;
 			border-top: 1px solid #ddd;
 			>th {
 				position: relative;
-				padding: 7.5px 0;
-				line-height: 21px;
+				padding: 12px 16px;
+				font-size: 14px;
+				line-height: 19px;
 				font-weight: 500;
 				color: $color_1;
 				background-color: $background-color_1;
 				>span.notice {
 					display: inline-block;
-					padding: 0 16px;
+					padding: 0 11px;
+					font-size: 13px;
+					color: $color_2;
 					background-color: $background-color_2;
-					border-radius: 30px;
+					border-radius: 33px;
 				}
 				>a {
 					&:hover {
@@ -78,8 +85,9 @@ $background-color_10: #AE0200;
 			}
 			>td {
 				position: relative;
-				padding: 7.5px 0;
-				line-height: 21px;
+				padding: 12px 16px;
+				font-size: 14px;
+				line-height: 19px;
 				>a {
 					&:hover {
 						font-weight: 700;
@@ -131,32 +139,30 @@ input.post_cbx[type="checkbox"] {
 		}
 	}
 	select {
-		height: 46px;
+		height: 48px;
+		font-size: 15px;
+		line-height: 46px;
+		border-radius: 6px;
 		padding: 0 0 0 16px;
-		font-size: 16px;
-		line-height: 44px;
 		background: url(../img/select_option.png) no-repeat right 16px center;
 		border: 1px solid #ddd;
-		border-radius: 6px;
 	}
 }
 .post_title_input {
-	height: 46px;
-	padding: 0 16px;
-	font-size: 16px;
-	line-height: 44px;
-	background-color: $background-color_3;
-	border: none;
+	height: 48px;
+	font-size: 15px;
+	line-height: 46px;
 	border-radius: 6px;
+	padding: 0 16px;
+	background-color: $background-color_3;
+	border: 1px solid #eeeeee;
 }
 .post_textarea_wrap {
 	height: 280px;
 	padding: 16px;
-	margin-top: 10px;
 	background: #fff;
 	border: 1px solid #eaeaea;
 	border-radius: 6px;
-	box-sizing: border-box;
 	>textarea {
 		width: 100%;
 		height: 100%;
@@ -165,7 +171,6 @@ input.post_cbx[type="checkbox"] {
 		outline: none;
 		font-size: 14px;
 		line-height: 150%;
-		box-sizing: border-box;
 		background: transparent;
 	}
 }
@@ -175,8 +180,9 @@ input.post_cbx[type="checkbox"] {
 	border-radius: 6px;
 }
 .os_file_plus {
-	font-size: 16px;
-	line-height: 44px;
+	width: 100%;
+	font-size: 15px;
+	line-height: 46px;
 	color: $color_2;
 	background-color: $background-color_5;
 	border-radius: 6px;
@@ -184,7 +190,10 @@ input.post_cbx[type="checkbox"] {
 .os_file_list {
 	margin-top: 16px;
 	>li {
-		padding: 10px 10px 10px 20px;
+		display: flex;
+		align-items: center;
+		gap: 10px;
+		padding: 10px 12px 10px 20px;
 		font-size: 14px;
 		line-height: 30px;
 		background-color: $background-color_6;
@@ -196,18 +205,15 @@ input.post_cbx[type="checkbox"] {
 			}
 		}
 		>span {
-			float: left;
+			min-width: 0;
 		}
 		>i {
-			float: left;
-			margin-left: 10px;
 			font-style: normal;
 			color: $color_3;
 		}
 		>b {
-			float: left;
 			padding: 0 3px;
-			margin: 5px 0 5px 10px;
+			margin: 5px 0 5px 0;
 			line-height: 20px;
 			color: $color_2;
 			font-weight: 400;
@@ -215,9 +221,9 @@ input.post_cbx[type="checkbox"] {
 			border-radius: 3px;
 		}
 		>button {
-			float: right;
 			max-width: fit-content;
 			padding: 0 8px;
+			margin-left: auto;
 			font-size: 14px;
 			line-height: 28px;
 			color: $color_4;
@@ -318,7 +324,7 @@ button.os_file_upload {
 }
 .calendar_wrap {
 	padding: 10px;
-	background-color: $background-color_3;
+	background-color: $background-color_9;
 	border-radius: 6px;
 }
 .calendar_list {
@@ -361,7 +367,6 @@ button.os_file_upload {
 .calendar_input {
 	position: relative;
 	padding: 0;
-	box-sizing: border-box;
 	font-size: 14px;
 	line-height: 26px;
 	color: $color_4;
@@ -389,29 +394,28 @@ button.os_file_upload {
 	font-size: 16px;
 	line-height: 44px;
 	text-align: right;
-	background-color: $background-color_9;
+	background-color: $background-color_10;
 	border: none;
 }
 .my_place_span {
+	display: block;
 	padding-left: 29px;
-	font-size: 18px;
-	line-height: 30px;
+	font-size: 16px;
+	line-height: 24px;
 	color: $color_5;
 	background: url(../img/my_place_span.png) no-repeat left center;
 }
 .basic_board3_wrap {
-	padding-right: 24px;
+	padding: 24px;
 	border-top: 1px solid #121212;
 	border-bottom: 1px solid #ddd;
 }
-.basic_board3 {
-	font-size: 13px;
-	>tbody {
-		>tr {
-			>td {
-				padding: 24px 0 24px 24px;
-			}
-		}
+.os_event_list {
+	display: grid;
+	grid-template-columns: repeat(4, 1fr);
+	gap: 32px 24px;
+	>li {
+		display: block;
 	}
 }
 .event_post_wrap {
@@ -423,18 +427,18 @@ button.os_file_upload {
 		left: 16px;
 		z-index: 10;
 		>i {
-			display: inline-block;
-			width: max-content;
-			padding: 0 8px;
+			display: inline-flex;
+			align-items: center;
+			padding: 4px 8px;
 			font-style: normal;
-			font-size: 14px;
-			line-height: 24px;
+			font-size: 12px;
+			line-height: 1;
 			color: $color_2;
-			background-color: $background-color_10;
-			border-radius: 3px;
+			background-color: $background-color_11;
+			border-radius: 4px;
 			+ {
 				i {
-					margin-left: 2px;
+					margin-left: 4px;
 				}
 			}
 		}
@@ -444,17 +448,16 @@ button.os_file_upload {
 	}
 	>img {
 		display: block;
-		width: 100%;
-		height: 290px;
+		width: 290px;
 		border-radius: 6px;
 		object-fit: cover;
 		object-position: center;
 	}
 	>p {
-		min-height: 52px;
-		margin-top: 16px;
-		font-size: 18px;
-		line-height: 26px;
+		min-height: 48px;
+		margin-top: 12px;
+		font-size: 16px;
+		line-height: 24px;
 		font-weight: 600;
 		overflow: hidden;
 		text-overflow: ellipsis;
@@ -465,10 +468,47 @@ button.os_file_upload {
 	>span {
 		display: block;
 		padding-left: 24px;
-		margin-top: 10px;
-		font-size: 16px;
-		line-height: 150%;
+		margin-top: 8px;
+		font-size: 14px;
+		line-height: 1.5;
 		color: $color_7;
 		background: url(../img/event_post_wrap_span.png) no-repeat left center;
+	}
+}
+.event_post_wrap.edit_mode {
+	position: relative;
+	&::before {
+		content: '';
+		position: absolute;
+		top: 20px;
+		right: 20px;
+		width: 25px;
+		height: 25px;
+		background-color: $background-color_6;
+		border: 1px solid #ddd;
+		border-radius: 100%;
+		z-index: 10;
+	}
+}
+.event_post_wrap.edit_mode.checked {
+	&::before {
+		border: none;
+		background: url(../img/edit_mode_checked.png) no-repeat center;
+		background-color: $background-color_2;
+		border: 2px solid #fff;
+	}
+	>img {
+		position: relative;
+		border: 2px solid #ae0200;
+	}
+	&::after {
+		content: '';
+		position: absolute;
+		top: 2px;
+		right: 2px;
+		bottom: 104px;
+		left: 2px;
+		background-color: $background-color_12;
+		border-radius: 4px;
 	}
 }
