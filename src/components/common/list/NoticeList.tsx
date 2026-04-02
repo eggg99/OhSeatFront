@@ -21,7 +21,7 @@ export const NoticeList:React.FC<NoticeListProps> = ({noticeList, isEdit}) => {
           </th>
           <th>{item.authorNickName}</th>
           <th>{item.createdAt ? item.createdAt.split("T")[0].replace(/-/g, ".") : ""}</th>
-          <th>{item.views}</th>
+          <th>{item.views}회</th>
           <th></th>
         </tr>
       ))}

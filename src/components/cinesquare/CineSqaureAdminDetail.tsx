@@ -63,11 +63,6 @@ export default function CineSqaureAdminDetail(){
         }
     }
 
-    // 수정 / 삭제 메뉴 버튼 클릭
-    const handleInnerToggle = () => {
-        setMenuOn((prev) => !prev);
-    };
-
     return(
         <div className="os_sub_contents">
             <div className="os_freetalk_wrap clear">
@@ -75,6 +70,7 @@ export default function CineSqaureAdminDetail(){
                     <button onClick={goBack} className="go_before_button">목록으로 돌아가기</button>
 
                     <h3>공지사항</h3>
+                    <div className="os_freetalk_right_wrap"></div>
                 </div>
 
                 <div className="theater_detail_board_wrap2">
@@ -94,21 +90,6 @@ export default function CineSqaureAdminDetail(){
                             <a href="#" className="post_hits_button">조회수
                                 <span>{detailValue?.views ?? 0}</span>
                             </a>
-
-                            {isLogin && detailValue?.authorId == userId && (
-                                <a href="#" className={`post_setting_button ${isMenuOn ? "on" : ""}`} onClick={handleInnerToggle}>
-                                    <span className="blind">더보기</span>
-                                </a>
-                            )}
-
-                            <div className="post_setting_wrap">
-                                {detailValue?.authorId == userId && isAdmin &&
-                                    <ul className="post_setting_list">
-                                        <li><a onClick={handleDelete} className="cursor-pointer">게시글 삭제</a></li>
-                                        {/*<li><Link to={`/cinesquare/admin/edit/${id}`}>게시글 수정</Link></li>*/}
-                                    </ul>
-                                }
-                            </div>
                         </div>
                     </div>
 

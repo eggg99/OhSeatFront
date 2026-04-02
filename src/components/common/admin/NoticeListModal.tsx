@@ -142,10 +142,10 @@ export default function NoticeListModal({
       <div className="modal_table_wrap">
         <table className="modal_table1">
           <colgroup>
-            <col style={{width: '13%'}}/>
-            <col style={{width: '59%'}}/>
-            <col style={{width: '13%'}}/>
-            <col style={{width: '15%'}}/>
+            <col style={{width: '10%'}}/>
+            <col style={{width: '68%'}}/>
+            <col style={{width: '10%'}}/>
+            <col style={{width: '12%'}}/>
           </colgroup>
           <thead>
           <tr>
@@ -189,7 +189,7 @@ export default function NoticeListModal({
                       <span className="mt_on">ON</span>
                     </label>
                   </td>
-                  <td className="txtc">{item.createdAt?.split("T")[0]}</td>
+                  <td className="txtc">{item.createdAt?.split("T")[0].replace(/-/g, ".")}</td>
                 </tr>
               ))
             ) : (

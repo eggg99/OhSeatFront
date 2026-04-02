@@ -3,20 +3,28 @@ import { locationStore } from "@/store/userLocation";
 
 interface LocationProps {
   onClick?: () => void;
+  autoFetch?: boolean;
+  refreshOnClick?: boolean;
 }
 
-export default function Location({ onClick }: LocationProps) {
+export default function Location({
+  onClick,
+  autoFetch = true,
+  refreshOnClick = true,
+}: LocationProps) {
   const currentLocation = locationStore((s) => s.currentLocation);
   const fetchLocation = locationStore((s) => s.fetchLocation);
 
   useEffect(() => {
-    if (!currentLocation.city) {
+    if (autoFetch && !currentLocation.city) {
       fetchLocation();
     }
-  }, [currentLocation.city, fetchLocation]);
+  }, [autoFetch, currentLocation.city, fetchLocation]);
 
   const handleClick = () => {
-    fetchLocation();   // 위치 최신화
+    if (refreshOnClick) {
+      fetchLocation();
+    }
     onClick?.();       // 부모에서 내려준 search 실행
   };
 

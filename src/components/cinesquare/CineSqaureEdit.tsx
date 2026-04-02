@@ -109,10 +109,12 @@ export default function CineSquareEdit() {
                     </button>
 
                     <h3>씨네광장 수정하기</h3>
-                    <div className="freetalk_button_wrap">
-                        <a onClick={handleSubmit} className="post_button write cursor-pointer">
-                            수정
-                        </a>
+                    <div className="os_freetalk_right_wrap">
+                        <div className="freetalk_button_wrap">
+                            <a onClick={handleSubmit} className="post_button write cursor-pointer">
+                                수정
+                            </a>
+                        </div>
                     </div>
                 </div>
 

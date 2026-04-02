@@ -201,7 +201,7 @@ export default function EventAnnouncementBrowse () {
                                 </td>
                                 <td className="txtc">관리자</td>
                                 <td className="txtc">{item.createdAt ? item.createdAt.split("T")[0].replace(/-/g, ".") : ""}</td>
-                                <td className="txtc">{item?.views}</td>
+                                <td className="txtc">{item?.views}회</td>
                             </tr>
                         ))
                     ) : (

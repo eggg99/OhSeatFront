@@ -36,7 +36,7 @@ export default function NoticeDetailModal({
       const { date, time } = formatDateTime(response.createdAt);
       setDetailValue({
         ...response,
-        createdAtDate: date,
+        createdAtDate: date.replace(/-/g, "."),
         createdAtTime: time,
       });
     } catch (error) {

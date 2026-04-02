@@ -233,7 +233,7 @@ export default function CineSqaureList() {
                 <div className="inner">
                     <div className="os_timeline_wrap">
                         <section className="location_wrap clear">
-                            <Location onClick={search} />
+                            <Location onClick={search} autoFetch={false} refreshOnClick={false} />
                             <div className="post_edit_wrap clear">
                                 {isAdmin && (
                                     <>
@@ -404,10 +404,9 @@ export default function CineSqaureList() {
                         )}
 
                     </div>
+                    {/*광고 영역*/}
+                    <div className="os_ad_wrap"></div>
                 </div>
-
-                {/*광고 영역*/}
-                <div className="os_ad_wrap"></div>
 
                 <div className="os_freetalk_floating">
                     {isLogin && (

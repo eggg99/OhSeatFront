@@ -198,7 +198,7 @@ export default function CineSquareDetail(){
         <div className="os_sub_contents">
             <div className="os_freetalk_wrap clear">
                 <div className="os_freetalk_subtitle">
-                    <button onClick={list} className="go_before_button">목록으로 돌아가기</button>
+                    <a onClick={list} className="go_before_button cursor-pointer">목록으로 돌아가기</a>
 
                     <h3>씨네광장 소식</h3>
                     {isLogin && isAdmin &&

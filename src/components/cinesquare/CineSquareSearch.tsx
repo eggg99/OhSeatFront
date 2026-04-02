@@ -24,11 +24,19 @@ export default function CinesquareSearch() {
     };
 
     const search = async () => {
+        const trimmedValue = inputValue.trim();
+
+        if (!trimmedValue) {
+            setResultSearch([]);
+            return;
+        }
+
         try {
-            const response = await searchLocation({ searchValue: inputValue });
-            if (response) setResultSearch(response);
+            const response = await searchLocation({ searchValue: trimmedValue });
+            setResultSearch(response ?? []);
         } catch (err) {
             console.error("위치 정보 검색 실패:", err);
+            setResultSearch([]);
         }
     };
 
@@ -78,7 +86,7 @@ return (
                     </li>
                 ))
             ) : (
-                <>검색 결과가 없습니다 🥲</>
+              <li className="clear">검색 결과가 없습니다 🥲</li>
             )}
         </ul>
 
@@ -99,7 +107,7 @@ return (
                             </li>
                         ))
                     ) : (
-                        <>최근 이용 지역이 없습니다 🥲</>
+                      <li className="clear">최근 이용 지역이 없습니다 🥲</li>
                     )}
                 </ul>
             </div>
