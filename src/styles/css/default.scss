@@ -2,8 +2,8 @@ $color_1: inherit;
 $color_2: #747474;
 $font-family_1: 'Pretendard', Helvetica, "Apple SD Gothic Neo", sans-serif;
 $background-color_1: #fff;
-$background-color_2: #f1f1f1;
-$background-color_3: #f2f2f2;
+$background-color_2: #f2f2f2;
+$background-color_3: #f1f1f1;
 
 @charset "UTF-8";
 /* reset */
@@ -67,28 +67,27 @@ $background-color_3: #f2f2f2;
 	font-family: 'GmarketSans';
 	font-weight: 300;
 	font-style: normal;
+	font-display: swap;
 	src: url('../fonts/GmarketSansLight.eot');
 	src: url('../fonts/GmarketSansLight.eot?#iefix') format('embedded-opentype'), url('../fonts/GmarketSansLight.woff2') format('woff2'), url('../fonts/GmarketSansLight.woff') format('woff'), url('../fonts/GmarketSansLight.ttf') format("truetype");
-	font-display: swap;
 }
 @font-face {
 	font-family: 'GmarketSans';
 	font-weight: 500;
 	font-style: normal;
+	font-display: swap;
 	src: url('../fonts/GmarketSansMedium.eot');
 	src: url('../fonts/GmarketSansMedium.eot?#iefix') format('embedded-opentype'), url('../fonts/GmarketSansMedium.woff2') format('woff2'), url('../fonts/GmarketSansMedium.woff') format('woff'), url('../fonts/GmarketSansMedium.ttf') format("truetype");
-	font-display: swap;
 }
 @font-face {
 	font-family: 'GmarketSans';
 	font-weight: 700;
 	font-style: normal;
+	font-display: swap;
 	src: url('../fonts/GmarketSansBold.eot');
 	src: url('../fonts/GmarketSansBold.eot?#iefix') format('embedded-opentype'), url('../fonts/GmarketSansBold.woff2') format('woff2'), url('../fonts/GmarketSansBold.woff') format('woff'), url('../fonts/GmarketSansBold.ttf') format("truetype");
-	font-display: swap;
 }
 * {
-	font-family: $font-family_1;
 	box-sizing: border-box;
 	&::before {
 		box-sizing: border-box;
@@ -97,12 +96,15 @@ $background-color_3: #f2f2f2;
 		box-sizing: border-box;
 	}
 }
-body {
-	margin: 0;
-	margin: 0;
+html {
 	font-family: $font-family_1;
-	vertical-align: top;
-	letter-spacing: -0.2px;
+	-webkit-text-size-adjust: 100%;
+	text-size-adjust: 100%;
+}
+body {
+	font-family: $font-family_1;
+	margin: 0;
+	word-break: keep-all;
 }
 h1 {
 	margin: 0;
@@ -132,13 +134,6 @@ ul {
 	margin: 0;
 	padding: 0;
 	list-style: none;
-	>li {
-		>table {
-			th {
-				text-align: center;
-			}
-		}
-	}
 }
 ol {
 	margin: 0;
@@ -166,6 +161,116 @@ legend {
 	margin: 0;
 	padding: 0;
 }
+input {
+	margin: 0;
+	font: inherit;
+	letter-spacing: -0.2px;
+	vertical-align: top;
+	border: 1px solid #ddd;
+	line-height: inherit;
+	vertical-align: top;
+	&:focus {
+		outline: 1px solid #adadad;
+	}
+	&:read-only {
+		background-color: $background-color_3;
+		color: $color_2;
+	}
+}
+textarea {
+	margin: 0;
+	font: inherit;
+	letter-spacing: -0.2px;
+	vertical-align: top;
+	width: 100%;
+	padding: 0;
+	font-size: 17px;
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	vertical-align: top;
+	resize: vertical;
+	&:focus {
+		outline: 1px solid #adadad;
+	}
+	&:read-only {
+		background-color: $background-color_2;
+	}
+}
+select {
+	margin: 0;
+	font: inherit;
+	letter-spacing: -0.2px;
+	vertical-align: top;
+	width: 100%;
+	padding: 0 5px;
+	border: 1px solid #ddd;
+	background: url(../img/select_option.png) no-repeat right 12px center;
+	background-color: $background-color_1;
+	appearance: none;
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	-o-appearance: none;
+	line-height: inherit;
+	vertical-align: top;
+	&:focus {
+		outline: 1px solid #adadad;
+	}
+}
+button {
+	margin: 0;
+	font: inherit;
+	letter-spacing: -0.2px;
+	vertical-align: top;
+	display: block;
+	width: 100%;
+	border: 0;
+	cursor: pointer;
+	&:focus {
+		outline: 1px solid #adadad;
+	}
+}
+pre {
+	margin: 0;
+	font: inherit;
+	letter-spacing: -0.2px;
+	vertical-align: top;
+	white-space: pre-wrap;
+}
+input[type="text"] {
+	width: 100%;
+}
+input[type="password"] {
+	width: 100%;
+}
+input[type="email"] {
+	width: 100%;
+}
+input[type="search"] {
+	width: 100%;
+}
+input[type="tel"] {
+	width: 100%;
+}
+input[type="number"] {
+	width: 100%;
+}
+input[type="date"] {
+	width: 100%;
+}
+img {
+	vertical-align: top;
+	max-width: 100%;
+	height: auto;
+}
+svg {
+	vertical-align: top;
+}
+video {
+	vertical-align: top;
+}
+canvas {
+	vertical-align: top;
+}
 table {
 	width: 100%;
 	border-collapse: collapse;
@@ -179,79 +284,13 @@ a {
 	text-decoration: none;
 	vertical-align: top;
 }
-img {
-	vertical-align: top;
-}
-input {
-	margin: 0;
-	font-family: $font-family_1;
-	vertical-align: top;
-	letter-spacing: -0.2px;
-	border: 1px solid #ddd;
-	width: 100%;
-	line-height: inherit;
-	vertical-align: top;
-	&:read-only {
-		background-color: $background-color_2;
-		color: $color_2;
-	}
-}
-textarea {
-	margin: 0;
-	font-family: $font-family_1;
-	vertical-align: top;
-	letter-spacing: -0.2px;
-	width: 100%;
-	padding: 0;
-	font-size: 17px;
-	border: 1px solid #ddd;
-	border-radius: 3px;
-	vertical-align: top;
-	&:read-only {
-		background-color: $background-color_3;
-	}
-}
-select {
-	margin: 0;
-	font-family: $font-family_1;
-	vertical-align: top;
-	letter-spacing: -0.2px;
-	width: 100%;
-	padding: 0 5px;
-	border: 1px solid #ddd;
-	background: url(../img/select_option.png) no-repeat right 12px center;
-	background-color: $background-color_1;
-	appearance: none;
-	-webkit-appearance: none;
-	-moz-appearance: none;
-	-o-appearance: none;
-	line-height: inherit;
-	vertical-align: top;
-	&:focus {
-		outline: none;
-	}
-}
-button {
-	margin: 0;
-	font-family: $font-family_1;
-	vertical-align: top;
-	letter-spacing: -0.2px;
-	display: block;
-	width: 100%;
-	border: 0;
-	cursor: pointer;
-}
-pre {
-	margin: 0;
-	font-family: $font-family_1;
-	vertical-align: top;
-	letter-spacing: -0.2px;
-	white-space: pre-wrap;
-}
-input[type="text"] {
-	&:focus {
-		outline: none;
-	}
+caption {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	margin: -1px;
+	overflow: hidden;
+	clip: rect(0 0 0 0);
 }
 .blind {
 	position: absolute;
@@ -260,7 +299,4 @@ input[type="text"] {
 	margin: -1px;
 	overflow: hidden;
 	clip: rect(0 0 0 0);
-}
-caption {
-	display: none;
 }

@@ -236,23 +236,22 @@ input.post_cbx[type="checkbox"] {
 .os_file_list2 {
 	>li {
 		position: relative;
-		padding-left: 300px;
+		display: flex;
+		gap: 40px;
+		align-items: center;
+		min-width: 0;
 		+ {
 			li {
 				margin-top: 8px;
 			}
 		}
 		>p {
-			position: absolute;
-			top: 50%;
-			left: 10px;
-			margin-top: -15px;
 			line-height: 30px;
-			margin-right: 20px;
 			font-weight: 700;
+			flex: 0 0 290px;
 			>i {
 				display: inline-block;
-				width: 14px;
+				width: 22px;
 				padding: 0 4px;
 				margin: 4px 8px 4px 0;
 				font-style: normal;
@@ -272,6 +271,10 @@ input.post_cbx[type="checkbox"] {
 			}
 		}
 		>.file_name_wrap {
+			flex: 1;
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
 			padding: 10px 10px 10px 20px;
 			font-size: 14px;
 			line-height: 30px;
@@ -292,11 +295,11 @@ input.post_cbx[type="checkbox"] {
 		color: $color_3;
 	}
 	>p {
-		float: left;
+		flex-shrink: 0;
 		color: $color_6;
 	}
 	>.file_button_wrap {
-		float: right;
+		margin-left: auto;
 	}
 }
 .file_button_wrap {

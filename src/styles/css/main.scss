@@ -22,6 +22,9 @@ $background-color_10: #D40000;
 
 @charset "UTF-8";
 /*메인페이지 콘텐츠*/
+/* 오늘의 무비픽 */
+/* 씨네광장 + 이벤트 */
+/* 씨네광장 */
 .os_main_contents {
 	padding: 48px 0 0;
 	margin-top: 72px;
@@ -32,8 +35,7 @@ $background-color_10: #D40000;
 	}
 }
 .os_main_visual {
-	width: 1280px;
-	margin: 0 auto;
+	margin-top: 0;
 	>.os_weekly_best_theater {
 		display: grid;
 		grid-template-columns: repeat(3, 1fr);
@@ -237,15 +239,15 @@ $background-color_10: #D40000;
 	}
 }
 .os_movie_pick {
-	position: relative;
-	width: 1280px;
-	margin: 120px auto 0;
-	overflow: hidden;
+	display: flex;
+	margin-top: 110px;
+	gap: 40px;
+	min-width: 0;
 	>.mp_title {
-		position: relative;
-		height: 380px;
+		flex: 0 0 290px;
 		display: flex;
 		flex-direction: column;
+		padding-top: 10px;
 	}
 }
 .mp_title {
@@ -291,33 +293,59 @@ $background-color_10: #D40000;
 		background: url(../img/kofic.png) no-repeat 0 0;
 	}
 }
+.mp_mask {
+	flex: 1;
+	position: relative;
+	min-width: 0;
+	height: 390px;
+	&::after {
+		content: '';
+		position: absolute;
+		top: 0;
+		right: 0;
+		bottom: 0;
+		width: 40px;
+		z-index: 3;
+		pointer-events: none;
+		background: linear-gradient(to left, #fff, transparent);
+	}
+}
 .mp_list_wrap {
 	position: absolute;
 	top: 0;
 	right: 0;
-	left: 360px;
-	height: 380px;
+	left: 0;
+	bottom: 0;
+	min-width: 0;
+	padding-top: 10px;
 	overflow-x: scroll;
 	overflow-y: hidden;
+	-webkit-overflow-scrolling: auto;
+	cursor: grab;
+	scroll-behavior: auto;
+	user-select: none;
 	&::-webkit-scrollbar {
 		display: none;
 	}
 	>.mp_list {
-		width: 2994px;
+		display: flex;
+		flex-wrap: nowrap;
+		gap: 16px;
 	}
+}
+.mp_list_wrap.dragging {
+	cursor: grabbing;
 }
 .mp_list {
 	>li {
-		float: left;
+		flex: 0 0 260px;
 		position: relative;
-		width: 260px;
 		height: 380px;
 		border-radius: 16px;
 		overflow: hidden;
-		+ {
-			li {
-				margin-left: 16px;
-			}
+		transition: transform 0.25s ease;
+		&:hover {
+			transform: translateY(-10px);
 		}
 		>img {
 			width: 100%;
@@ -426,8 +454,7 @@ $background-color_10: #D40000;
 }
 .os_cine_square {
 	position: relative;
-	width: 1280px;
-	margin: 0 auto;
+	margin-top: 0;
 }
 .square_title {
 	position: relative;
@@ -497,11 +524,31 @@ $background-color_10: #D40000;
 		background: url(../img/square_after_on.png) no-repeat left 18px center;
 	}
 }
-.square_latest_list_wrap {
+.square_mask {
 	position: absolute;
 	bottom: 40px;
 	right: 0;
 	left: 305px;
+	height: 220px;
+	&::after {
+		content: '';
+		position: absolute;
+		top: 0;
+		right: 0;
+		bottom: 0;
+		width: 40px;
+		z-index: 3;
+		pointer-events: none;
+		background: linear-gradient(to left, #0e0e0e, transparent);
+	}
+}
+.square_latest_list_wrap {
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	padding-top: 10px;
 	overflow-x: scroll;
 	overflow-y: hidden;
 	&::-webkit-scrollbar {
@@ -510,13 +557,10 @@ $background-color_10: #D40000;
 }
 .square_latest_list {
 	display: flex;
+	gap: 16px;
+	width: max-content;
 	>li {
-		flex: 1;
-		+ {
-			li {
-				margin-left: 16px;
-			}
-		}
+		flex: 0 0 auto;
 		>a.inner {
 			display: block;
 			position: relative;
@@ -527,6 +571,11 @@ $background-color_10: #D40000;
 			border-radius: 10px;
 			display: flex;
 			flex-direction: column;
+			transition: transform 0.25s ease, box-shadow 0.25s ease;
+			&:hover {
+				transform: translateY(-10px);
+				box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+			}
 		}
 		>a {
 			>.category {
@@ -575,10 +624,9 @@ $background-color_10: #D40000;
 	border-radius: 100px 0 0 0;
 	>.inner {
 		position: relative;
-		width: 1280px;
 		height: 250px;
 		padding: 40px 0 0 0;
-		margin: 0 auto;
+		margin-top: 0;
 	}
 }
 .event_title {

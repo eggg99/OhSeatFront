@@ -1,16 +1,18 @@
 $color_1: #AE0200;
 $color_2: #fff;
-$color_3: #747474;
+$color_3: #888;
 $color_4: #121212;
 $color_5: #afafaf;
+$color_6: #666;
 $background-color_1: #f5f5f5;
 $background-color_2: #fff;
 $background-color_3: #ececec;
 $background-color_4: transparent;
 $background-color_5: #AE0200;
 $background-color_6: #eaeaea;
-$background-color_7: #686868;
-$background-color_8: #121212;
+$background-color_7: #f7f7f7;
+$background-color_8: #686868;
+$background-color_9: #121212;
 
 @charset "UTF-8";
 .os_user_contents {
@@ -33,16 +35,16 @@ $background-color_8: #121212;
 	position: absolute;
 	top: 50%;
 	left: 50%;
-	padding: 40px;
+	padding: 30px;
 	width: 400px;
-	height: 354px;
-	margin-top: -177px;
+	height: 322px;
+	margin-top: -161px;
 	margin-left: -200px;
 	background-color: $background-color_2;
 	border: 1px solid #ededed;
 	border-radius: 16px;
 	>h3 {
-		margin-bottom: 30px;
+		margin-bottom: 24px;
 		font-size: 22px;
 		text-align: center;
 		>span {
@@ -81,14 +83,15 @@ $background-color_8: #121212;
 			top: 0;
 			left: 20px;
 			font-size: 14px;
-			line-height: 48px;
+			line-height: 42px;
 			color: $color_1;
 			font-weight: 600;
 		}
 		>input[type="text"] {
+			height: 44px;
 			padding: 0 18px;
 			font-size: 14px;
-			line-height: 48px;
+			line-height: 42px;
 			background-color: $background-color_4;
 			border: none;
 		}
@@ -113,28 +116,29 @@ $background-color_8: #121212;
 			top: 0;
 			left: 20px;
 			font-size: 14px;
-			line-height: 48px;
+			line-height: 42px;
 			color: $color_1;
 			font-weight: 600;
 		}
 		>input[type="password"] {
+			height: 44px;
 			padding: 0 18px;
 			font-size: 14px;
-			line-height: 48px;
+			line-height: 42px;
 			background-color: $background-color_4;
 			border: none;
 		}
 	}
 }
 .user_login_button {
-	font-size: 16px;
-	line-height: 50px;
+	font-size: 15px;
+	line-height: 48px;
 	color: $color_2;
 	background-color: $background-color_5;
 	border-radius: 6px;
 }
 .login_plus_list {
-	margin-top: 20px;
+	margin-top: 28px;
 	text-align: center;
 	>li {
 		display: inline-block;
@@ -158,7 +162,7 @@ $background-color_8: #121212;
 		}
 		>a {
 			display: block;
-			font-size: 14px;
+			font-size: 13px;
 			line-height: 20px;
 			color: $color_3;
 		}
@@ -171,13 +175,13 @@ $background-color_8: #121212;
 }
 .os_join_form {
 	width: 400px;
-	padding: 40px;
+	padding: 30px;
 	margin: 0 auto;
 	background-color: $background-color_2;
 	border: 1px solid #ededed;
 	border-radius: 16px;
 	>h3 {
-		margin-bottom: 30px;
+		margin-bottom: 24px;
 		font-size: 22px;
 		text-align: center;
 		>span {
@@ -193,14 +197,14 @@ $background-color_8: #121212;
 		font-size: 14px;
 		+ {
 			li {
-				margin-top: 20px;
+				margin-top: 24px;
 			}
 		}
 		>span {
 			display: block;
 			line-height: 20px;
 			color: $color_4;
-			font-weight: 600;
+			font-weight: 500;
 			>i {
 				display: inline-block;
 				margin-left: 8px;
@@ -217,14 +221,17 @@ $background-color_8: #121212;
 			}
 		}
 		>input {
+			width: 100%;
+			height: 44px;
 			padding: 0 18px;
-			margin-top: 8px;
+			margin-top: 10px;
 			font-size: 14px;
-			line-height: 48px;
+			line-height: normal;
 			border: 1px solid #eaeaea;
-			border-radius: 6px;
+			border-radius: 8px;
 			&:read-only {
-				background-color: $background-color_6;
+				color: $color_6;
+				background-color: $background-color_7;
 			}
 			+ {
 				button {
@@ -235,17 +242,17 @@ $background-color_8: #121212;
 		>.input_with_btn {
 			position: relative;
 			padding-right: 77px;
-			margin-top: 8px;
+			margin-top: 10px;
 			background-color: $background-color_2;
 			border: 1px solid #eaeaea;
-			border-radius: 6px;
+			border-radius: 8px;
 			>input {
 				padding: 0 18px;
 				font-size: 14px;
-				line-height: 48px;
+				line-height: 42px;
 				background-color: $background-color_4;
 				border: none;
-				border-radius: none;
+				border-radius: 0;
 			}
 			>button {
 				position: absolute;
@@ -253,9 +260,10 @@ $background-color_8: #121212;
 				right: 6px;
 				bottom: 6px;
 				width: 65px;
-				font-size: 14px;
+				font-size: 13px;
+				font-weight: 500;
 				color: $color_2;
-				background-color: $background-color_7;
+				background-color: $background-color_8;
 				border-radius: 6px;
 			}
 		}
@@ -274,11 +282,15 @@ $background-color_8: #121212;
 	}
 }
 .user_join_button {
-	font-size: 16px;
+	width: 100%;
+	height: 48px;
+	padding: 0;
+	font-size: 15px;
 	line-height: 48px;
 	color: $color_2;
-	background-color: $background-color_8;
-	border-radius: 6px;
+	background-color: $background-color_9;
+	border-radius: 8px;
+	font-weight: 600;
 }
 .os_found_form_wrap {
 	width: 1280px;
@@ -287,15 +299,17 @@ $background-color_8: #121212;
 }
 .os_found_form {
 	width: 400px;
-	padding: 40px;
+	padding: 30px;
 	margin: 0 auto;
 	background-color: $background-color_2;
 	border: 1px solid #ededed;
 	border-radius: 16px;
 	>h3 {
-		margin-bottom: 30px;
-		font-size: 22px;
+		margin-bottom: 24px;
+		font-size: 20px;
+		line-height: 1.4;
 		text-align: center;
+		font-weight: 600;
 		>span {
 			display: inline-block;
 			padding-left: 32px;
@@ -305,16 +319,22 @@ $background-color_8: #121212;
 	}
 }
 .found_result_wrap {
-	padding: 20px 25px;
-	font-size: 16px;
-	line-height: 24px;
+	display: flex;
+	align-items: center;
+	flex-direction: column;
+	min-height: 56px;
+	padding: 16px 20px;
+	font-size: 14px;
+	line-height: 22px;
 	text-align: center;
-	font-weight: 600;
+	font-weight: 400;
 	background-color: $background-color_1;
-	border-radius: 6px;
+	border-radius: 8px;
 	>p {
 		>span {
+			font-size: 15px;
 			color: $color_1;
+			font-weight: 600;
 		}
 	}
 }
@@ -331,10 +351,11 @@ $background-color_8: #121212;
 	border: 1px solid #ededed;
 	border-radius: 16px;
 	>h3 {
-		margin-top: 10px;
-		margin-bottom: 30px;
-		font-size: 22px;
+		margin-bottom: 24px;
+		font-size: 20px;
+		line-height: 1.4;
 		text-align: center;
+		font-weight: 600;
 		>span {
 			display: inline-block;
 			padding-left: 32px;
@@ -343,11 +364,15 @@ $background-color_8: #121212;
 		}
 	}
 	>h4 {
-		margin-bottom: 14px;
+		margin-bottom: 12px;
+		font-size: 16px;
+		line-height: 1.4;
+		font-weight: 600;
+		color: $color_4;
 	}
 }
 .edit_my_info {
 	padding: 16px;
 	background-color: $background-color_1;
-	border-radius: 6px;
+	border-radius: 8px;
 }
