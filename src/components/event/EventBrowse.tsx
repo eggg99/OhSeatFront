@@ -253,7 +253,7 @@ export default function EventList () {
 
                 <div className="post_button_wrap clear">
                     <div className="right">
-                        {isLogin && <Link to={`/event/reg`} className="post_button write">글쓰기</Link>}
+                        {isLogin && isAdmin && <Link to={`/event/reg`} className="post_button write">글쓰기</Link>}
                     </div>
                 </div>
 
