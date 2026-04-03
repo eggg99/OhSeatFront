@@ -26,7 +26,7 @@ export default function EventAnnouncementBrowse () {
             await getList();
         }
         fetchData();
-    }, [categoryId, orderType]);
+    }, [categoryId, orderType, page, size]);
 
     // 페이지 로드 시 URL에 있는 쿼리로 초기화
     useEffect(() => {
@@ -37,6 +37,7 @@ export default function EventAnnouncementBrowse () {
     const handleClick = (value: number|null) => (e: React.MouseEvent) => {
         e.preventDefault(); // a 태그 기본 동작 방지
         setCategoryId(value);
+        setPage(0);
 
         // URL 쿼리 반영
         if (value) {
@@ -83,10 +84,16 @@ export default function EventAnnouncementBrowse () {
     const handlePageChange = (newPage: number) => setPage(newPage);
 
     // 정렬 변경
-    const handleOrderChange = (newOrder: string) => setOrderType(newOrder);
+    const handleOrderChange = (newOrder: string) => {
+        setOrderType(newOrder);
+        setPage(0);
+    };
 
     // 사이즈 변경
-    const handleSizeChange = (newSize: number) => setSize(newSize);
+    const handleSizeChange = (newSize: number) => {
+        setSize(newSize);
+        setPage(0);
+    };
 
     return (
         <div className="os_sub_contents">
@@ -224,11 +231,12 @@ export default function EventAnnouncementBrowse () {
                 <div className="post_button_wrap clear">
                     <div className="left">
                         {announcementList &&
-                            <Pagination
-                                currentPage={announcementList.number}
-                                totalPages={announcementList.totalPages}
-                                onPageChange={handlePageChange}
-                            />
+                          <Pagination
+                            currentPage={page}
+                            totalPages={announcementList.totalPages}
+                            onPageChange={handlePageChange}
+                            pageBase={0}
+                          />
                         }
                     </div>
                 </div>

@@ -768,7 +768,8 @@ $background-color_23: #ddd;
 	>li {
 		display: inline-block;
 		vertical-align: top;
-		>a {
+		>a,
+		>button {
 			display: inline-flex;
 			align-items: center;
 			justify-content: center;
@@ -776,20 +777,27 @@ $background-color_23: #ddd;
 			height: 32px;
 			font-size: 13px;
 			line-height: 32px;
+			padding: 0;
+			background-color: transparent;
+			border: none;
+			cursor: pointer;
 		}
-		>a.before {
+		>a.before,
+		>button.before {
 			border: 1px solid #ddd;
 			border-radius: 5px;
 			background: url(../img/pagination_before.png) no-repeat center;
 		}
-		>a.after {
+		>a.after,
+		>button.after {
 			border: 1px solid #ddd;
 			border-radius: 5px;
 			background: url(../img/pagination_after.png) no-repeat center;
 		}
 	}
 	>li.on {
-		>a {
+		>a,
+		>button {
 			background-color: $background-color_15;
 			border-radius: 5px;
 		}

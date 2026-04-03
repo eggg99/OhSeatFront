@@ -201,7 +201,7 @@ export default function CineSquareDetail(){
                     <a onClick={list} className="go_before_button cursor-pointer">목록으로 돌아가기</a>
 
                     <h3>씨네광장 소식</h3>
-                    {isLogin && isAdmin &&
+                    {isLogin && isAdmin ? (
                       <div className="os_freetalk_right_wrap">
                           <a
                             href="#"
@@ -209,7 +209,9 @@ export default function CineSquareDetail(){
                             onClick={() => handleDeleteAdmin()}
                           >삭제</a>
                       </div>
-                    }
+                      ) : (
+                      <div className="os_freetalk_right_wrap"></div>
+                    )}
                 </div>
 
                 <div className="theater_detail_board_wrap2">
@@ -391,10 +393,12 @@ export default function CineSquareDetail(){
 
                 <div className="post_button_wrap2 clear">
                     <div className="left">
-                        <Link
-                          to="/cinesquare/reg"
-                          className="post_button write"
-                        >글쓰기</Link>
+                        { isLogin &&
+                          <Link
+                            to="/cinesquare/reg"
+                            className="post_button write"
+                          >글쓰기</Link>
+                        }
                     </div>
 
                     <div className="right">
@@ -406,7 +410,7 @@ export default function CineSquareDetail(){
                         }
 
                         <Link
-                          to="/cinesquare/reg"
+                          to="/cinesquare/list?category=0"
                           className="post_button"
                         >목록</Link>
 

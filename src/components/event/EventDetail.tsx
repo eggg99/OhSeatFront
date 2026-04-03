@@ -67,6 +67,19 @@ export default function EventDetail () {
         }
     }
 
+    const moveToPost = (eventId: number, flag: 'bef' | 'aft') => {
+        if (!eventId) {
+            if (flag === 'bef') {
+                alert('이전글이 존재하지 않습니다.');
+            } else {
+                alert('다음글이 존재하지 않습니다.');
+            }
+            return;
+        }
+
+        navigate(`/event/${eventId}`);
+    };
+
     // 게시글 좋아요
     // postLikeEvent
     // postUnlikeEvent
@@ -114,26 +127,26 @@ export default function EventDetail () {
                         <div className="left"></div>
 
                         <div className="right">
-                            {detail.prevSeq ? (
-                              <Link
-                                to={`/event/${detail.prevSeq}`}
-                                className="post_button before cursor-pointer"
-                              >
-                                  이전글
-                              </Link>
-                            ) : (
-                              <span className="post_button before cursor-pointer">이전글</span>
-                            )}
-                            {detail.nextSeq ? (
-                              <Link
-                                to={`/event/${detail.nextSeq}`}
-                                className="post_button after cursor-pointer"
-                              >
-                                  다음글
-                              </Link>
-                            ) : (
-                              <span className="post_button before after cursor-pointer">다음글</span>
-                            )}
+                            <a
+                              href="#"
+                              className="post_button before cursor-pointer"
+                              onClick={(e) => {
+                                  e.preventDefault();
+                                  moveToPost(detail.prevSeq, 'bef');
+                              }}
+                            >
+                                이전글
+                            </a>
+                            <a
+                              href="#"
+                              className="post_button after cursor-pointer"
+                              onClick={(e) => {
+                                  e.preventDefault();
+                                  moveToPost(detail.nextSeq, 'aft');
+                              }}
+                            >
+                                다음글
+                            </a>
                             <Link to="/event/browse" className="post_button cursor-pointer">목록</Link>
                         </div>
                     </div>
@@ -212,7 +225,7 @@ export default function EventDetail () {
 
                     <div className="post_button_wrap clear">
                         <div className="left">
-                            <Link to={`/event/reg`} className="post_button write">글쓰기</Link>
+                            {isLogin && isAdmin && <Link to={`/event/reg`} className="post_button write">글쓰기</Link>}
                         </div>
 
                         <div className="right">

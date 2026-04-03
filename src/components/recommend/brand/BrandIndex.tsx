@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import { getCinemaList, getPostList, getScreenList } from "@/apis/api/recommend";
 import useEmblaCarousel from "embla-carousel-react";
 import { getRecommendNotice, deleteAdminPost } from "@/apis/api/admin";
@@ -42,6 +42,7 @@ export default function BrandIndex() {
     const [size, setSize] = useState<number>(10);
     const [noticeList, setNoticeList] = useState<NoticeData[]>([]);
     const [selectedPostIds, setSelectedPostIds] = useState<number[]>([]);       // 관리자용 삭제할 게시글 배열
+    const latestPostRequestRef = useRef(0);
     const initialAreaId = searchParams.get("areaId") ?? "00";
     const initialCinemaId = searchParams.get("cinemaId");
 
@@ -72,7 +73,11 @@ export default function BrandIndex() {
 
     // 게시글 리스트 조회
     const handlePostList = async() => {
+        const requestId = ++latestPostRequestRef.current;
         const response = await getPostList(multiplexId, selectedAreaId, selectedCinema.cinemaId, selectedScreen.screenId, orderType, page, size);
+        if (requestId !== latestPostRequestRef.current) {
+            return;
+        }
         setPostList(response);
     }
 
@@ -361,6 +366,7 @@ export default function BrandIndex() {
                 {/* 게시글 테이블 */}
                 {postList && (
                   <RecommendList
+                    key={`brand-post-list-${page}`}
                     noticeList={noticeList}
                     postList={postList}
                     isEditMode={isEditMode}
@@ -380,9 +386,10 @@ export default function BrandIndex() {
                     <div className="left">
                         {postList &&
                             <Pagination
-                                currentPage={postList.number}
+                                currentPage={page}
                                 totalPages={postList.totalPages}
                                 onPageChange={handlePageChange}
+                                pageBase={0}
                             />
                         }
                     </div>

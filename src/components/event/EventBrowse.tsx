@@ -261,9 +261,10 @@ export default function EventList () {
                     <div className="left">
                         {eventList &&
                           <Pagination
-                            currentPage={eventList.number}
+                            currentPage={page}
                             totalPages={eventList.totalPages}
                             onPageChange={handlePageChange}
+                            pageBase={0}
                           />
                         }
                     </div>

@@ -14,7 +14,7 @@ export default function NoticeListModal({
   onCreate,
 }: NoticeListModalProps) {
   const [noticeList, setNoticeList] = useState<NoticePage>();
-  const [modalPage, setModalPage] = useState<number>(1);
+  const [modalPage, setModalPage] = useState<number>(0);
 
   const getList = async () => {
     const response = await getNoticeList('RECOMMEND', modalPage)
@@ -206,9 +206,10 @@ export default function NoticeListModal({
           <div className="left">
             {noticeList &&
                 <Pagination
-                    currentPage={noticeList.number}
+                    currentPage={modalPage}
                     totalPages={noticeList.totalPages}
                     onPageChange={handlePageChange}
+                    pageBase={0}
                 />
             }
           </div>

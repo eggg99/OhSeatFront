@@ -409,7 +409,7 @@ export default function CineSqaureList() {
                 </div>
 
                 <div className="os_freetalk_floating">
-                    {isLogin && (
+                    {isLogin && isAdmin && (
                       <>
                       {isEditMode && (
                         <a

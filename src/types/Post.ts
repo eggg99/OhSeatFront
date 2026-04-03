@@ -1,4 +1,5 @@
 export interface PostData {
+  likeCount: number;
   multiplexId: number;
   postId: number;
   title: string;
@@ -9,6 +10,7 @@ export interface PostData {
   commentCount: number;
   multiplexName:string;
   cinemaName:string;
+
 }
 
 export interface PostPage {

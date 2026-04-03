@@ -5,10 +5,11 @@ import Location from "@/components/common/Location";
 import { locationStore } from "@/store/userLocation";
 import { FileUpload } from "@/components/common/file/FileUpload";
 import { POST_CATEGORY } from '@/constants/category_cine';
+import { userStore } from "@/store/userStore";
 
 export default function CineSquareReg() {
     const navigate = useNavigate();
-
+    const isLogin = userStore((state) => state.isLogin);
     // 게시글 정보
     const location = locationStore((state) => state.currentLocation);
     const [inputValue, setInputValue] = useState({
@@ -121,77 +122,71 @@ export default function CineSquareReg() {
         <div className="os_sub_contents">
             <div className="os_freetalk_wrap clear">
                 <div className="os_freetalk_subtitle">
-                    <button onClick={list} className="go_before_button">
-                        목록으로 돌아가기
-                    </button>
+                    <a onClick={list} className="go_before_button cursor-pointer">목록으로 돌아가기</a>
 
                     <h3>씨네광장 글쓰기</h3>
                     <div className="os_freetalk_right_wrap">
                         <div className="freetalk_button_wrap">
-                            <a onClick={() => handleSubmit()} className="post_button write cursor-pointer">
-                                등록
-                            </a>
+                            {isLogin && <a onClick={() => handleSubmit()} className="post_button write cursor-pointer">등록</a>}
                         </div>
                     </div>
                 </div>
 
-                <div className="theater_detail_board_wrap2">
-                    <div className="post_write_area_wrap">
-                        <table className="basic_board2">
-                            <tbody>
-                            <tr>
-                                <td colSpan={4}>
-                                    <span className="my_place_span">
-                                        <Location />
-                                    </span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <select name="categoryId" onChange={handleInput} value={inputValue.categoryId}>
-                                        <option value="">게시글 종류 선택</option>
-                                        {POST_CATEGORY.map((category) => (
-                                          <option key={category.id} value={category.id}>
-                                            {category.name}
-                                          </option>
-                                        ))}
-                                    </select>
-                                </td>
-                                <td colSpan={3}>
-                                    <input
-                                        type="text"
-                                        name="title"
-                                        value={inputValue.title}
-                                        onChange={handleInput}
-                                        className="post_title_input"
-                                        placeholder="제목을 입력하세요"
-                                        required
-                                    />
-                                </td>
-                            </tr>
-                            <tr>
-                                <td colSpan={4}>
-                                    <div className="post_textarea_wrap">
-                                            <textarea
-                                                name="content"
-                                                placeholder="내용을 입력하세요"
-                                                value={inputValue.content}
-                                                onChange={handleInput}
-                                            />
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td colSpan={4}>
-                                    <FileUpload
-                                        onFilesChange={handleFilesChange}
-                                        onRepresentativeChange={handleRepresentativeChange}
-                                    />
-                                </td>
-                            </tr>
-                            </tbody>
-                        </table>
-                    </div>
+                <div className="post_write_area_wrap">
+                    <table className="basic_board2">
+                        <tbody>
+                        <tr>
+                            <td colSpan={4}>
+                                <span className="my_place_span">
+                                    <Location />
+                                </span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <select name="categoryId" onChange={handleInput} value={inputValue.categoryId}>
+                                    <option value="">게시글 종류 선택</option>
+                                    {POST_CATEGORY.map((category) => (
+                                      <option key={category.id} value={category.id}>
+                                        {category.name}
+                                      </option>
+                                    ))}
+                                </select>
+                            </td>
+                            <td colSpan={3}>
+                                <input
+                                    type="text"
+                                    name="title"
+                                    value={inputValue.title}
+                                    onChange={handleInput}
+                                    className="post_title_input"
+                                    placeholder="제목을 입력하세요"
+                                    required
+                                />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colSpan={4}>
+                                <div className="post_textarea_wrap">
+                                        <textarea
+                                            name="content"
+                                            placeholder="내용을 입력하세요"
+                                            value={inputValue.content}
+                                            onChange={handleInput}
+                                        />
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colSpan={4}>
+                                <FileUpload
+                                    onFilesChange={handleFilesChange}
+                                    onRepresentativeChange={handleRepresentativeChange}
+                                />
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>

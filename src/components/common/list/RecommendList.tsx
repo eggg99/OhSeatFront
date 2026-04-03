@@ -93,7 +93,7 @@ export const RecommendList: React.FC<PostListProps> = ({
                   <td className="txtc">{item.authorNickname}</td>
                   <td className="txtc">{String(item.createdAt).split(/[ T]/)[0].replace(/-/g, '.')}</td>
                   <td className="txtc">{item.views}</td>
-                  <td className="txtc">{item.commentCount}</td>
+                  <td className="txtc">{item.likeCount}</td>
                 </tr>
               );
             })

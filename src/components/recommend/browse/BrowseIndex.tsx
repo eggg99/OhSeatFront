@@ -1,7 +1,7 @@
 import { getTrendingCinema, getPostList } from "@/apis/api/recommend";
 import { getRecommendNotice } from "@/apis/api/admin";
 import { getMultiplexBrand, getMultiplexLabel } from "@/utils/recommend";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { PostPage } from "@/types/Post";
 import WeekString from '@/components/common/WeekString';
@@ -41,11 +41,12 @@ export default function BrowseIndex() {
     const navigate = useNavigate();
     const [topCinemas, setTopCinemas] = useState<Cinema[]>([]);
     const [postList, setPostList] = useState<PostPage>();
-    const [page, setPage] = useState<number>(1);
+    const [page, setPage] = useState<number>(0);
     const [orderType, setOrderType] = useState<string>("latest");
     const [size, setSize] = useState<number>(10);
     const [noticeList, setNoticeList] = useState<NoticeData[]>([]);
     const [event, setEvent] = useState<Event[]>();
+    const latestPostRequestRef = useRef(0);
 
     // 언급량 top5 조회
     const getData = async () => {
@@ -57,8 +58,16 @@ export default function BrowseIndex() {
         }
     }
     // 게시글 전체 리스트 조회
-    const getPostData = async() => {
-        const response = await getPostList(0, '00', 'all_c', 'all_s', orderType, page, size);
+    const getPostData = async(
+        targetPage: number,
+        targetOrderType: string = orderType,
+        targetSize: number = size,
+    ) => {
+        const requestId = ++latestPostRequestRef.current;
+        const response = await getPostList(0, '00', 'all_c', 'all_s', targetOrderType, targetPage, targetSize);
+        if (requestId !== latestPostRequestRef.current) {
+            return;
+        }
         setPostList(response);
     }
 
@@ -68,20 +77,23 @@ export default function BrowseIndex() {
         setNoticeList(response);
     }
 
-    // 마운트 될 때 데이터 가져오기
+    // 마운트 될 때 부가 데이터 가져오기
     useEffect(() => {
         const fetchData = async () => {
             await getData();
-            await getPostData();
             await getNoticeData();
             await getMainEvents();
         };
         fetchData();
     }, []);
 
-    // 페이지/정렬 변경 시 데이터 재요청
+    // 게시글 리스트는 페이지/정렬/개수 상태 변화에만 반응해 조회
     useEffect(() => {
-        getPostData();
+        const fetchData = async () => {
+            await getPostData(page, orderType, size);
+        };
+
+        fetchData();
     }, [page, orderType, size]);
 
     // 1위 영화관
@@ -89,13 +101,20 @@ export default function BrowseIndex() {
 
     // 페이지 변경
     const handlePageChange = (newPage: number) => {
-        console.log(newPage); setPage(newPage);}
+        setPage(newPage);
+    }
 
     // 정렬 변경
-    const handleOrderChange = (newOrder: string) => setOrderType(newOrder);
+    const handleOrderChange = (newOrder: string) => {
+        setOrderType(newOrder);
+        setPage(0);
+    };
 
     // 사이즈 변경
-    const handleSizeChange = (newSize: number) => setSize(newSize);
+    const handleSizeChange = (newSize: number) => {
+        setSize(newSize);
+        setPage(0);
+    };
 
     const getMainEvents = async () => {
         const response:Event[] = await getEventMain({ count : 1 });
@@ -258,6 +277,7 @@ export default function BrowseIndex() {
                 {/* 게시글 테이블 */}
                 {postList && (
                   <RecommendList
+                    key={`browse-post-list-${page}`}
                     noticeList={noticeList}
                     postList={postList}
                     isEditMode={false}
@@ -269,9 +289,10 @@ export default function BrowseIndex() {
                         {/*페이징처리*/}
                         {postList &&
                           <Pagination
-                            currentPage={postList.number}
+                            currentPage={page}
                             totalPages={postList.totalPages}
                             onPageChange={handlePageChange}
+                            pageBase={0}
                           />
                         }
                     </div>
