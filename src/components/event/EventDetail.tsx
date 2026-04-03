@@ -5,6 +5,7 @@ import {Link, useNavigate, useParams } from "react-router-dom";
 import type {EventDataDetail} from "@/types/Event";
 import {CATEGORY_LABEL} from "@/types/EventAnn";
 import { FilePreview } from "@/components/common/file/FilePreview";
+import { formatDateDot } from "@/utils/format";
 
 export default function EventDetail () {
     const navigate = useNavigate();
@@ -146,7 +147,7 @@ export default function EventDetail () {
 
                             <div className="event_overview_wrap">
                                 <ul className="event_overview_list clear">
-                                    <li className="date"><p>{detail.startDt} ~ {detail.endDt}</p></li>
+                                    <li className="date"><p>{formatDateDot(detail.startDt)} ~ {formatDateDot(detail.endDt)}</p></li>
                                     <li className="draw"><span>당첨인원 <i>{detail.annCount}명</i></span></li>
                                     <li className="state">
                                         {detail.end

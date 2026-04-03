@@ -17,3 +17,11 @@ export const formatDateTime = (dateTime: string) => {
     time: time?.slice(0, 5) ?? "",
   };
 };
+
+export const formatDateDot = (dateValue?: string | null) => {
+  if (!dateValue) return "";
+
+  return String(dateValue)
+    .split(/[ T]/)[0]
+    .replace(/-/g, ".");
+};

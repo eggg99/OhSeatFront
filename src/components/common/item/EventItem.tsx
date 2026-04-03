@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import type  {EventDataPage, EventData} from "@/types/Event";
 import {CATEGORY_LABEL} from "../../../types/EventAnn";
+import { formatDateDot } from "@/utils/format";
 
 interface Props {
   eventList : EventData[];
@@ -53,7 +54,7 @@ export const EventItem:React.FC<Props> = ({
             </div>
             <img src={src} alt={item.title} />
             <p>{item.title}</p>
-            <span>{item.startDt} ~ {item.endDt}</span>
+            <span>{formatDateDot(item.startDt)} ~ {formatDateDot(item.endDt)}</span>
            </a>
          </li>
         );

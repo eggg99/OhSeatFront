@@ -14,6 +14,7 @@ import {getEventMain} from "@/apis/api/event";
 import {fileData} from "@/types/CineSquare";
 import {CATEGORY_LABEL} from "@/types/EventAnn";
 import { FilePreview } from "@/components/common/file/FilePreview";
+import { formatDateDot } from "@/utils/format";
 
 interface Cinema {
     multiplexId: number;
@@ -197,7 +198,7 @@ export default function BrowseIndex() {
                                                 )}
 
                                                 <ul className="inner_info_list">
-                                                    <li><b>이벤트 일정</b>{item.startDt}~{item.endDt}</li>
+                                                    <li><b>이벤트 일정</b>{formatDateDot(item.startDt)}~{formatDateDot(item.endDt)}</li>
                                                     <li><b>당첨 인원</b>{item.annCount}명</li>
                                                 </ul>
                                             </div>

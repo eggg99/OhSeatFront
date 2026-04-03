@@ -8,7 +8,7 @@ import WeekString from '@/components/common/WeekString';
 import { getBoxoffice } from '@/apis/api/movie';
 import { CRTF_MAP } from '@/constants/certifcate';
 import { CineSquareData } from "../types/CineSquare";
-import { formatNumberWithComma } from "../utils/format";
+import { formatDateDot, formatNumberWithComma } from "../utils/format";
 import { getEventMain } from "@/apis/api/event";
 import { fileData } from "@/types/CineSquare";
 import { CATEGORY_LABEL } from "@/types/EventAnn";
@@ -651,7 +651,7 @@ export default function PageMain() {
                       <div className="inner">
                         <i>{CATEGORY_LABEL[item.categoryId] ?? ''}</i>
                         <p>{item.title}</p>
-                        <span>{item.startDt}<br />~ {item.endDt}</span>
+                        <span>{formatDateDot(item.startDt)}<br />~ {formatDateDot(item.endDt)}</span>
                       </div>
                     </Link>
                   </li>
