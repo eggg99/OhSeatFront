@@ -1,4 +1,3 @@
-import type { MouseEvent }      from 'react';
 import { useEffect, useState }  from 'react';
 import { userStore }            from '@/store/userStore';
 import { Link, useLocation, useNavigate } from "react-router-dom";
@@ -14,11 +13,6 @@ const Header = () => {
     useEffect(() => {
         setOpenMenu(null);
     }, [location.pathname]);
-
-    const toggleMenu = (menu: 'recommend' | 'event') => (event: MouseEvent<HTMLAnchorElement>) => {
-        event.preventDefault();
-        setOpenMenu((current) => current === menu ? null : menu);
-    };
 
     const closeMenu = () => {
         setOpenMenu(null);
@@ -41,7 +35,7 @@ const Header = () => {
                         onMouseEnter={() => setOpenMenu('recommend')}
                         onMouseLeave={closeMenu}
                     >
-                        <Link to="/recommend/browse" onClick={toggleMenu('recommend')}>영화관 좌석 추천</Link>
+                        <Link to="/recommend/browse">영화관 좌석 추천</Link>
                         <ul className="os_gnb2">
                             <li><Link to="/recommend/browse" onClick={closeMenu}>둘러보기(pick!)</Link></li>
                             <li><Link to="/recommend/cgv" onClick={closeMenu}>CGV</Link></li>
@@ -55,7 +49,7 @@ const Header = () => {
                         onMouseEnter={() => setOpenMenu('event')}
                         onMouseLeave={closeMenu}
                     >
-                        <Link to="/event/browse" onClick={toggleMenu('event')}>이벤트</Link>
+                        <Link to="/event/browse">이벤트</Link>
                         <ul className="os_gnb2">
                             <li><Link to="/event/browse" onClick={closeMenu}>이벤트 둘러보기</Link></li>
                             <li><Link to="/event/announcement/browse" onClick={closeMenu}>이벤트 당첨발표</Link></li>

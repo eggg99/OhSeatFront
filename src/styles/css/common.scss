@@ -193,20 +193,6 @@ $background-color_6: #5b5b5b;
 		}
 	}
 	>li.two_depth {
-		&:hover {
-			>.os_gnb2 {
-				opacity: 1;
-				visibility: visible;
-				transform: translateY(0);
-			}
-		}
-		&:focus-within {
-			>.os_gnb2 {
-				opacity: 1;
-				visibility: visible;
-				transform: translateY(0);
-			}
-		}
 		>.os_gnb2 {
 			>li {
 				&:hover {
