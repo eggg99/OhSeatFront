@@ -76,7 +76,7 @@ export const RecommendList: React.FC<PostListProps> = ({
                     <td>{item.title} [편집모드]</td>
                     <td className="txtc">{item.authorNickname}</td>
                     <td className="txtc">{String(item.createdAt).split(/[ T]/)[0].replace(/-/g, '.')}</td>
-                    <td className="txtc">{item.views}회</td>
+                    <td className="txtc">{item.views}</td>
                   </tr>
                 );
               }
@@ -92,8 +92,8 @@ export const RecommendList: React.FC<PostListProps> = ({
                   <td>{item.title}</td>
                   <td className="txtc">{item.authorNickname}</td>
                   <td className="txtc">{String(item.createdAt).split(/[ T]/)[0].replace(/-/g, '.')}</td>
-                  <td className="txtc">{item.views}회</td>
-                  <td className="txtc">{item.commentCount}개</td>
+                  <td className="txtc">{item.views}</td>
+                  <td className="txtc">{item.commentCount}</td>
                 </tr>
               );
             })
