@@ -78,7 +78,7 @@ export default function PageMain() {
   const getData = async () => {
     try {
       const response: Cinema[] = await getTrendingCinema();
-      setTopCinemas(response[0]);
+      setTopCinemas(response?.[0]);
     } catch (error) {
       console.error(error);
     }
@@ -87,9 +87,10 @@ export default function PageMain() {
   const getTop3Post = async () => {
     try {
       const response = await top3Post();
-      setRecentPost(response);
+      setRecentPost(Array.isArray(response) ? response : []);
     } catch (error) {
       console.error(error);
+      setRecentPost([]);
     }
   }
 
@@ -132,9 +133,10 @@ export default function PageMain() {
   const getRandomCineData = async () => {
     try {
       const response: CineSquareData[] = await getCineSquareRandom();
-      setCineSquareList(response);
+      setCineSquareList(Array.isArray(response) ? response : []);
     } catch (error) {
       console.error(error);
+      setCineSquareList([]);
     }
   }
 
@@ -144,12 +146,15 @@ export default function PageMain() {
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
-      await getData();
-      await getTop3Post();
-      await getMovieChart();
-      await getRandomCineData();
-      await getMainEvents();
-      setLoading(false);
+      try {
+        await getData();
+        await getTop3Post();
+        await getMovieChart();
+        await getRandomCineData();
+        await getMainEvents();
+      } finally {
+        setLoading(false);
+      }
     };
     fetchData();
   }, []);
@@ -431,22 +436,27 @@ export default function PageMain() {
   };
 
   const getMainEvents = async () => {
-    const response: RawEvent[] = await getEventMain({ count: 2 });
-    const events: Event[] = response.map((item) => {
-      const posterFile = item.files.find(f => f.fileRole === "THUMB");
+    try {
+      const response: RawEvent[] = await getEventMain({ count: 2 });
+      const events: Event[] = (Array.isArray(response) ? response : []).map((item) => {
+        const posterFile = item.files?.find(f => f.fileRole === "THUMB");
 
-      return {
-        eventId: item.eventId,
-        categoryId: item.categoryId,
-        title: item.title,
-        startDt: item.startDt,
-        endDt: item.endDt,
-        annCount: item.annCount,
-        end: item.end,
-        file: posterFile || null,
-      };
-    });
-    setEvent(events);
+        return {
+          eventId: item.eventId,
+          categoryId: item.categoryId,
+          title: item.title,
+          startDt: item.startDt,
+          endDt: item.endDt,
+          annCount: item.annCount,
+          end: item.end,
+          file: posterFile || null,
+        };
+      });
+      setEvent(events);
+    } catch (error) {
+      console.error(error);
+      setEvent([]);
+    }
   }
 
 

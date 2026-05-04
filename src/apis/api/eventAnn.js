@@ -1,4 +1,5 @@
 import { axiosApi } from "@/apis/utils/instance";
+import { emptyPage, logApiError } from "@/apis/utils/fallback";
 
 /**
  * 이벤트 당첨확인 전체 조회
@@ -8,9 +9,10 @@ import { axiosApi } from "@/apis/utils/instance";
 export const getEventAnnouncementList = async (param) => {
     try{
         const response = await axiosApi.get(`/event/announcement/list`, { params: param })
-        return response.data;
+        return response.data ?? emptyPage(param);
     } catch (error) {
-        console.error("이벤트 당첨확인 게시글 전체 조회 실패: ", error);
+        logApiError("이벤트 당첨확인 게시글 전체 조회 실패", error);
+        return emptyPage(param);
     }
 }
 

@@ -1,4 +1,5 @@
 import { axiosApi } from "@/apis/utils/instance";
+import { emptyPage, logApiError } from "@/apis/utils/fallback";
 
 /**
  * 이벤트 게시글 전체 조회
@@ -8,9 +9,10 @@ import { axiosApi } from "@/apis/utils/instance";
 export const getEventList = async (param) => {
     try{
         const response = await axiosApi.get(`/event/list`, { params: param })
-        return response.data;
+        return response.data ?? emptyPage(param);
     } catch (error) {
-        console.error("이벤트 게시글 전체 조회 실패: ", error);
+        logApiError("이벤트 게시글 전체 조회 실패", error);
+        return emptyPage(param);
     }
 }
 
@@ -49,9 +51,10 @@ export const postEvent = async (formData) => {
 export const getEventMain = async (param) => {
     try{
         const response = await axiosApi.get(`/event/main`, { params: param })
-        return response.data;
+        return Array.isArray(response.data) ? response.data : [];
     } catch (error) {
-        console.error("이벤트 게시글 메인/좌석추천 조회 실패: ", error);
+        logApiError("이벤트 게시글 메인/좌석추천 조회 실패", error);
+        return [];
     }
 }
 

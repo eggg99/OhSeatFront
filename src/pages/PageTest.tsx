@@ -7,156 +7,95 @@ import img2 from '@/styles/img/89701_320.png';
 import img3 from '@/styles/img/89706_320.png';
 import img4 from '@/styles/img/89847_320.png';
 
+/*const backgroundColor = '#eeeae6';
+const lightShadow = '#ffffff';
+const darkShadow = '#e9dbcdde';*/
+
+const backgroundColor = '#fef6ef';
+const lightShadow = '#ffffff';
+const darkShadow = '#e9dbcdde';
+
 export default function PageTest() {
-    // 이미지용
-    const [emblaRef, emblaApi] = useEmblaCarousel(
-        { loop: true, align: 'start' },
-        [Autoplay({ delay: 3000, stopOnInteraction: true, stopOnMouseEnter: true })]
-    );
+  const square_background: React.CSSProperties = {
+    width: '100%',
+    height: '500px',
+    backgroundColor: backgroundColor,
+    padding: '20px',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap:'100px',
+  };
+  const neu_1: React.CSSProperties = {
+    background: backgroundColor,
+    boxShadow: `-28px -28px 30px ${lightShadow},
+    28px 28px 30px ${darkShadow}`,
+  };
 
-    // 이미지 슬라이드
-    const slides = [img1, img2, img3, img4];
-    const [selectedIndex, setSelectedIndex] = useState(0);
+  const neu_1_1: React.CSSProperties = {
+    width: '290px',
+    height: '180px',
+    background: backgroundColor,
+    border:'1px solid #EFF1F4',
+    boxShadow: `-28px -28px 30px ${lightShadow},
+    28px 28px 30px ${darkShadow}`,
+  };
 
-    // 현재 슬라이드 인덱스 업데이트
-    const onSelect = (embla: typeof emblaApi): void => {
-        if (!embla) return;
-        setSelectedIndex(embla.selectedScrollSnap());
-    };
+  const neu_2: React.CSSProperties = {
+    width: '300px',
+    height: '130px',
+    background: backgroundColor,
+    boxShadow: `inset 18px 18px 30px ${darkShadow}, inset -18px -18px 30px ${lightShadow}`,
+  };
 
-    // Embla가 준비되면 onSelect 이벤트 연결
-    useEffect(() => {
-        if (!emblaApi) return;
-        emblaApi.on('select', () => onSelect(emblaApi));
-        onSelect(emblaApi);
-    }, [emblaApi]);
+  const outer: React.CSSProperties = {
+    width: '40px',
+    height: '40px',
+    borderRadius: '32px',
+    background: backgroundColor,
+    padding: '10px',
+    boxShadow: `
+      8px 8px 18px ${darkShadow},
+      -6px -6px 14px ${lightShadow}
+    `,
+  };
 
+  const inner: React.CSSProperties = {
+    width: '100%',
+    height: '100%',
+    borderRadius: '24px',
+    background: backgroundColor,
+    border: '1px solid rgba(255,255,255,0.5)',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    boxShadow: `
+      inset 3px 3px 6px ${darkShadow},
+      inset -3px -3px 6px ${lightShadow},
+      inset 10px 10px 18px ${darkShadow},
+      inset -10px -10px 18px ${lightShadow}
+    `,
+  };
 
-    // 영화관용
-    const [emblaRef2] = useEmblaCarousel({
-        dragFree: true,     
-        containScroll: 'trimSnaps',
-    })
-    const theaters = Array.from({ length: 100 }, (_, i) => `영화관${i + 1}`)
-
-    // 인라인 스타일 - 이미지용
-    const viewportStyle: React.CSSProperties = { overflow: 'hidden', width: '300px' };
-    const containerStyle: React.CSSProperties = { display: 'flex', userSelect: 'none' };
-    const slideStyle: React.CSSProperties = { minWidth: '100%', textAlign: 'center' };
-    const arrowStyle: React.CSSProperties = {
-        padding: '0.5rem 1rem',
-        margin: '0 0.5rem',
-        cursor: 'pointer',
-        background: '#000',
-        color: '#fff',
-        border: 'none',
-        borderRadius: '4px'
-    };
-    const indicatorStyle: React.CSSProperties = {
-        display: 'inline-block',
-        width: '10px',
-        height: '10px',
-        margin: '0 5px',
-        borderRadius: '50%',
-        backgroundColor: '#ccc'
-    };
-    const activeIndicatorStyle: React.CSSProperties = {
-        ...indicatorStyle,
-        backgroundColor: '#333'
-    };
-
-
-    // 인라인 스타일 - 영화관용
-    const emblaStyle: React.CSSProperties = {
-        width: '100%',
-        overflow: 'hidden',
-    }
-
-    const viewportStyle2: React.CSSProperties = {
-        overflow: 'hidden',
-        width: '100%',
-    }
-
-    const containerStyle2: React.CSSProperties = {
-        display: 'flex',
-        userSelect: 'none',
-        WebkitTouchCallout: 'none',
-    }
-
-    const slideStyle2: React.CSSProperties = {
-        flex: '0 0 auto',
-        marginRight: '12px',
-    }
-
-    const linkStyle: React.CSSProperties = {
-        display: 'inline-block',
-        padding: '8px 12px',
-        background: '#eee',
-        borderRadius: '6px',
-        textDecoration: 'none',
-        color: '#333',
-        whiteSpace: 'nowrap',
-    }
+  const iconStyle: React.CSSProperties = {
+    fontSize: '12px',
+    fontWeight: 700,
+    color: '#F27D7D',
+    lineHeight: 1,
+  };
 
 
   return (
     <div className="os_main_contents">
-        <div className="os_main_visual">
-            <div style={viewportStyle}>
-                <h2>이미지 슬라이드</h2>
-                {/* 이미지들 */}
-                <div ref={emblaRef}>
-                    <ul style={containerStyle}>
-                        {slides.map((img, idx) => (
-                            <li style={slideStyle} key={idx}>
-                                <img src={img} alt={`테스트 이미지${idx + 1}`} style={{ width: '100%' }} />
-                            </li>
-                        ))}
-                    </ul>
-                </div>
-
-                {/* 화살표 버튼 */}
-                <div style={{ textAlign: 'center', marginTop: '10px' }}>
-                    <button
-                        style={arrowStyle}
-                        onClick={() => emblaApi?.scrollPrev()}
-                    >◀</button>
-                    
-                    <button
-                        style={arrowStyle}
-                        onClick={() => emblaApi?.scrollNext()}
-                    >▶</button>
-                </div>
-
-                {/* 페이지 인디케이터 */}
-                <div style={{ textAlign: 'center', marginTop: '10px' }}>
-                    {slides.map((_, idx) => (
-                        <span
-                            key={idx}
-                            style={idx === selectedIndex ? activeIndicatorStyle : indicatorStyle}
-                            onClick={() => emblaApi?.scrollTo(idx)}
-                        />
-                    ))}
-                </div>
-            </div>
-            
-            <hr/>
-
-            <div style={viewportStyle}>
-                <h2>영화관 옆으로 넘기는 부분 슬라이드</h2>
-                <div style={emblaStyle}>
-                    <div style={viewportStyle2} className="embla__viewport" ref={emblaRef2}>
-                        <ul style={containerStyle2} className="embla__container">
-                            {theaters.map((name) => (
-                                <li style={slideStyle2} className="embla__slide" key={name}>
-                                <a href="#" style={linkStyle}>{name}</a>
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
-                </div>
-            </div>
+      <div style={square_background}>
+        <div style={neu_1}></div>
+        <div style={neu_2}></div>
+        <div style={outer}>
+          <div style={inner}>
+            <div style={iconStyle}>F</div>
+          </div>
         </div>
+      </div>
     </div>
   );
 }

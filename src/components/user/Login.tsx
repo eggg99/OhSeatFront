@@ -12,6 +12,7 @@ export default function Login(){
     email: '',
     password: '',
   });
+  const [errorMessage, setErrorMessage] = useState('');
 
   const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name } = e.target;
@@ -24,10 +25,16 @@ export default function Login(){
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const response = await loginUser(inputValue);
-    if (!response) {
-      return;
-    } else {
+    setErrorMessage('');
+
+    try {
+      const response = await loginUser(inputValue);
+
+      if (!response) {
+        setErrorMessage('로그인에 실패했습니다. 입력 정보 또는 서버 상태를 확인해주세요.');
+        return;
+      }
+
       alert('로그인이 완료되었습니다!');
       setUser({
         'userId': response.userId,
@@ -40,6 +47,9 @@ export default function Login(){
       const params = new URLSearchParams(location.search);
       const redirectPath = params.get('redirect');
       navigate(redirectPath || '/');
+    } catch (error) {
+      console.error(error);
+      setErrorMessage('로그인 처리 중 문제가 발생했습니다. 잠시 후 다시 시도해주세요.');
     }
   }
 
@@ -86,6 +96,11 @@ export default function Login(){
           <li>
             <button type="submit" className="user_login_button">로그인</button>
           </li>
+          {errorMessage && (
+            <li>
+              <p className="alert">{errorMessage}</p>
+            </li>
+          )}
         </ul>
         <ul className="login_plus_list">
           <li><Link to="/user/join">회원가입</Link></li>

@@ -1,12 +1,14 @@
 import { axiosApi } from "@/apis/utils/instance";
+import { emptyPage, logApiError } from "@/apis/utils/fallback";
 
 // 공지사항 리스트 조회 - 좌석추천 - 유저용
 export const getRecommendNotice = async (targetBoard) => {
     try{
         const response = await axiosApi.get(`/notices/top`, {params: { targetBoard }})
-        return response.data;
+        return Array.isArray(response.data) ? response.data : [];
     } catch (error) {
-        console.error("좌석추천 공지사항 전체 조회 실패: ", error);
+        logApiError("좌석추천 공지사항 전체 조회 실패", error);
+        return [];
     }
 }
 
@@ -14,9 +16,10 @@ export const getRecommendNotice = async (targetBoard) => {
 export const getNoticeList = async (targetBoard, page) => {
     try{
         const response = await axiosApi.get(`/admin/notices`, {params: { targetBoard, page }})
-        return response.data;
+        return response.data ?? emptyPage({ page });
     } catch (error) {
-        console.error("씨네광장 공지사항 전체 조회 실패: ", error);
+        logApiError("씨네광장 공지사항 전체 조회 실패", error);
+        return emptyPage({ page });
     }
 }
 

@@ -1,4 +1,5 @@
 import { axiosApi } from "@/apis/utils/instance";
+import { emptyPage, logApiError } from "@/apis/utils/fallback";
 
 /**
  * 최근 일주일간 언급 많이 된 영화관
@@ -6,9 +7,10 @@ import { axiosApi } from "@/apis/utils/instance";
 export const getTrendingCinema = async() => {
     try{
         const response = await axiosApi.get('/rcmd/trendingCinema', { })
-        return response.data;
+        return Array.isArray(response.data) ? response.data : [];
     } catch (error) {
-        console.error("최근 일주일간 언급 많이 된 영화관 조회 실패: ", error);
+        logApiError("최근 일주일간 언급 많이 된 영화관 조회 실패", error);
+        return [];
     }
 }
 
@@ -21,9 +23,10 @@ export const getCinemaList = async(multiplexId, areaId) => {
     try{
         const params = { multiplexId, areaId };
         const response = await axiosApi.get('/rcmd/cinemaList', { params })
-        return response.data;
+        return Array.isArray(response.data) ? response.data : [];
     } catch (error) {
-        console.error("영화관 리스트 조회 실패: ", error);
+        logApiError("영화관 리스트 조회 실패", error);
+        return [];
     }
 }
 
@@ -36,9 +39,10 @@ export const getScreenList = async(multiplexId, cinemaId) => {
     try{
         const params = { multiplexId, cinemaId };
         const response = await axiosApi.get('/rcmd/screenList', { params })
-        return response.data;
+        return Array.isArray(response.data) ? response.data : [];
     } catch (error) {
-        console.error("상영관 리스트 조회 실패: ", error);
+        logApiError("상영관 리스트 조회 실패", error);
+        return [];
     }
 }
 
@@ -56,9 +60,10 @@ export const getPostList = async(multiplexId, areaId, cinemaId, screenId, orderT
     try{
         const params = { multiplexId, areaId, cinemaId, screenId,orderType, page, size };
         const response = await axiosApi.get('/rcmd/postList', { params })
-        return response.data;
+        return response.data ?? emptyPage(params);
     } catch (error) {
-        console.error("게시글 조회 실패: ", error);
+        logApiError("게시글 조회 실패", error);
+        return emptyPage({ page, size });
     }
 }
 
@@ -153,9 +158,10 @@ export const getCommentList = async(postId) => {
     try{
         const params = { postId }
         const response = await axiosApi.get('/rcmd/commentList', { params })
-        return response.data;
+        return Array.isArray(response.data) ? response.data : [];
     } catch (error) {
-        console.error("댓글 리스트 조회 실패: ", error);
+        logApiError("댓글 리스트 조회 실패", error);
+        return [];
     }
 }
 
@@ -237,9 +243,10 @@ export const updatePostLike = async (postId) => {
 export const top3Post = async () => {
     try {
         const response = await axiosApi.get(`/rcmd/post/top3List`, {});
-        return response.data;
+        return Array.isArray(response.data) ? response.data : [];
     } catch (error) {
-        console.error("최신 게시글 3개 조회 실패: ", error);
+        logApiError("최신 게시글 3개 조회 실패", error);
+        return [];
     }
 }
 

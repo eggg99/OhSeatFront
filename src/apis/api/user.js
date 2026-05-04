@@ -1,13 +1,17 @@
 import { axiosApi } from "@/apis/utils/instance";
 
+const getApiErrorStatus = (error) => error?.response?.status ?? error?.status;
+const getApiErrorMessage = (error, fallbackMessage) =>
+    error?.response?.data?.message || fallbackMessage;
+
 // 회원가입 처리
 export const registerUser = async (formData) => {
     try {
         const response = await axiosApi.post('/user/join', formData);
         return response.data;
     } catch (error) {
-        if (error.response && error.status === 409) {
-            alert(error.response.data.message);
+        if (getApiErrorStatus(error) === 409) {
+            alert(getApiErrorMessage(error, '이미 사용 중인 정보입니다.'));
             return false;
         } else {
             console.error('회원가입 에러:', error);
@@ -23,13 +27,21 @@ export const loginUser = async (formData) => {
         const response = await axiosApi.post('/user/login', formData);
         return response.data;
     } catch (error) {
-        if (error.response && error.status === 401) {
-            alert(error.response.data.message);
+        const status = getApiErrorStatus(error);
+
+        if (status === 401) {
+            alert(getApiErrorMessage(error, '이메일 또는 비밀번호가 올바르지 않습니다.'));
             return false;
-        } else {
-            console.error('로그인 에러:', error);
-            throw error;
         }
+
+        if (status === 404) {
+            alert(getApiErrorMessage(error, '로그인 요청 주소를 찾을 수 없습니다. 백엔드 로그인 API 경로를 확인해주세요.'));
+            return false;
+        }
+
+        console.error('로그인 에러:', error);
+        alert(getApiErrorMessage(error, '로그인 실패! 잠시 후 다시 시도해주세요.'));
+        return false;
     }
 };
 
@@ -72,8 +84,8 @@ export const changePassword = async (formData) => {
         const response = await axiosApi.post('/user/changePw', formData);
         return response.data;
     } catch (error) {
-        if (error.response && error.status === 401) {
-            alert(error.response.data.message);
+        if (getApiErrorStatus(error) === 401) {
+            alert(getApiErrorMessage(error, '비밀번호 변경 권한이 없습니다.'));
             return false;
         } else {
             console.error('비밀번호 변경 에러:', error);
@@ -100,7 +112,7 @@ export const findPw = async (formData) => {
         return response.data;
     } catch (error) {
         console.error('비밀번호 찾기 에러:', error);
-        alert(error.response.data.message);
+        alert(getApiErrorMessage(error, '비밀번호 찾기 실패! 다시 시도해주세요.'));
         return false;
     }
 }
