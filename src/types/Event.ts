@@ -7,7 +7,7 @@ export interface EventData {
   startDt : string;           // 시작일
   endDt : string;             // 종료일
   end : boolean;               // 마감여부
-  imgUrl : string;            // 썸네일이미지
+  imgUrl : string | null;     // 썸네일이미지
 }
 
 export interface EventDataPage {

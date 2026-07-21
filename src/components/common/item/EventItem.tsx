@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import type  {EventDataPage, EventData} from "@/types/Event";
+import type { EventData } from "@/types/Event";
 import {CATEGORY_LABEL} from "../../../types/EventAnn";
 import { formatDateDot } from "@/utils/format";
 
@@ -27,8 +27,11 @@ export const EventItem:React.FC<Props> = ({
     <>
       {eventList.map((item: EventData) => {
         const isSelected = selectedIds.includes(item.eventId);
-        const baseUrl = "http://localhost:8000/"
-        const src = `${baseUrl.replace(/\/$/, '')}/${item.imgUrl.replace(/^\//, '')}`;
+        const baseUrl = "http://localhost:8000/";
+        const imagePath = item.imgUrl?.trim();
+        const src = imagePath
+          ? `${baseUrl.replace(/\/$/, '')}/${imagePath.replace(/^\//, '')}`
+          : "/styles/img/251114_event.jpg";
         return(
          <li
           key={`event-${item?.eventId}`}
